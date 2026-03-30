@@ -2,48 +2,29 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    // 1. Kasih tahu Laravel nama tabelmu yang sebenarnya
+    protected $table = 'tb_admin';
+
+    // 2. Jika di tb_admin kamu TIDAK ADA kolom 'created_at' dan 'updated_at', matikan fiturnya:
+    public $timestamps = false;
+
+    protected $primaryKey = 'id_admin';
+
+    // 3. Kolom apa saja yang boleh diisi
     protected $fillable = [
-        'name',
-        'email',
+        'username',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    // 4. Sembunyikan password agar tidak bocor
     protected $hidden = [
         'password',
-        'remember_token',
     ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 }
