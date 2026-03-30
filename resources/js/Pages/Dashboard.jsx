@@ -1,10 +1,10 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react'; // 👈 Import Link ditambahkan di sini
+import { Head, Link } from '@inertiajs/react'; //Import Link ditambahkan di sini
 import AdminLayout from '../Layouts/AdminLayout';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function Dashboard() {
-    // Data dummy untuk grafik
+    // Data dummy untuk grafik, nanti di perbaiki
     const chartData = [
         { name: '8 Mar', Pendapatan: 0, Pengeluaran: 0, Profit: 0 },
         { name: '9 Mar', Pendapatan: 0, Pengeluaran: 0, Profit: 0 },
@@ -18,7 +18,7 @@ export default function Dashboard() {
     return (
         <AdminLayout title="Dashboard">
             
-            {/* --- 1. Top Cards --- */}
+            {/* --- Top Cards --- */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div className="bg-[#3b82f6] rounded-xl p-5 text-white shadow-sm flex flex-col justify-between hover:-translate-y-1 transition-transform">
                     <div>
@@ -62,7 +62,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            {/* --- 2. Quick Actions (Telah Diperbarui dengan <Link>) --- */}
+            {/* --- Quick Actions--- */}
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                 <h3 className="text-md font-bold text-gray-800 mb-4">Quick Actions</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -86,7 +86,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            {/* --- 3. Area Grafik --- */}
+            {/* --- Area Grafik --- */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <h3 className="text-md font-bold text-gray-800 mb-4">Pendapatan & Pengeluaran (7 Hari Terakhir)</h3>
@@ -122,7 +122,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            {/* --- 4. Top 5 Pelanggan --- */}
+            {/* --- Top 5 Pelanggan, belum beckend --- */}
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
                 <h3 className="text-md font-bold text-gray-800 mb-4">Top 5 Pelanggan</h3>
                 <div className="flex justify-center items-center h-24 text-gray-400 text-sm">

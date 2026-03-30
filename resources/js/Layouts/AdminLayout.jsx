@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Link, Head, usePage } from '@inertiajs/react'; // 👈 Tambahkan usePage di sini
+import { Link, Head, usePage } from '@inertiajs/react';
 
 export default function AdminLayout({ children, title }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     
-    // 1. Ambil URL yang sedang aktif saat ini
+    //Ambil URL yang sedang aktif saat ini
     const { url } = usePage();
 
-    // 2. Buat fungsi pintar untuk mengecek apakah menu ini sedang aktif
+    //Fungsi untuk mengecek apakah menu ini sedang aktif
     const isActive = (path) => {
         // Jika URL saat ini sama dengan path menu, atau diawali dengan path tersebut 
         // (contoh: /orders/create akan membuat menu /orders tetap menyala)
@@ -24,7 +24,6 @@ export default function AdminLayout({ children, title }) {
 
             {/* SIDEBAR */}
             <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-[#2563eb] text-white transition-all duration-300 flex flex-col shadow-xl z-20`}>
-                {/* ... (Bagian Header & Tombol Tutup Menu tidak berubah) ... */}
                 <div className="p-4 border-b border-blue-500/30 flex items-center justify-between h-20">
                     {isSidebarOpen && (
                         <div>
@@ -50,7 +49,7 @@ export default function AdminLayout({ children, title }) {
                     {/* Menu: Dashboard */}
                     <Link 
                         href="/dashboard" 
-                        // 🔥 Di sini keajaibannya terjadi! Kelas CSS berubah tergantung aktif atau tidak
+                        // Kelas CSS berubah tergantung aktif atau tidak
                         className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${
                             isActive('/dashboard') 
                             ? 'bg-white text-blue-600 shadow-sm font-semibold' 
@@ -160,7 +159,7 @@ export default function AdminLayout({ children, title }) {
                 </nav>
             </aside>
 
-            {/* AREA KANAN (Header & Main Content tidak berubah) */}
+            {/* AREA KANAN */}
             <div className="flex-1 flex flex-col h-screen overflow-hidden">
                 <header className="bg-[#3b82f6] text-white h-20 px-8 flex items-center justify-between shadow-md z-10">
                     <h2 className="text-xl font-bold">{title}</h2>

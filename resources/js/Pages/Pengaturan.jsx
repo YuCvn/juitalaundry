@@ -57,7 +57,7 @@ export default function Pengaturan() {
                         </div>
                     </div>
 
-                    {/* --- KANAN: Konten Tab Aktif (Fleksibel) --- */}
+                    {/* --- KANAN: Konten Tab Aktif --- */}
                     <div className="flex-1 w-full min-w-0">
                         
                         {/* Konten: PROFIL */}

@@ -22,7 +22,7 @@ export default function Login() {
                 {/* Bagian Logo dan Judul */}
                 <div className="flex flex-col items-center mb-8">
                     <div className="bg-[#00a8ff] p-3 rounded-full mb-4 shadow-sm">
-                        {/* Ikon Tetesan Air sederhana */}
+                        {/* Ikon Tetesan Air sederhana, bisa diubah nanti */}
                         <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16a4 4 0 100-8 4 4 0 000 8z" />
                         </svg>

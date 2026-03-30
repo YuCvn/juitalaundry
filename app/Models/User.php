@@ -23,7 +23,7 @@ class User extends Authenticatable
         'password',
     ];
 
-    // 4. Sembunyikan password agar tidak bocor
+    // 4. Sembunyikan password
     protected $hidden = [
         'password',
     ];

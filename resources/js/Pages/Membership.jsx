@@ -10,7 +10,7 @@ export default function Membership() {
     const mockMembers = [
         {
             id: 1,
-            nama: 'aa',
+            nama: 'Yudi',
             tanggalGabung: '14/3/2026',
             saldoAktif: 100000,
             totalTopUp: 100000,

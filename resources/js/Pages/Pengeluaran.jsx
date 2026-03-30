@@ -24,7 +24,7 @@ export default function Pengeluaran() {
                     </button>
                 </div>
 
-                {/* --- 3 Kartu Ringkasan (Top Cards) --- */}
+                {/* --- Kartu Ringkasan (Top Cards) --- */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     {/* Card 1: Total Bulan Ini (Biru Solid) */}
                     <div className="bg-[#00d2ff] rounded-xl p-6 text-white shadow-sm flex justify-between items-center cursor-default">
@@ -102,7 +102,7 @@ export default function Pengeluaran() {
 
             </div>
 
-            {/* --- MODAL POP-UP TAMBAH PENGELUARAN (Dipertahankan dari yang sebelumnya) --- */}
+            {/* --- MODAL POP-UP TAMBAH PENGELUARAN --- */}
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/80 backdrop-blur-sm transition-opacity">
                     <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">

@@ -79,8 +79,7 @@ export default function Orders() {
                 
                 <p className="text-gray-500 mb-8 text-lg">Belum ada order</p>
                 
-                {/* Tombol Tambah Order Pertama di Tengah */}
-                {/* Tombol Tambah Order Pertama di Tengah */}
+                {/* Tombol Tambah Order di Tengah */}
                 <Link 
                     href="/orders/create" 
                     className="bg-[#00d2ff] hover:bg-[#00b8e6] text-white font-bold py-3 px-6 rounded-xl flex items-center transition-colors shadow-lg"

@@ -23,7 +23,7 @@ export default function LaporanKeuangan() {
             
             <div className="max-w-7xl mx-auto space-y-6 relative">
                 
-                {/* --- 1. Filter Periode & Tombol Tambah --- */}
+                {/* --- Filter Periode & Tombol Tambah --- */}
                 <div className="bg-white rounded-xl shadow-sm border border-[#06b6d4]/30 p-6">
                     <h3 className="text-lg font-bold text-gray-800 mb-4">Filter Periode</h3>
                     <div className="flex flex-col md:flex-row items-end gap-4">
@@ -40,7 +40,7 @@ export default function LaporanKeuangan() {
                             </div>
                         </div>
                         <div className="flex-1 w-full md:w-auto mt-4 md:mt-0">
-                            {/* Tombol pemicu Modal di sini 👇 */}
+                            {/* Tombol pemicu Modal */}
                             <button 
                                 onClick={() => setShowModal(true)}
                                 className="w-full bg-[#00d2ff] hover:bg-[#00b8e6] text-white font-bold py-2.5 px-4 rounded-lg flex items-center justify-center transition-colors shadow-sm"
@@ -52,7 +52,7 @@ export default function LaporanKeuangan() {
                     </div>
                 </div>
 
-                {/* --- 2. Empat Kartu Ringkasan --- */}
+                {/* --- Empat Kartu Ringkasan --- */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {/* Card 1: Total Pendapatan */}
                     <div className="bg-white rounded-xl p-5 shadow-sm border border-[#06b6d4] flex flex-col justify-between">
@@ -91,7 +91,7 @@ export default function LaporanKeuangan() {
                     </div>
                 </div>
 
-                {/* --- 3. Area Grafik --- */}
+                {/* --- Area Grafik --- */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30">
                         <h3 className="text-md font-bold text-gray-800 mb-4">Pendapatan vs Pengeluaran (7 Hari)</h3>
@@ -127,7 +127,7 @@ export default function LaporanKeuangan() {
                     </div>
                 </div>
 
-                {/* --- 4. Pengeluaran Terbaru --- */}
+                {/* --- Pengeluaran Terbaru --- */}
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30 flex flex-col min-h-[150px]">
                     <h3 className="text-md font-bold text-gray-800 mb-4">Pengeluaran Terbaru</h3>
                     <div className="flex-1 flex justify-center items-center text-gray-400 text-sm">
