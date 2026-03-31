@@ -8,13 +8,13 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
-    // Menampilkan halaman render dari React/Inertia
+    // Halaman Render Inertia
     public function create()
     {
         return Inertia::render('Auth/Login');
     }
 
-    // Memproses data login
+    // Proses Data Login
     public function store(Request $request)
     {
         $credentials = $request->validate([
@@ -25,17 +25,17 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Arahkan ke rute dashboard setelah berhasil
+            // Mengarahkan ke dashboard jika berhasil
             return redirect()->intended('/dashboard'); 
         }
 
-        // Jika gagal, kembalikan error ke Inertia
+        // Jika gagal, error ke Inertia
         return back()->withErrors([
             'username' => 'Username atau password yang Anda masukkan salah.',
         ])->onlyInput('username');
     }
 
-    // Fungsi untuk logout nanti
+    // Fungsi Logout
     public function destroy(Request $request)
     {
         Auth::logout();

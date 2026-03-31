@@ -6,7 +6,7 @@ export default function Membership() {
     // State untuk mengontrol pop-up (modal) Tambah Member
     const [showModal, setShowModal] = useState(false);
 
-    // Data dummy sementara untuk menampilkan list member sesuai desainmu
+    // Data bodong
     const mockMembers = [
         {
             id: 1,
@@ -27,7 +27,7 @@ export default function Membership() {
         <AdminLayout title="Membership">
             
             <div className="max-w-7xl mx-auto relative">
-                {/* --- Header Halaman & Tombol Tambah --- */}
+                {/* Header Halaman & Tombol Tambah */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                     <h2 className="text-2xl font-bold text-gray-800">Membership</h2>
                     
@@ -41,7 +41,7 @@ export default function Membership() {
                     </button>
                 </div>
 
-                {/* --- 3 Kartu Ringkasan (Top Cards) --- */}
+                {/* (Top Cards) */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div className="bg-[#3b82f6] hover:-translate-y-1 transition-transform duration-200 rounded-xl p-6 text-white shadow-sm flex justify-between items-center cursor-default">
                         <div>
@@ -68,7 +68,7 @@ export default function Membership() {
                     </div>
                 </div>
 
-                {/* --- Area Daftar Member --- */}
+                {/* Area Daftar Member */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden min-h-[400px] flex flex-col">
                     <div className="bg-[#0ea5e9] px-6 py-4 flex items-center text-white">
                         <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
@@ -116,7 +116,7 @@ export default function Membership() {
 
             </div>
 
-            {/* --- MODAL POP-UP TAMBAH MEMBER --- */}
+            {/* MODAL POP-UP TAMBAH MEMBER */}
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm transition-opacity">
                     
@@ -155,7 +155,7 @@ export default function Membership() {
                                     <label className="block text-sm font-semibold text-gray-700 mb-1">Saldo Awal</label>
                                     <div className="relative">
                                         <span className="absolute left-4 top-2.5 font-bold text-blue-600">Rp</span>
-                                        {/* Ubah defaultValue menjadi placeholder di sini 👇 */}
+
                                         <input 
                                             type="number" 
                                             placeholder="100000" 

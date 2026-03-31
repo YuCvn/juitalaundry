@@ -7,7 +7,7 @@ export default function LaporanKeuangan() {
     // State untuk mengontrol pop-up (modal) Tambah Pengeluaran
     const [showModal, setShowModal] = useState(false);
 
-    // Data dummy untuk grafik
+    // Data bodong
     const chartData = [
         { name: '8 Mar', Pendapatan: 0, Pengeluaran: 0, Profit: 0 },
         { name: '9 Mar', Pendapatan: 0, Pengeluaran: 0, Profit: 0 },
@@ -23,7 +23,7 @@ export default function LaporanKeuangan() {
             
             <div className="max-w-7xl mx-auto space-y-6 relative">
                 
-                {/* --- Filter Periode & Tombol Tambah --- */}
+                {/* Filter Periode & Tombol Tambah*/}
                 <div className="bg-white rounded-xl shadow-sm border border-[#06b6d4]/30 p-6">
                     <h3 className="text-lg font-bold text-gray-800 mb-4">Filter Periode</h3>
                     <div className="flex flex-col md:flex-row items-end gap-4">
@@ -52,9 +52,9 @@ export default function LaporanKeuangan() {
                     </div>
                 </div>
 
-                {/* --- Empat Kartu Ringkasan --- */}
+                {/* Kartu Ringkasan */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {/* Card 1: Total Pendapatan */}
+                    {/* Total Pendapatan */}
                     <div className="bg-white rounded-xl p-5 shadow-sm border border-[#06b6d4] flex flex-col justify-between">
                         <div className="flex items-center text-[#06b6d4] mb-2">
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
@@ -63,7 +63,7 @@ export default function LaporanKeuangan() {
                         <h3 className="text-3xl font-bold text-[#06b6d4]">Rp 0</h3>
                     </div>
 
-                    {/* Card 2: Total Pengeluaran */}
+                    {/* Total Pengeluaran */}
                     <div className="bg-white rounded-xl p-5 shadow-sm border border-[#f97316] flex flex-col justify-between">
                         <div className="flex items-center text-[#f97316] mb-2">
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" /></svg>
@@ -72,7 +72,7 @@ export default function LaporanKeuangan() {
                         <h3 className="text-3xl font-bold text-[#f97316]">Rp 0</h3>
                     </div>
 
-                    {/* Card 3: Net Profit */}
+                    {/* Net Profit */}
                     <div className="bg-white rounded-xl p-5 shadow-sm border border-[#14b8a6] flex flex-col justify-between">
                         <div className="flex items-center text-[#14b8a6] mb-2">
                             <span className="text-lg font-bold mr-2">$</span>
@@ -81,7 +81,7 @@ export default function LaporanKeuangan() {
                         <h3 className="text-3xl font-bold text-[#14b8a6]">Rp 0</h3>
                     </div>
 
-                    {/* Card 4: Profit Margin */}
+                    {/* Profit Margin */}
                     <div className="bg-white rounded-xl p-5 shadow-sm border border-[#06b6d4] flex flex-col justify-between">
                         <div className="flex items-center text-[#06b6d4] mb-2">
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11h10M7 15h10M3 20a1 1 0 001 1h16a1 1 0 001-1V4a1 1 0 00-1-1H4a1 1 0 00-1 1v16z" /></svg>
@@ -91,7 +91,7 @@ export default function LaporanKeuangan() {
                     </div>
                 </div>
 
-                {/* --- Area Grafik --- */}
+                {/* Area Grafik */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30">
                         <h3 className="text-md font-bold text-gray-800 mb-4">Pendapatan vs Pengeluaran (7 Hari)</h3>
@@ -127,7 +127,7 @@ export default function LaporanKeuangan() {
                     </div>
                 </div>
 
-                {/* --- Pengeluaran Terbaru --- */}
+                {/* Pengeluaran Terbaru */}
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30 flex flex-col min-h-[150px]">
                     <h3 className="text-md font-bold text-gray-800 mb-4">Pengeluaran Terbaru</h3>
                     <div className="flex-1 flex justify-center items-center text-gray-400 text-sm">
@@ -137,7 +137,7 @@ export default function LaporanKeuangan() {
 
             </div>
 
-            {/* --- MODAL POP-UP TAMBAH PENGELUARAN --- */}
+            {/* MODAL POP-UP TAMBAH PENGELUARAN */}
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/80 backdrop-blur-sm transition-opacity">
                     

@@ -4,13 +4,11 @@ import { Link, Head, usePage } from '@inertiajs/react';
 export default function AdminLayout({ children, title }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     
-    //Ambil URL yang sedang aktif saat ini
+    //Ambil URL yang aktif
     const { url } = usePage();
 
-    //Fungsi untuk mengecek apakah menu ini sedang aktif
+    //Cek apakah menu aktif
     const isActive = (path) => {
-        // Jika URL saat ini sama dengan path menu, atau diawali dengan path tersebut 
-        // (contoh: /orders/create akan membuat menu /orders tetap menyala)
         return url.startsWith(path);
     };
 
@@ -43,7 +41,7 @@ export default function AdminLayout({ children, title }) {
                     </button>
                 </div>
 
-                {/* --- MENU NAVIGASI --- */}
+                {/* MENU NAVIGASI */}
                 <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-2">
                     
                     {/* Menu: Dashboard */}
@@ -90,7 +88,7 @@ export default function AdminLayout({ children, title }) {
                         {isSidebarOpen && <span className="ml-3 text-sm">History</span>}
                     </Link>
 
-                    {/* --- Pemisah DATA MASTER --- */}
+                    {/* Pemisah DATA MASTER */}
                     <div className="text-xs font-semibold text-blue-300 mt-6 mb-2 px-3 uppercase tracking-wider">
                         {isSidebarOpen ? 'Data Master' : '...'}
                     </div>
@@ -108,7 +106,7 @@ export default function AdminLayout({ children, title }) {
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                         {isSidebarOpen && <span className="ml-3 text-sm">Membership</span>}
                     </Link>
-                    {/* --- Pemisah FINANCIAL --- */}
+                    {/* Pemisah FINANCIAL */}
                     <div className="text-xs font-semibold text-blue-300 mt-6 mb-2 px-3 uppercase tracking-wider">
                         {isSidebarOpen ? 'Financial' : '...'}
                     </div>
@@ -139,7 +137,7 @@ export default function AdminLayout({ children, title }) {
                         {isSidebarOpen && <span className="ml-3 text-sm">Pengeluaran</span>}
                     </Link>
 
-                    {/* --- Pemisah LAINNYA --- */}
+                    {/* Pemisah LAINNYA*/}
                     <div className="text-xs font-semibold text-blue-300 mt-6 mb-2 px-3 uppercase tracking-wider">
                         {isSidebarOpen ? 'Lainnya' : '...'}
                     </div>

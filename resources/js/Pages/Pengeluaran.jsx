@@ -11,7 +11,7 @@ export default function Pengeluaran() {
             
             <div className="max-w-7xl mx-auto relative">
                 
-                {/* --- Header Halaman & Tombol Tambah --- */}
+                {/* Header Halaman & Tombol Tambah  */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                     <h2 className="text-2xl font-bold text-gray-800">Manajemen Pengeluaran</h2>
                     
@@ -24,9 +24,9 @@ export default function Pengeluaran() {
                     </button>
                 </div>
 
-                {/* --- Kartu Ringkasan (Top Cards) --- */}
+                {/* (Top Cards) */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    {/* Card 1: Total Bulan Ini (Biru Solid) */}
+                    {/* Total Bulan Ini (Biru Solid) */}
                     <div className="bg-[#00d2ff] rounded-xl p-6 text-white shadow-sm flex justify-between items-center cursor-default">
                         <div>
                             <p className="text-sm font-semibold text-sky-100 mb-1">Total Bulan Ini</p>
@@ -36,7 +36,7 @@ export default function Pengeluaran() {
                         <svg className="w-10 h-10 text-white opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" /></svg>
                     </div>
 
-                    {/* Card 2: Total Transaksi */}
+                    {/*  Total Transaksi */}
                     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex justify-between items-center cursor-default">
                         <div>
                             <p className="text-sm font-semibold text-gray-500 mb-1">Total Transaksi</p>
@@ -46,7 +46,7 @@ export default function Pengeluaran() {
                         <svg className="w-10 h-10 text-[#00a3ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                     </div>
 
-                    {/* Card 3: Kategori Terbanyak */}
+                    {/* Kategori Terbanyak */}
                     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex justify-between items-center cursor-default">
                         <div>
                             <p className="text-sm font-semibold text-gray-500 mb-1">Kategori Terbanyak</p>
@@ -55,13 +55,12 @@ export default function Pengeluaran() {
                     </div>
                 </div>
 
-                {/* --- Area Tabel --- */}
+                {/* Area Tabel */}
                 <div className="bg-white rounded-xl shadow-sm border border-[#00d2ff]/30 overflow-hidden min-h-[400px]">
                     
                     {/* Table View */}
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm text-gray-600">
-                            {/* Header Tabel Warna Cyan Terang */}
                             <thead className="text-xs text-gray-700 font-bold bg-[#cffafe] border-b border-[#00d2ff]/20">
                                 <tr>
                                     <th scope="col" className="px-6 py-4">Tanggal</th>
@@ -72,11 +71,10 @@ export default function Pengeluaran() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* Baris Kosong (Placeholder) - Menggabungkan 5 Kolom */}
+
                                 <tr>
                                     <td colSpan="5" className="px-6 py-20">
                                         <div className="flex flex-col items-center justify-center text-center">
-                                            {/* Ikon Downward Zigzag */}
                                             <div className="text-[#00d2ff] mb-4">
                                                 <svg className="w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
@@ -84,7 +82,6 @@ export default function Pengeluaran() {
                                             </div>
                                             <p className="text-gray-500 text-base mb-6">Belum ada pengeluaran</p>
                                             
-                                            {/* Tombol Tambah di Tengah */}
                                             <button 
                                                 onClick={() => setShowModal(true)}
                                                 className="bg-[#00d2ff] hover:bg-[#00b8e6] text-white font-semibold py-2.5 px-6 rounded-lg flex items-center transition-colors shadow-sm"
@@ -102,7 +99,7 @@ export default function Pengeluaran() {
 
             </div>
 
-            {/* --- MODAL POP-UP TAMBAH PENGELUARAN --- */}
+            {/* MODAL POP-UP TAMBAH PENGELUARAN*/}
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/80 backdrop-blur-sm transition-opacity">
                     <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">

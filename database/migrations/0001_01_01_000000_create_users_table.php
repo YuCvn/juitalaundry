@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Table $table) {
             $table->id();
             $table->string('name');
-            $table->string('username')->unique(); // Ubah dari email ke username
+            $table->string('username')->unique();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

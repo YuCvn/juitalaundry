@@ -1,10 +1,10 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react'; //Import Link ditambahkan di sini
+import { Head, Link } from '@inertiajs/react';
 import AdminLayout from '../Layouts/AdminLayout';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function Dashboard() {
-    // Data dummy untuk grafik, nanti di perbaiki
+    // Data jelek doang
     const chartData = [
         { name: '8 Mar', Pendapatan: 0, Pengeluaran: 0, Profit: 0 },
         { name: '9 Mar', Pendapatan: 0, Pengeluaran: 0, Profit: 0 },

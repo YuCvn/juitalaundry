@@ -4,12 +4,10 @@
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\AuthController;
 
-    // Jika user buka web utama, langsung arahkan ke halaman login
     Route::get('/', function () {
         return redirect()->route('login');
     });
 
-    // (Kode yang sebelumnya sudah kita buat di bawahnya)
     Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'create'])->name('login');
         Route::post('/login', [AuthController::class, 'store']);
@@ -17,7 +15,6 @@
 
     Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth')->name('logout');
 
-    // Pastikan ini benar
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->middleware('auth')->name('dashboard');
