@@ -9,7 +9,7 @@ export default function Orders() {
     return (
         <AdminLayout title="Orders">
             
-            {/* --- Bagian Header Halaman --- */}
+            {/* Bagian Header Halaman */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <h2 className="text-2xl font-bold text-gray-800">Manajemen Orders</h2>
                 
@@ -19,7 +19,7 @@ export default function Orders() {
                 </Link>
             </div>
 
-            {/* --- Kotak Filter Status (Pills Design) --- */}
+            {/* Kotak Filter Status (Pills Design) */}
             <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 flex items-center gap-4 overflow-x-auto">
                 <span className="text-sm font-medium text-gray-500 whitespace-nowrap pl-2">Filter Status:</span>
                 
@@ -67,7 +67,7 @@ export default function Orders() {
                 </div>
             </div>
 
-            {/* --- Kotak Konten Utama (Empty State) --- */}
+            {/* Kotak Konten Utama (Empty State) */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 md:p-24 flex flex-col items-center justify-center min-h-[400px]">
                 
                 {/* Ikon Box Empty */}

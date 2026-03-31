@@ -10,7 +10,7 @@ export default function Pengaturan() {
             
             <div className="max-w-6xl mx-auto">
                 
-                {/* --- Header Halaman & Tombol Logout --- */}
+                {/* Header Halaman & Tombol Logout */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <h2 className="text-2xl font-bold text-gray-800">Pengaturan</h2>
                     
@@ -20,10 +20,10 @@ export default function Pengaturan() {
                     </button>
                 </div>
 
-                {/* --- Layout Utama: Kiri (Menu) & Kanan (Konten) --- */}
+                {/* Layout Utama: Kiri (Menu) & Kanan (Konten) */}
                 <div className="flex flex-col md:flex-row gap-8 items-start">
                     
-                    {/* --- KIRI: Navigasi Tab (Lebar Dikunci) --- */}
+                    {/*  KIRI: Navigasi Tab (Lebar Dikunci) */}
                     <div className="w-full md:w-72 flex-none">
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
                             <button 
@@ -57,7 +57,7 @@ export default function Pengaturan() {
                         </div>
                     </div>
 
-                    {/* --- KANAN: Konten Tab Aktif --- */}
+                    {/* KANAN: Konten Tab Aktif */}
                     <div className="flex-1 w-full min-w-0">
                         
                         {/* Konten: PROFIL */}
