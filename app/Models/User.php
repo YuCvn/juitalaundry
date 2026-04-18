@@ -11,7 +11,6 @@ class User extends Authenticatable
 
     protected $table = 'tb_admin';
 
-    // False kan dulu
     public $timestamps = false;
 
     protected $primaryKey = 'id_admin';
@@ -19,6 +18,7 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'password',
+        'role', 
     ];
 
     protected $hidden = [
