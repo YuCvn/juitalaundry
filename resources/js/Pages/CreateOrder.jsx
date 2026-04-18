@@ -1,7 +1,7 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AdminLayout from '../Layouts/AdminLayout';
-
+//Woy benerin kunyk
 export default function CreateOrder() {
     // State form menggunakan Inertia
     const { data, setData, post, processing } = useForm({
