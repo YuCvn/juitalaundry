@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminLayout from '../Layouts/AdminLayout';
+import AdminLayout from '../../Layouts/AdminLayout';
 import { Head, useForm } from '@inertiajs/react';
 
 export default function Pengaturan() {

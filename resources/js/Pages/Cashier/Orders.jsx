@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from '@inertiajs/react';
-import AdminLayout from '../Layouts/AdminLayout';
+import CashierLayout from '../../Layouts/CashierLayout';
 
 export default function Orders() {
     // State ini berfungsi untuk mengingat filter mana yang sedang aktif / di-klik

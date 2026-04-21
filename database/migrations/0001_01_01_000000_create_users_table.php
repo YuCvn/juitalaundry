@@ -11,18 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Ubah 'users' menjadi 'tb_admin' agar sesuai dengan Model User.php
-        Schema::create('tb_admin', function (Blueprint $table) {
-            // Gunakan id_admin sesuai rancangan di Model
-            $table->id('id_admin'); 
-            $table->string('username')->unique();
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('username')->unique(); // Tambahkan kolom username (harus unik)
             $table->string('password');
-            
-            // INI PENAMBAHANNYA: Kolom role untuk membedakan hak akses
-            $table->enum('role', ['Administrator', 'Kasir'])->default('Kasir'); 
-            
+            $table->string('role')->default('kasir'); // Tambahkan kolom role ('admin' atau 'kasir')
             $table->rememberToken();
-            // Kita hilangkan $table->timestamps(); karena di model kamu set false
+            $table->timestamps();
         });
 
         // Biarkan tabel reset token dan session seperti bawaan aslinya

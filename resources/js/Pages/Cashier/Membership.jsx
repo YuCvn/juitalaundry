@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
-import AdminLayout from '../Layouts/AdminLayout';
+import CashierLayout from '../../Layouts/CashierLayout';
 
 export default function Membership() {
     // State untuk mengontrol pop-up (modal) Tambah Member
