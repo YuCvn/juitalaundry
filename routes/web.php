@@ -26,7 +26,15 @@ use App\Http\Controllers\Cashier\MembershipController;
 // ==========================================
 
 // Default Route: Langsung arahkan ke halaman login
+// 1. Route Default: Pengecekan Cerdas
 Route::get('/', function () {
+    if (Auth::check()) {
+        $role = strtolower(Auth::user()->role);
+        if ($role === 'admin' || $role === 'administrator') {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('cashier.dashboard');
+    }
     return redirect()->route('login');
 });
 
@@ -55,7 +63,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
         
         // Sistem & Pengaturan
+        // Kelola Kasir
         Route::get('/cashiers', [CashierController::class, 'index'])->name('cashiers.index');
+        Route::post('/cashiers', [CashierController::class, 'store'])->name('cashiers.store');
+
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::post('/settings/password', [SettingController::class, 'updatePassword'])->name('settings.password.update');
     });
