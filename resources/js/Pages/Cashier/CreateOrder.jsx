@@ -15,49 +15,51 @@ export default function CreateOrder() {
 
     const hargaPerKg = 2500;
     
+    // Menghitung otomatis
     const beratAngka = parseFloat(data.berat) || 0;
     const totalPembayaran = beratAngka * hargaPerKg;
 
+    // Format rupiah
     const formatRp = (angka) => {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     };
 
     const submit = (e) => {
         e.preventDefault();
-        // Kode untuk beckend nanti
+        // Kode untuk backend nanti
         console.log("Data siap dikirim:", data);
-        // post('/orders');
+        // post('/cashier/orders');
     };
 
     return (
-        <AdminLayout title="Dashboard"> {/* Sidebar */}
+        <CashierLayout title="Buat Pesanan Baru">
+            <Head title="Order Baru - Juita Laundry" />
             
             <div className="max-w-3xl mx-auto pb-12">
                 {/* Tombol Kembali */}
-                <Link href="/orders" className="inline-flex items-center text-blue-500 hover:text-blue-700 font-semibold mb-6 transition-colors">
+                <Link href="/cashier/orders" className="inline-flex items-center text-sky-500 hover:text-sky-700 font-semibold mb-6 transition-colors">
                     <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                    Kembali ke Orders
+                    Kembali ke Daftar Pesanan
                 </Link>
 
                 {/* Card Form Utama */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
-                    <h2 className="text-2xl font-bold text-blue-600 mb-8">Order Baru</h2>
+                    <h2 className="text-2xl font-bold text-sky-600 mb-8">Order Baru</h2>
 
                     <form onSubmit={submit} className="space-y-6">
                         
                         {/* Checkbox Membership */}
-                        <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl flex items-start gap-3">
+                        <div className="bg-sky-50 border border-sky-100 p-4 rounded-xl flex items-start gap-3">
                             <input 
                                 type="checkbox" 
                                 id="membership"
                                 checked={data.is_membership}
                                 onChange={e => setData('is_membership', e.target.checked)}
-                                className="mt-1 w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer"
+                                className="mt-1 w-5 h-5 text-sky-600 rounded border-gray-300 focus:ring-sky-500 cursor-pointer"
                             />
                             <div>
                                 <label htmlFor="membership" className="font-semibold text-gray-800 cursor-pointer flex items-center gap-2">
-                                    {/* TODO: Ganti ikon kartu di bawah ini jika perlu */}
-                                    <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                                    <svg className="w-5 h-5 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" /></svg>
                                     Gunakan Membership
                                 </label>
                                 <p className="text-xs text-gray-500 mt-1">Centang jika pelanggan ini menggunakan membership (akan mendapat poin dan bisa bayar pakai saldo)</p>
@@ -68,14 +70,13 @@ export default function CreateOrder() {
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1">Nama Pelanggan</label>
                             <div className="relative">
-                                {/* Icon ganti jangan lupa wkwk*/}
-                                <svg className="w-5 h-5 absolute left-3 top-2.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                 <input 
                                     type="text" 
                                     value={data.nama}
                                     onChange={e => setData('nama', e.target.value)}
                                     placeholder="Nama lengkap pelanggan" 
-                                    className="pl-10 w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                    className="pl-10 w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all"
                                 />
                             </div>
                         </div>
@@ -84,14 +85,13 @@ export default function CreateOrder() {
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1">Nomor Telepon</label>
                             <div className="relative">
-                                {/* Icon tolong GANTI!!!!!!!!!!!! */}
-                                <svg className="w-5 h-5 absolute left-3 top-2.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                 <input 
                                     type="tel" 
                                     value={data.telepon}
                                     onChange={e => setData('telepon', e.target.value)}
                                     placeholder="08xxxxxxxxxx" 
-                                    className="pl-10 w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                    className="pl-10 w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all"
                                 />
                             </div>
                         </div>
@@ -100,14 +100,13 @@ export default function CreateOrder() {
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1">Alamat Pelanggan</label>
                             <div className="relative">
-                                {/* Icon ganti */}
-                                <svg className="w-5 h-5 absolute left-3 top-2.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 <input 
                                     type="text" 
                                     value={data.alamat}
                                     onChange={e => setData('alamat', e.target.value)}
                                     placeholder="Alamat lengkap pelanggan" 
-                                    className="pl-10 w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                    className="pl-10 w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all"
                                 />
                             </div>
                         </div>
@@ -116,12 +115,12 @@ export default function CreateOrder() {
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1">Harga per kg (Rp)</label>
                             <div className="relative">
-                                <span className="absolute left-4 top-2.5 font-bold text-blue-600">Rp</span>
+                                <span className="absolute left-4 top-2.5 font-bold text-sky-600">Rp</span>
                                 <input 
                                     type="text" 
                                     disabled 
                                     value={hargaPerKg}
-                                    className="pl-12 w-full px-4 py-2.5 bg-gray-100 border border-gray-200 rounded-lg text-gray-600 outline-none cursor-not-allowed"
+                                    className="pl-12 w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 outline-none cursor-not-allowed"
                                 />
                             </div>
                             <p className="text-xs text-gray-500 mt-1">🔥 Harga tetap: Rp 2.500/kg</p>
@@ -131,8 +130,7 @@ export default function CreateOrder() {
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1">Berat Laundry (kg)</label>
                             <div className="relative">
-                                {/*  Icon ganti */}
-                                <svg className="w-5 h-5 absolute left-3 top-2.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                                <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
                                 <input 
                                     type="number" 
                                     step="0.1"
@@ -140,7 +138,7 @@ export default function CreateOrder() {
                                     value={data.berat}
                                     onChange={e => setData('berat', e.target.value)}
                                     placeholder="0.0" 
-                                    className="pl-10 w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                    className="pl-10 w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all"
                                 />
                             </div>
                         </div>
@@ -151,14 +149,12 @@ export default function CreateOrder() {
                             <div className="grid grid-cols-2 gap-4">
                                 <label className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all ${data.metode_pengambilan === 'ambil' ? 'border-green-500 bg-green-50 shadow-sm' : 'border-gray-200 hover:bg-gray-50'}`}>
                                     <input type="radio" name="pengambilan" value="ambil" checked={data.metode_pengambilan === 'ambil'} onChange={e => setData('metode_pengambilan', e.target.value)} className="hidden" />
-                                    {/* Icon ganti */}
                                     <svg className={`w-6 h-6 ${data.metode_pengambilan === 'ambil' ? 'text-green-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                                     <span className={`text-sm font-semibold ${data.metode_pengambilan === 'ambil' ? 'text-green-700' : 'text-gray-600'}`}>Ambil di Tempat</span>
                                 </label>
 
                                 <label className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all ${data.metode_pengambilan === 'antar' ? 'border-orange-500 bg-orange-50 shadow-sm' : 'border-gray-200 hover:bg-gray-50'}`}>
                                     <input type="radio" name="pengambilan" value="antar" checked={data.metode_pengambilan === 'antar'} onChange={e => setData('metode_pengambilan', e.target.value)} className="hidden" />
-                                    {/* Icon ganti */}
                                     <svg className={`w-6 h-6 ${data.metode_pengambilan === 'antar' ? 'text-orange-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 14H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
                                     <span className={`text-sm font-semibold ${data.metode_pengambilan === 'antar' ? 'text-orange-600' : 'text-gray-600'}`}>Antar ke Alamat</span>
                                 </label>
@@ -170,18 +166,16 @@ export default function CreateOrder() {
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Metode Pembayaran</label>
                             <div className="grid grid-cols-2 gap-4">
-                                <label className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all ${data.metode_pembayaran === 'nanti' ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200 hover:bg-gray-50'}`}>
+                                <label className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all ${data.metode_pembayaran === 'nanti' ? 'border-sky-500 bg-sky-50 shadow-sm' : 'border-gray-200 hover:bg-gray-50'}`}>
                                     <input type="radio" name="pembayaran" value="nanti" checked={data.metode_pembayaran === 'nanti'} onChange={e => setData('metode_pembayaran', e.target.value)} className="hidden" />
-                                    {/* Icon ganti */}
-                                    <svg className={`w-6 h-6 ${data.metode_pembayaran === 'nanti' ? 'text-blue-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    <span className={`text-sm font-semibold ${data.metode_pembayaran === 'nanti' ? 'text-blue-700' : 'text-gray-600'}`}>Bayar Nanti</span>
+                                    <svg className={`w-6 h-6 ${data.metode_pembayaran === 'nanti' ? 'text-sky-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <span className={`text-sm font-semibold ${data.metode_pembayaran === 'nanti' ? 'text-sky-700' : 'text-gray-600'}`}>Bayar Nanti</span>
                                 </label>
 
-                                <label className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all ${data.metode_pembayaran === 'langsung' ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200 hover:bg-gray-50'}`}>
+                                <label className={`cursor-pointer border rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all ${data.metode_pembayaran === 'langsung' ? 'border-sky-500 bg-sky-50 shadow-sm' : 'border-gray-200 hover:bg-gray-50'}`}>
                                     <input type="radio" name="pembayaran" value="langsung" checked={data.metode_pembayaran === 'langsung'} onChange={e => setData('metode_pembayaran', e.target.value)} className="hidden" />
-                                    {/* Icon ganti */}
-                                    <svg className={`w-6 h-6 ${data.metode_pembayaran === 'langsung' ? 'text-blue-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-                                    <span className={`text-sm font-semibold ${data.metode_pembayaran === 'langsung' ? 'text-blue-700' : 'text-gray-600'}`}>Bayar Langsung</span>
+                                    <svg className={`w-6 h-6 ${data.metode_pembayaran === 'langsung' ? 'text-sky-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                                    <span className={`text-sm font-semibold ${data.metode_pembayaran === 'langsung' ? 'text-sky-700' : 'text-gray-600'}`}>Bayar Langsung</span>
                                 </label>
                             </div>
                         </div>
@@ -204,15 +198,16 @@ export default function CreateOrder() {
                         {/* Tombol Submit */}
                         <button 
                             type="submit"
-                            className="w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-bold py-3.5 px-4 rounded-xl transition-colors shadow-lg mt-4"
+                            disabled={processing}
+                            className="w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-bold py-3.5 px-4 rounded-xl transition-colors shadow-lg mt-4 disabled:opacity-75 disabled:cursor-not-allowed"
                         >
-                            Buat Order
+                            {processing ? 'Memproses...' : 'Buat Order'}
                         </button>
 
                     </form>
                 </div>
             </div>
 
-        </AdminLayout>
+        </CashierLayout>
     );
 }
