@@ -4,7 +4,7 @@ import { Head, useForm } from '@inertiajs/react';
 
 export default function Services({ services }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalMode, setModalMode] = useState('create'); // 'create' or 'edit'
+    const [modalMode, setModalMode] = useState('create'); 
     const [editingId, setEditingId] = useState(null);
 
     const { data, setData, post, put, delete: destroy, reset, processing, errors } = useForm({
@@ -47,15 +47,15 @@ export default function Services({ services }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (modalMode === 'create') {
-            post(route('admin.services.store'), { onSuccess: () => closeModal() });
+            post('/admin/services', { onSuccess: () => closeModal() });
         } else {
-            put(route('admin.services.update', editingId), { onSuccess: () => closeModal() });
+            put(`/admin/services/${editingId}`, { onSuccess: () => closeModal() });
         }
     };
 
     const handleDelete = (id) => {
         if (confirm('Apakah Anda yakin ingin menghapus layanan ini?')) {
-            destroy(route('admin.services.destroy', id));
+            destroy(`/admin/services/${id}`);
         }
     };
 
@@ -74,11 +74,9 @@ export default function Services({ services }) {
                 </p>
             </div>
             <div className="flex gap-2">
-                {/* Tombol Edit (Icon Pensil Biru/Abu) */}
                 <button onClick={() => openEditModal(service)} className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
                 </button>
-                {/* Tombol Hapus (Icon Tong Sampah Merah) */}
                 <button onClick={() => handleDelete(service.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                 </button>
@@ -99,7 +97,6 @@ export default function Services({ services }) {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Bagian Laundry Kiloan */}
                     <div>
                         <h3 className="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Laundry Kiloan</h3>
                         <div className="flex flex-col gap-3">
@@ -111,7 +108,6 @@ export default function Services({ services }) {
                         </div>
                     </div>
 
-                    {/* Bagian Jasa Lainnya */}
                     <div>
                         <h3 className="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Jasa Lainnya</h3>
                         <div className="flex flex-col gap-3">
@@ -125,7 +121,6 @@ export default function Services({ services }) {
                 </div>
             </div>
 
-            {/* Modal Edit / Tambah */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm p-4">
                     <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
@@ -144,6 +139,7 @@ export default function Services({ services }) {
                                     <option value="kiloan">Laundry Kiloan</option>
                                     <option value="lainnya">Jasa Lainnya</option>
                                 </select>
+                                {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
                             </div>
 
                             <div>
@@ -154,8 +150,8 @@ export default function Services({ services }) {
                                     onChange={(e) => setData('name', e.target.value)}
                                     placeholder="Contoh: Cuci Komplit"
                                     className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
-                                    required
                                 />
+                                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                             </div>
 
                             <div>
@@ -167,6 +163,7 @@ export default function Services({ services }) {
                                     placeholder="Contoh: Reguler / Kilat"
                                     className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
                                 />
+                                {errors.type && <p className="text-red-500 text-xs mt-1">{errors.type}</p>}
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
@@ -178,9 +175,7 @@ export default function Services({ services }) {
                                         onChange={(e) => setData('price', e.target.value)}
                                         placeholder="5000"
                                         className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
-                                        required
                                     />
-                                    {/* Tambahkan ini untuk menampilkan pesan error */}
                                     {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
                                 </div>
                                 <div>
@@ -191,8 +186,8 @@ export default function Services({ services }) {
                                         onChange={(e) => setData('unit', e.target.value)}
                                         placeholder="Kg / Pcs"
                                         className="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500"
-                                        required
                                     />
+                                    {errors.unit && <p className="text-red-500 text-xs mt-1">{errors.unit}</p>}
                                 </div>
                             </div>
 
@@ -207,6 +202,7 @@ export default function Services({ services }) {
                                 <label htmlFor="is_active" className="text-sm font-medium text-gray-700 cursor-pointer">
                                     Layanan Aktif
                                 </label>
+                                {errors.is_active && <p className="text-red-500 text-xs mt-1">{errors.is_active}</p>}
                             </div>
 
                             <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
