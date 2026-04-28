@@ -126,7 +126,7 @@ export default function CashierLayout({ children, title }) {
 
                         <Link href="/logout" method="post" as="button" className={`w-full flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} text-blue-100 hover:bg-blue-700 font-medium`}>
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                            {isSidebarOpen && <span className="ml-3 text-sm">Keluar</span>}
+                            {isSidebarOpen && <span className="ml-3 text-sm">Logout</span>}
                         </Link>
                     </div>
                 </nav>

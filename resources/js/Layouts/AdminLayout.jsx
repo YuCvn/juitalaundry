@@ -33,7 +33,6 @@ export default function AdminLayout({ children, title }) {
 
             {/* NOTIFIKASI TOAST */}
             <div className="fixed top-5 right-5 z-[9999] flex flex-col gap-3">
-                {/* NOTIFIKASI HIJAU (SUCCESS) */}
                 {flash?.success && showNotification && (
                     <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-xl shadow-xl flex items-center justify-between w-80 animate-fade-in-down">
                         <div className="flex items-center">
@@ -55,7 +54,6 @@ export default function AdminLayout({ children, title }) {
                     </div>
                 )}
 
-                {/* NOTIFIKASI MERAH (ERROR / WARNING) */}
                 {flash?.error && showNotification && (
                     <div className="bg-white border-l-4 border-rose-500 p-4 rounded-xl shadow-xl flex items-center justify-between w-80 animate-fade-in-down">
                         <div className="flex items-center">
@@ -112,6 +110,10 @@ export default function AdminLayout({ children, title }) {
                     </Link>
 
                     <div className="text-xs font-semibold text-blue-300 mt-6 mb-2 px-3 uppercase tracking-wider">{isSidebarOpen ? 'Lainnya' : '...'}</div>
+                    <Link href="/admin/services" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/services') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+                        {isSidebarOpen && <span className="ml-3 text-sm">Kelola Layanan</span>}
+                    </Link>
                     <Link href="/admin/cashiers" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/cashiers') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                         {isSidebarOpen && <span className="ml-3 text-sm">Kelola Kasir</span>}

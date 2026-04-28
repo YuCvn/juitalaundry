@@ -1,10 +1,12 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
+// Import sudah benar
 import CashierLayout from '../../Layouts/CashierLayout';
 
 export default function History() {
     return (
-        <AdminLayout title="History">
+        // UBAH INI MENJADI CashierLayout
+        <CashierLayout title="History">
             
             <div className="max-w-7xl mx-auto">
                 {/* Header Halaman */}
@@ -60,7 +62,6 @@ export default function History() {
                     <p className="text-gray-500 text-base text-center max-w-sm">Orderan yang sudah diambil akan muncul di sini</p>
                 </div>
             </div>
-
-        </AdminLayout>
+        </CashierLayout>
     );
 }

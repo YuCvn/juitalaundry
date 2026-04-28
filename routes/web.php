@@ -55,6 +55,11 @@ Route::middleware('auth')->group(function () {
         // Keuangan
         Route::get('/financial-reports', [FinancialReportController::class, 'index'])->name('financial-reports.index');
         Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
+
+        // Kelola Layanan
+        Route::get('/services', function () {
+            return inertia('Admin/Service');
+        })->name('services.index');
         
         // Kelola Kasir
         Route::get('/cashiers', [CashierController::class, 'index'])->name('cashiers.index');

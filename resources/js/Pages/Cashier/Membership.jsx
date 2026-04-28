@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
+// Import sudah benar
 import CashierLayout from '../../Layouts/CashierLayout';
 
 export default function Membership() {
@@ -23,7 +24,8 @@ export default function Membership() {
     };
 
     return (
-        <AdminLayout title="Membership">
+        // UBAH INI MENJADI CashierLayout
+        <CashierLayout title="Membership">
             
             <div className="max-w-7xl mx-auto relative">
                 {/* Header Halaman & Tombol Tambah */}
@@ -183,7 +185,6 @@ export default function Membership() {
                     </div>
                 </div>
             )}
-
-        </AdminLayout>
+        </CashierLayout>
     );
 }
