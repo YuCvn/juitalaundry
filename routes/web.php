@@ -58,9 +58,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
 
         // Kelola Layanan
-        Route::get('/services', function () {
-            return inertia('Admin/Service');
-        })->name('services.index');
         Route::resource('services', ServiceController::class)->except(['create', 'show', 'edit']);
         
         // Kelola Kasir

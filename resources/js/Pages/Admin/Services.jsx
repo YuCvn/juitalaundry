@@ -47,19 +47,18 @@ export default function Services({ services }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (modalMode === 'create') {
-            post(route('services.store'), { onSuccess: () => closeModal() });
+            post(route('admin.services.store'), { onSuccess: () => closeModal() });
         } else {
-            put(route('services.update', editingId), { onSuccess: () => closeModal() });
+            put(route('admin.services.update', editingId), { onSuccess: () => closeModal() });
         }
     };
 
     const handleDelete = (id) => {
         if (confirm('Apakah Anda yakin ingin menghapus layanan ini?')) {
-            destroy(route('services.destroy', id));
+            destroy(route('admin.services.destroy', id));
         }
     };
 
-    // Komponen Card untuk dipake berulang
     const ServiceCard = ({ service }) => (
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
             <div>
