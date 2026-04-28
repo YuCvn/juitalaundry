@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\FinancialReportController;
 use App\Http\Controllers\Admin\ExpenseController;
 use App\Http\Controllers\Admin\CashierController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ServiceController;
 // Cashier Controllers
 use App\Http\Controllers\Cashier\DashboardController as CashierDashboard;
 use App\Http\Controllers\Cashier\OrderController;
@@ -60,6 +61,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/services', function () {
             return inertia('Admin/Service');
         })->name('services.index');
+        Route::resource('services', ServiceController::class)->except(['create', 'show', 'edit']);
         
         // Kelola Kasir
         Route::get('/cashiers', [CashierController::class, 'index'])->name('cashiers.index');
@@ -72,9 +74,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/settings/password', [SettingController::class, 'updatePassword'])->name('settings.password.update');
     });
 
-    // ------------------------------------------
     // AREA KASIR (CASHIER)
-    // ------------------------------------------
 
     Route::prefix('cashier')->name('cashier.')->middleware('role:cashier')->group(function () {
         
