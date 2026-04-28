@@ -15,18 +15,16 @@ export default function CreateOrder() {
 
     const hargaPerKg = 2500;
     
-    // Menghitubg otomatis
     const beratAngka = parseFloat(data.berat) || 0;
     const totalPembayaran = beratAngka * hargaPerKg;
 
-    // Format rupiah
     const formatRp = (angka) => {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     };
 
     const submit = (e) => {
         e.preventDefault();
-        // Kode untuk beckemd nanti
+        // Kode untuk beckend nanti
         console.log("Data siap dikirim:", data);
         // post('/orders');
     };

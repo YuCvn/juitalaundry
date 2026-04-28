@@ -24,6 +24,12 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            if (isset($user->is_active) && !$user->is_active) {
+                Auth::logout();
+                return back()->with('error', 'Akun Anda telah dinonaktifkan oleh Administrator. Hubungi atasan Anda.');
+            }
             $request->session()->regenerate();
 
             $role = Auth::user()->role; 
@@ -32,7 +38,7 @@ class AuthController extends Controller
                 return redirect()->intended(route('admin.dashboard'))
                     ->with('success', 'Selamat datang kembali, Admin!');
             } elseif (strtolower($role) === 'kasir' || strtolower($role) === 'cashier') {
-                return redirect()->intended(route('cashier.dashboard'))
+                return redirect()->intended(route('cashier.orders.create'))
                     ->with('success', 'Selamat bekerja, Kasir!');
             }
 

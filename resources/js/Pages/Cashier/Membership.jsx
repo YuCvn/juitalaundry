@@ -18,7 +18,6 @@ export default function Membership() {
         }
     ];
 
-    // Fungsi format rupiah
     const formatRp = (angka) => {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     };
@@ -30,8 +29,6 @@ export default function Membership() {
                 {/* Header Halaman & Tombol Tambah */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                     <h2 className="text-2xl font-bold text-gray-800">Membership</h2>
-                    
-                    {/* Tombol yang akan mengubah state showModal menjadi true */}
                     <button 
                         onClick={() => setShowModal(true)}
                         className="bg-[#10b981] hover:bg-emerald-600 text-white font-semibold py-2.5 px-5 rounded-lg flex items-center transition-colors shadow-sm"

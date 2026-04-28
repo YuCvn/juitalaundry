@@ -3,7 +3,6 @@ import { Link } from '@inertiajs/react';
 import CashierLayout from '../../Layouts/CashierLayout';
 
 export default function Orders() {
-    // State ini berfungsi untuk mengingat filter mana yang sedang aktif / di-klik
     const [activeFilter, setActiveFilter] = useState('semua');
 
     return (

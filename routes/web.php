@@ -1,58 +1,53 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-// ==========================================
-// IMPORT CONTROLLERS
-// ==========================================
 // Auth
 use App\Http\Controllers\Auth\AuthController;
-
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\FinancialReportController;
 use App\Http\Controllers\Admin\ExpenseController;
 use App\Http\Controllers\Admin\CashierController;
 use App\Http\Controllers\Admin\SettingController;
-
 // Cashier Controllers
 use App\Http\Controllers\Cashier\DashboardController as CashierDashboard;
 use App\Http\Controllers\Cashier\OrderController;
 use App\Http\Controllers\Cashier\HistoryController;
 use App\Http\Controllers\Cashier\MembershipController;
 
-// ==========================================
-// ROUTES
-// ==========================================
-
-// Default Route: Langsung arahkan ke halaman login
-// 1. Route Default: Pengecekan Cerdas
+// Route Default
 Route::get('/', function () {
     if (Auth::check()) {
         $role = strtolower(Auth::user()->role);
         if ($role === 'admin' || $role === 'administrator') {
             return redirect()->route('admin.dashboard');
         }
-        return redirect()->route('cashier.dashboard');
+        return redirect()->route('cashier.orders.create'); 
     }
     return redirect()->route('login');
 });
 
-// Route Guest: Hanya untuk pengguna yang belum login
+// Route Guest
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'create'])->name('login');
     Route::post('/login', [AuthController::class, 'store']);
 });
 
-// Route Auth: Harus login terlebih dahulu
+// Route Auth
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        $role = strtolower(Auth::user()->role);
+        if ($role === 'admin' || $role === 'administrator') {
+            return redirect()->route('admin.dashboard');
+        }
+        // Kasir langsung dilempar ke menu pemesanan
+        return redirect()->route('cashier.orders.create');
+    })->name('dashboard.redirect');
     
     // Rute Logout
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
-    // ------------------------------------------
     // AREA ADMIN
-    // ------------------------------------------
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
         
@@ -62,10 +57,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/financial-reports', [FinancialReportController::class, 'index'])->name('financial-reports.index');
         Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
         
-        // Sistem & Pengaturan
         // Kelola Kasir
         Route::get('/cashiers', [CashierController::class, 'index'])->name('cashiers.index');
         Route::post('/cashiers', [CashierController::class, 'store'])->name('cashiers.store');
+        Route::patch('/cashiers/{id}/toggle', [CashierController::class, 'toggleStatus'])->name('cashiers.toggle');
+        Route::put('/cashiers/{id}', [CashierController::class, 'update'])->name('cashiers.update');
+        Route::delete('/cashiers/{id}', [CashierController::class, 'destroy'])->name('cashiers.destroy');
 
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::post('/settings/password', [SettingController::class, 'updatePassword'])->name('settings.password.update');
