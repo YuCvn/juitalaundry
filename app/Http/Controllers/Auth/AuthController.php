@@ -38,7 +38,7 @@ class AuthController extends Controller
                 return redirect()->intended(route('admin.dashboard'))
                     ->with('success', 'Selamat datang kembali, Admin!');
             } elseif (strtolower($role) === 'kasir' || strtolower($role) === 'cashier') {
-                return redirect()->intended(route('cashier.orders.create'))
+                return redirect()->intended(route('cashier.orders.index'))
                     ->with('success', 'Selamat bekerja, Kasir!');
             }
 

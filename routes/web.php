@@ -22,7 +22,7 @@ Route::get('/', function () {
         if ($role === 'admin' || $role === 'administrator') {
             return redirect()->route('admin.dashboard');
         }
-        return redirect()->route('cashier.orders.create'); 
+        return redirect()->route('cashier.orders.index'); 
     }
     return redirect()->route('login');
 });
@@ -40,8 +40,7 @@ Route::middleware('auth')->group(function () {
         if ($role === 'admin' || $role === 'administrator') {
             return redirect()->route('admin.dashboard');
         }
-        // Kasir langsung dilempar ke menu pemesanan
-        return redirect()->route('cashier.orders.create');
+        return redirect()->route('cashier.orders.index');
     })->name('dashboard.redirect');
     
     // Rute Logout

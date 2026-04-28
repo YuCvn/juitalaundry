@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { Link } from '@inertiajs/react';
+// Impor CashierLayout sudah benar
 import CashierLayout from '../../Layouts/CashierLayout';
 
 export default function Orders() {
     const [activeFilter, setActiveFilter] = useState('semua');
 
     return (
-        <AdminLayout title="Orders">
+        // UBAH INI: Gunakan CashierLayout, bukan AdminLayout
+        <CashierLayout title="Orders">
             
             {/* Bagian Header Halaman */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <h2 className="text-2xl font-bold text-gray-800">Manajemen Orders</h2>
                 
-                <Link href="/orders/create" className="bg-[#10b981] hover:bg-emerald-600 text-white font-semibold py-2.5 px-5 rounded-lg flex items-center transition-colors shadow-sm w-fit">
+                <Link href="/cashier/orders/create" className="bg-[#10b981] hover:bg-emerald-600 text-white font-semibold py-2.5 px-5 rounded-lg flex items-center transition-colors shadow-sm w-fit">
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                     Order Baru
                 </Link>
@@ -80,7 +82,7 @@ export default function Orders() {
                 
                 {/* Tombol Tambah Order di Tengah */}
                 <Link 
-                    href="/orders/create" 
+                    href="/cashier/orders/create" 
                     className="bg-[#00d2ff] hover:bg-[#00b8e6] text-white font-bold py-3 px-6 rounded-xl flex items-center transition-colors shadow-lg"
                 >
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
@@ -88,6 +90,7 @@ export default function Orders() {
                 </Link>
             </div>
 
-        </AdminLayout>
+        {/* UBAH INI: Penutup CashierLayout */}
+        </CashierLayout>
     );
 }

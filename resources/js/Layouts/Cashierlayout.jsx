@@ -68,35 +68,35 @@ export default function CashierLayout({ children, title }) {
 
                 {/* MENU NAVIGASI KASIR */}
                 <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-2">
-                    <Link href="/cashier/dashboard" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/dashboard') ? 'bg-white text-sky-600 shadow-sm font-semibold' : 'text-sky-50 hover:bg-sky-600 font-medium'}`}>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-                        {isSidebarOpen && <span className="ml-3 text-sm">Dashboard</span>}
-                    </Link>
+                    
+                    {/* MENU DASHBOARD TELAH DIHAPUS DARI SINI */}
 
-                    <div className="text-xs font-semibold text-sky-200 mt-6 mb-2 px-3 uppercase tracking-wider">{isSidebarOpen ? 'Transaksi' : '...'}</div>
-                    <Link href="/cashier/orders/create" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/orders/create') ? 'bg-white text-sky-600 shadow-sm font-semibold' : 'text-sky-50 hover:bg-sky-600 font-medium'}`}>
+                    <div className="text-xs font-semibold text-sky-200 mt-4 mb-2 px-3 uppercase tracking-wider">{isSidebarOpen ? 'Transaksi' : '...'}</div>
+                    <Link href="/cashier/orders/create" className={`flex items-center p-3 rounded-xl transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/orders/create') ? 'bg-white text-sky-600 shadow-sm font-bold' : 'text-sky-50 hover:bg-sky-600 font-medium'}`}>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                         {isSidebarOpen && <span className="ml-3 text-sm">Buat Pesanan</span>}
                     </Link>
-                    <Link href="/cashier/orders" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${url === '/cashier/orders' ? 'bg-white text-sky-600 shadow-sm font-semibold' : 'text-sky-50 hover:bg-sky-600 font-medium'}`}>
+                    
+                    <Link href="/cashier/orders" className={`flex items-center p-3 rounded-xl transition-all ${!isSidebarOpen && 'justify-center'} ${url === '/cashier/orders' ? 'bg-white text-sky-600 shadow-sm font-bold' : 'text-sky-50 hover:bg-sky-600 font-medium'}`}>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
                         {isSidebarOpen && <span className="ml-3 text-sm">Daftar Pesanan</span>}
                     </Link>
-                    <Link href="/cashier/history" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/history') ? 'bg-white text-sky-600 shadow-sm font-semibold' : 'text-sky-50 hover:bg-sky-600 font-medium'}`}>
+                    
+                    <Link href="/cashier/history" className={`flex items-center p-3 rounded-xl transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/history') ? 'bg-white text-sky-600 shadow-sm font-bold' : 'text-sky-50 hover:bg-sky-600 font-medium'}`}>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        {isSidebarOpen && <span className="ml-3 text-sm">Riwayat</span>}
+                        {isSidebarOpen && <span className="ml-3 text-sm">Riwayat Selesai</span>}
                     </Link>
 
                     <div className="text-xs font-semibold text-sky-200 mt-6 mb-2 px-3 uppercase tracking-wider">{isSidebarOpen ? 'Pelanggan' : '...'}</div>
-                    <Link href="/cashier/membership" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/membership') ? 'bg-white text-sky-600 shadow-sm font-semibold' : 'text-sky-50 hover:bg-sky-600 font-medium'}`}>
+                    <Link href="/cashier/membership" className={`flex items-center p-3 rounded-xl transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/membership') ? 'bg-white text-sky-600 shadow-sm font-bold' : 'text-sky-50 hover:bg-sky-600 font-medium'}`}>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                         {isSidebarOpen && <span className="ml-3 text-sm">Membership</span>}
                     </Link>
 
                     <div className="mt-auto pt-6 pb-2">
-                        <Link href="/logout" method="post" as="button" className={`w-full flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} text-sky-50 hover:bg-sky-600 font-medium`}>
+                        <Link href="/logout" method="post" as="button" className={`w-full flex items-center p-3 rounded-xl transition-all ${!isSidebarOpen && 'justify-center'} text-sky-50 hover:bg-sky-600 font-medium`}>
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                            {isSidebarOpen && <span className="ml-3 text-sm">Keluar</span>}
+                            {isSidebarOpen && <span className="ml-3 text-sm">Keluar Sistem</span>}
                         </Link>
                     </div>
                 </nav>
