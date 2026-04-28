@@ -55,10 +55,8 @@ export default function Pengaturan() {
                         {errors.new_password && <div className="text-red-500 text-sm mt-1">{errors.new_password}</div>}
                     </div>
 
-                    {/* Input Konfirmasi Password Baru */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Konfirmasi Password Baru</label>
-                        {/* PASTIKAN state-nya bernama new_password_confirmation agar terbaca oleh Laravel */}
                         <input
                             type="password"
                             value={data.new_password_confirmation}

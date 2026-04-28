@@ -5,11 +5,9 @@ export default function AdminLayout({ children, title }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [showNotification, setShowNotification] = useState(true);
     
-    // 1. Ambil auth dari props Inertia
     const { url, props } = usePage();
     const { flash, auth } = props; 
     
-    // 2. Simpan data user ke variabel dan ambil huruf pertama namanya
     const user = auth?.user;
     const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : 'A';
 
@@ -41,11 +39,9 @@ export default function AdminLayout({ children, title }) {
                             </div>
                             <div>
                                 <h4 className="text-sm font-bold text-gray-800">
-                                    {/* Memisahkan Judul jika ada karakter | */}
                                     {flash.success.includes('|') ? flash.success.split('|')[0] : 'Berhasil'}
                                 </h4>
                                 <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
-                                    {/* Memisahkan Pesan jika ada karakter | */}
                                     {flash.success.includes('|') ? flash.success.split('|')[1] : flash.success}
                                 </p>
                             </div>
