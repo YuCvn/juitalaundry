@@ -7,10 +7,8 @@ export default function Orders() {
     const [activeFilter, setActiveFilter] = useState('semua');
 
     return (
-        // UBAH INI: Gunakan CashierLayout, bukan AdminLayout
         <CashierLayout title="Orders">
             
-            {/* Bagian Header Halaman */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <h2 className="text-2xl font-bold text-gray-800">Manajemen Orders</h2>
                 
@@ -20,7 +18,6 @@ export default function Orders() {
                 </Link>
             </div>
 
-            {/* Kotak Filter Status (Pills Design) */}
             <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 flex items-center gap-4 overflow-x-auto">
                 <span className="text-sm font-medium text-gray-500 whitespace-nowrap pl-2">Filter Status:</span>
                 
@@ -68,10 +65,8 @@ export default function Orders() {
                 </div>
             </div>
 
-            {/* Kotak Konten Utama (Empty State) */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 md:p-24 flex flex-col items-center justify-center min-h-[400px]">
                 
-                {/* Ikon Box Empty */}
                 <div className="text-gray-300 mb-5">
                     <svg className="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -80,7 +75,6 @@ export default function Orders() {
                 
                 <p className="text-gray-500 mb-8 text-lg">Belum ada order</p>
                 
-                {/* Tombol Tambah Order di Tengah */}
                 <Link 
                     href="/cashier/orders/create" 
                     className="bg-[#00d2ff] hover:bg-[#00b8e6] text-white font-bold py-3 px-6 rounded-xl flex items-center transition-colors shadow-lg"
@@ -90,7 +84,6 @@ export default function Orders() {
                 </Link>
             </div>
 
-        {/* UBAH INI: Penutup CashierLayout */}
         </CashierLayout>
     );
 }
