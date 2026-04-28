@@ -12,11 +12,9 @@ export default function Pengaturan() {
 
     const submit = (e) => {
         e.preventDefault();
-        // Mengirim data form via metode PUT
         put('/pengaturan/password', {
             preserveScroll: true,
             onSuccess: () => {
-                // Jika berhasil sukses ubah password, kosongkan form
                 reset();
             },
         });

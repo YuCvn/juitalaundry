@@ -3,7 +3,6 @@ import { Head } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 
 export default function Pengeluaran() {
-    // State untuk mengontrol pop-up (modal) Tambah Pengeluaran
     const [showModal, setShowModal] = useState(false);
 
     return (
