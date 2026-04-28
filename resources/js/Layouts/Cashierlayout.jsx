@@ -33,7 +33,6 @@ export default function CashierLayout({ children, title }) {
 
             {/* NOTIFIKASI TOAST */}
             <div className="fixed top-5 right-5 z-[9999] flex flex-col gap-3">
-                {/* ... (kode notifikasi toast tetap sama agar rapi, saya sembunyikan untuk menghemat ruang, kamu bisa biarkan punya kamu yang lama) ... */}
                 {flash?.success && showNotification && (
                     <div className="bg-white border-l-4 border-green-500 p-4 rounded-lg shadow-xl flex items-center justify-between w-80 animate-fade-in-down">
                         <div className="flex items-center">
@@ -102,11 +101,8 @@ export default function CashierLayout({ children, title }) {
                     </div>
                 </nav>
 
-                {/* AREA PROFIL USER KASIR (BAWAH KIRI) */}
-                {/* AREA PROFIL USER KASIR (BAWAH KIRI) */}
                 <div className="p-4 border-t border-sky-400/20 bg-sky-700/30">
                     <div className={`flex items-center ${!isSidebarOpen ? 'justify-center' : ''}`}>
-                        {/* Lingkaran Avatar: Putih Bersih, Teks Biru Langit, Font Ekstra Tebal */}
                         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
                             <span className="text-sky-600 font-black text-lg leading-none" style={{ fontFamily: 'sans-serif' }}>
                                 {userInitial}
