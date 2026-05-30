@@ -4,7 +4,6 @@ import AdminLayout from '../../Layouts/AdminLayout';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function LaporanKeuangan() {
-    // State untuk mengontrol pop-up (modal) Tambah Pengeluaran
     const [showModal, setShowModal] = useState(false);
 
     // Data bodong
