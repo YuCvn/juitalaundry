@@ -10,12 +10,15 @@ use Inertia\Inertia;
 class ServiceController extends Controller
 {
     public function index()
-    {
-        $services = Service::latest()->get();
-        return Inertia::render('Admin/Services', [
-            'services' => $services
-        ]);
-    }
+{
+    // Ambil data dari database
+    $services = Service::all(); 
+    
+    // Lempar ke React
+    return Inertia::render('Admin/Services', [
+        'services' => $services
+    ]);
+}
 
     public function store(Request $request)
     {
