@@ -82,9 +82,17 @@ Route::middleware('auth')->group(function () {
         Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         
+        // TAMBAHKAN BARIS INI TEPAT DI BAWAHNYA:
+        Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+        
         // Riwayat & Pelanggan
         Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+        
+        // Kelola Membership
         Route::get('/membership', [MembershipController::class, 'index'])->name('membership.index');
+        Route::post('/membership', [MembershipController::class, 'store'])->name('membership.store');
+        Route::put('/membership/{membership}', [MembershipController::class, 'update'])->name('membership.update');
+        Route::delete('/membership/{membership}', [MembershipController::class, 'destroy'])->name('membership.destroy');
     });
 
 });

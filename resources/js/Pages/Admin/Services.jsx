@@ -43,8 +43,16 @@ export default function Services({ auth, services }) {
     // Submit Form (Tambah / Edit)
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        // Membersihkan tipe jika kategori diubah kembali ke kiloan agar data rapi
+        const submitData = { ...data };
+        if (submitData.category === 'kiloan') {
+            submitData.type = '';
+        }
+
         if (modalMode === 'create') {
             post(route('admin.services.store'), {
+                data: submitData,
                 onSuccess: () => {
                     setIsModalOpen(false);
                     reset();
@@ -52,6 +60,7 @@ export default function Services({ auth, services }) {
             });
         } else {
             put(route('admin.services.update', currentId), {
+                data: submitData,
                 onSuccess: () => {
                     setIsModalOpen(false);
                     reset();
@@ -76,7 +85,7 @@ export default function Services({ auth, services }) {
         }).format(number);
     };
 
-    // Filter data berdasarkan pencarian (Aman jika services undfined)
+    // Filter data berdasarkan pencarian (Aman jika services undefined)
     const safeServices = Array.isArray(services) ? services : [];
     const filteredServices = safeServices.filter(service => {
         const sName = service.name || service.nama_layanan || '';
@@ -94,16 +103,11 @@ export default function Services({ auth, services }) {
             <Head title="Kelola Layanan" />
             <div className="space-y-6">
                 
-                {/* 1. BANNER ATAS (Desain Estetik) */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
-                    <div className="bg-blue-100 p-3 rounded-xl">
-                        <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                        </svg>
-                    </div>
+                {/* 1. BANNER ATAS */}
+                <div className="bg-[#3388FF] text-white rounded-lg p-6 mb-6 text-center">
                     <div>
-                        <h1 className="text-2xl font-extrabold text-gray-800 tracking-wide font-sans">Kelola Layanan</h1>
-                        <p className="text-sm text-gray-500 font-medium mt-1">Atur harga, satuan, dan jenis layanan laundry</p>
+                        <h1 className="text-xl font-normal mb-1">Kelola Layanan</h1>
+                        <p className="text-white text-[12px] font-normal">Atur harga dan jenis layanan laundry</p>
                     </div>
                 </div>
 
@@ -148,31 +152,33 @@ export default function Services({ auth, services }) {
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                             {kiloanServices.map((service) => (
-                                <div key={service.id} className="border border-gray-100 rounded-xl p-5 bg-white shadow-sm hover:shadow-lg transition-all relative flex flex-col justify-between group">
-                                    <div>
-                                        <div className="flex justify-between items-start">
-                                            <div>
-                                                <h3 className="font-bold text-gray-800 text-base">{service.name || service.nama_layanan}</h3>
-                                                {service.type && <p className="text-sm text-gray-500 mt-0.5">{service.type}</p>}
-                                            </div>
-                                            <div className="flex gap-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
-                                                <button onClick={() => openEditModal(service)} className="text-blue-500 hover:bg-blue-50 p-1.5 rounded-lg transition-colors">
-                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                                                </button>
-                                                <button onClick={() => handleDelete(service.id)} className="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg transition-colors">
-                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                                </button>
-                                            </div>
+                                <div key={service.id} className="border border-gray-100 rounded-xl p-4 bg-white shadow-sm flex justify-between items-center relative group">
+                                    <div className="flex flex-col space-y-1.5">
+                                        <div className="text-[11px] font-normal text-gray-800 flex flex-col">
+                                            <span>{service.name || service.nama_layanan}</span>
+                                            {service.type && <span className="text-gray-500">- {service.type}</span>}
                                         </div>
-                                        <div className="mt-4 flex items-baseline gap-1">
-                                            <span className="text-xl font-extrabold text-blue-600">{formatRupiah(service.price || service.harga)}</span>
-                                            <span className="text-sm text-gray-500 font-medium">/{service.unit || service.satuan}</span>
+                                        <span className="text-[14px] font-bold text-blue-600">
+                                            {formatRupiah(service.price || service.harga)}
+                                        </span>
+                                        <div>
+                                            <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-normal ${service.is_active ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-500'}`}>
+                                                {service.is_active ? 'Aktif' : 'Nonaktif'}
+                                            </span>
                                         </div>
                                     </div>
-                                    <div className="mt-4 pt-4 border-t border-gray-50">
-                                        <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold ${service.is_active ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-500'}`}>
-                                            <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${service.is_active ? 'bg-emerald-500' : 'bg-gray-400'}`}></span>
-                                            {service.is_active ? 'Aktif' : 'Nonaktif'}
+                                    
+                                    <div className="flex flex-col items-end space-y-2">
+                                        <div className="flex gap-1">
+                                            <button onClick={() => openEditModal(service)} className="text-blue-500 hover:bg-blue-50 p-1.5 rounded-lg transition-colors">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                            </button>
+                                            <button onClick={() => handleDelete(service.id)} className="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg transition-colors">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                            </button>
+                                        </div>
+                                        <span className="text-[10px] text-gray-500 font-normal mt-1">
+                                            /{service.unit || service.satuan}
                                         </span>
                                     </div>
                                 </div>
@@ -195,31 +201,33 @@ export default function Services({ auth, services }) {
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                             {lainnyaServices.map((service) => (
-                                <div key={service.id} className="border border-gray-100 rounded-xl p-5 bg-white shadow-sm hover:shadow-lg transition-all relative flex flex-col justify-between group">
-                                    <div>
-                                        <div className="flex justify-between items-start">
-                                            <div>
-                                                <h3 className="font-bold text-gray-800 text-base">{service.name || service.nama_layanan}</h3>
-                                                {service.type && <p className="text-sm text-gray-500 mt-0.5">{service.type}</p>}
-                                            </div>
-                                            <div className="flex gap-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
-                                                <button onClick={() => openEditModal(service)} className="text-purple-500 hover:bg-purple-50 p-1.5 rounded-lg transition-colors">
-                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                                                </button>
-                                                <button onClick={() => handleDelete(service.id)} className="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg transition-colors">
-                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                                </button>
-                                            </div>
+                                <div key={service.id} className="border border-gray-100 rounded-xl p-4 bg-white shadow-sm flex justify-between items-center relative group">
+                                    <div className="flex flex-col space-y-1.5">
+                                        <div className="text-[11px] font-normal text-gray-800 flex flex-col">
+                                            <span>{service.name || service.nama_layanan}</span>
+                                            {service.type && <span className="text-gray-500">- {service.type}</span>}
                                         </div>
-                                        <div className="mt-4 flex items-baseline gap-1">
-                                            <span className="text-xl font-extrabold text-purple-600">{formatRupiah(service.price || service.harga)}</span>
-                                            <span className="text-sm text-gray-500 font-medium">/{service.unit || service.satuan}</span>
+                                        <span className="text-[14px] font-bold text-purple-600">
+                                            {formatRupiah(service.price || service.harga)}
+                                        </span>
+                                        <div>
+                                            <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-normal ${service.is_active ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-500'}`}>
+                                                {service.is_active ? 'Aktif' : 'Nonaktif'}
+                                            </span>
                                         </div>
                                     </div>
-                                    <div className="mt-4 pt-4 border-t border-gray-50">
-                                        <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold ${service.is_active ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-100 text-gray-500'}`}>
-                                            <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${service.is_active ? 'bg-emerald-500' : 'bg-gray-400'}`}></span>
-                                            {service.is_active ? 'Aktif' : 'Nonaktif'}
+                                    
+                                    <div className="flex flex-col items-end space-y-2">
+                                        <div className="flex gap-1">
+                                            <button onClick={() => openEditModal(service)} className="text-purple-500 hover:bg-purple-50 p-1.5 rounded-lg transition-colors">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                                            </button>
+                                            <button onClick={() => handleDelete(service.id)} className="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg transition-colors">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                            </button>
+                                        </div>
+                                        <span className="text-[10px] text-gray-500 font-normal mt-1">
+                                            /{service.unit || service.satuan}
                                         </span>
                                     </div>
                                 </div>
@@ -229,7 +237,7 @@ export default function Services({ auth, services }) {
                 </div>
             </div>
 
-            {/* MODAL INPUT (TAMBAH / EDIT) - Desain Modern Clean */}
+            {/* MODAL INPUT (TAMBAH / EDIT) - TELAH DIUPDATE SESUAI FIGMA */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl relative overflow-hidden">
@@ -244,6 +252,8 @@ export default function Services({ auth, services }) {
                         
                         <form onSubmit={handleSubmit} className="p-6">
                             <div className="space-y-4">
+                                
+                                {/* 1. Kategori */}
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Kategori</label>
                                     <select 
@@ -256,6 +266,7 @@ export default function Services({ auth, services }) {
                                     </select>
                                 </div>
 
+                                {/* 2. Nama Layanan */}
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Layanan</label>
                                     <input 
@@ -269,66 +280,66 @@ export default function Services({ auth, services }) {
                                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                                 </div>
 
+                                {data.category === 'lainnya' && (
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                                            Ukuran/Jenis <span className="text-gray-400 font-normal">(Opsional)</span>
+                                        </label>
+                                        <input 
+                                            type="text" 
+                                            value={data.type} 
+                                            placeholder="Contoh: Pakaian, Selimut"
+                                            onChange={(e) => setData('type', e.target.value)} 
+                                            className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2.5 px-3 outline-none"
+                                        />
+                                    </div>
+                                )}
+
+                                {/* 3. Harga */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Tipe <span className="text-gray-400 font-normal">(Opsional)</span></label>
-                                    <input 
-                                        type="text" 
-                                        value={data.type} 
-                                        placeholder="Contoh: Pakaian, Selimut"
-                                        onChange={(e) => setData('type', e.target.value)} 
-                                        className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2.5 px-3 outline-none"
-                                    />
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Harga</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <span className="text-gray-500 sm:text-sm font-medium">Rp</span>
-                                            </div>
-                                            <input 
-                                                type="number" 
-                                                value={data.price} 
-                                                onChange={(e) => setData('price', e.target.value)} 
-                                                required
-                                                className="block w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm outline-none"
-                                            />
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Harga</label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span className="text-gray-500 sm:text-sm font-medium">Rp</span>
                                         </div>
-                                        {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
+                                        <input 
+                                            type="number" 
+                                            value={data.price} 
+                                            onChange={(e) => setData('price', e.target.value)} 
+                                            required
+                                            className="block w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm outline-none"
+                                        />
                                     </div>
-
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Satuan</label>
-                                        <select 
-                                            value={data.unit} 
-                                            onChange={(e) => setData('unit', e.target.value)} 
-                                            className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2.5 px-3 bg-gray-50 outline-none"
-                                        >
-                                            <option value="kg">Kg</option>
-                                            <option value="pcs">Pcs</option>
-                                            <option value="meter">Meter</option>
-                                        </select>
-                                    </div>
+                                    {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
                                 </div>
 
+                                {/* 4. Satuan */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Satuan</label>
+                                    <select 
+                                        value={data.unit} 
+                                        onChange={(e) => setData('unit', e.target.value)} 
+                                        className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2.5 px-3 bg-gray-50 outline-none"
+                                    >
+                                        <option value="kg">Kg</option>
+                                        <option value="pcs">Pcs</option>
+                                        <option value="meter">Meter</option>
+                                    </select>
+                                </div>
+
+                                {/* 6. Checkbox Status Aktif */}
                                 <div className="pt-2">
-                                    <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                                        <div className="relative">
-                                            <input 
-                                                type="checkbox" 
-                                                id="is_active"
-                                                checked={data.is_active} 
-                                                onChange={(e) => setData('is_active', e.target.checked)} 
-                                                className="sr-only"
-                                            />
-                                            {/* Toggle switch visual */}
-                                            <div className={`block w-10 h-6 rounded-full transition-colors ${data.is_active ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
-                                            <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${data.is_active ? 'transform translate-x-4' : ''}`}></div>
-                                        </div>
-                                        <div className="ml-3 text-sm font-semibold text-gray-700">
-                                            Status Layanan Aktif
-                                        </div>
+                                    <label className="flex items-center cursor-pointer gap-2">
+                                        <input 
+                                            type="checkbox" 
+                                            id="is_active"
+                                            checked={data.is_active} 
+                                            onChange={(e) => setData('is_active', e.target.checked)} 
+                                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                        />
+                                        <span className="text-sm font-semibold text-gray-700">
+                                            Layanan Aktif
+                                        </span>
                                     </label>
                                 </div>
                             </div>
