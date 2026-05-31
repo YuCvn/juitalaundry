@@ -16,7 +16,6 @@ export default function Orders() {
         const datePart = date.toLocaleDateString('id-ID', options);
         
         const timeOptions = { hour: '2-digit', minute: '2-digit' };
-        // Ubah titik menjadi titik dua (opsional, tergantung preferensi lokal JS)
         const timePart = date.toLocaleTimeString('id-ID', timeOptions).replace('.', ':');
         
         return `${datePart} pukul ${timePart}`;
@@ -68,11 +67,12 @@ export default function Orders() {
                 </Link>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 bg-white p-1.5 rounded-xl w-full md:w-1/2 mb-6 border border-gray-200 shadow-sm">
-                <Link href="/cashier/orders" className="flex items-center justify-center bg-[#3b82f6] text-white shadow-sm px-6 py-2 rounded-lg text-sm transition-all">
+            {/* --- SWITCHER DIKEMBALIKAN KE FULL WIDTH --- */}
+            <div className="grid grid-cols-2 gap-2 bg-white p-1.5 rounded-xl w-full mb-6 border border-gray-200 shadow-sm">
+                <Link href="/cashier/orders" className="flex items-center justify-center bg-[#3b82f6] text-white shadow-md px-6 py-2.5 rounded-lg text-sm font-bold transition-all">
                     Order Aktif
                 </Link>
-                <Link href="/cashier/history" className="flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-transparent px-6 py-2 rounded-lg text-sm transition-all">
+                <Link href="/cashier/history" className="flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-transparent px-6 py-2.5 rounded-lg text-sm font-semibold transition-all">
                     History Selesai
                 </Link>
             </div>
@@ -147,52 +147,59 @@ export default function Orders() {
                                             </div>
                                         ))}
 
+                                        {/* Ongkir */}
                                         {order.biaya_ongkir > 0 && (
-                                            <div className="bg-white/60 rounded p-2 border border-[#e9d5ff] flex justify-between items-center">
+                                            <div className="bg-white/60 rounded p-2 border border-[#e9d5ff] flex justify-between items-center mt-1">
                                                 <p className="text-[10px] text-gray-700">Biaya Ongkir</p>
                                                 <p className="text-[#7e22ce] text-xs font-medium">{formatRp(order.biaya_ongkir)}</p>
+                                            </div>
+                                        )}
+
+                                        {/* Diskon Member */}
+                                        {order.diskon > 0 && (
+                                            <div className="bg-emerald-50/60 rounded p-2 border border-emerald-100 flex justify-between items-center mt-1">
+                                                <p className="text-[10px] text-emerald-700">Diskon Member</p>
+                                                <p className="text-emerald-700 text-xs font-medium">- {formatRp(order.diskon)}</p>
                                             </div>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* --- 3. KUMPULAN CARD TERPISAH --- */}
+                                {/* --- 3. KUMPULAN CARD INFO --- */}
                                 <div className="flex flex-col gap-2 mb-4">
-                                    
-                                    {/* 3.1 Card Pembayaran */}
+                                    {/* 3.1 Pembayaran */}
                                     <div className="flex items-center gap-2 bg-sky-50 border border-sky-100 p-2.5 rounded-lg text-xs text-sky-600">
                                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-                                        {order.metode_pembayaran === 'langsung' ? 'Bayar Langsung' : 'Bayar Nanti'}
+                                        <span className="capitalize">{order.metode_pembayaran}</span>
                                     </div>
 
-                                    {/* 3.2 Card Ambil / Antar */}
+                                    {/* 3.2 Ambil / Antar */}
                                     <div className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs ${order.metode_pengambilan === 'antar' ? 'bg-orange-50 border-orange-100 text-orange-600' : 'bg-green-50 border-green-100 text-green-600'}`}>
                                         {order.metode_pengambilan === 'antar' ? (
-                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" /></svg>
+                                            <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" /></svg>
                                         ) : (
-                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                                            <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                                         )}
                                         {order.metode_pengambilan === 'antar' ? 'Diantar ke Alamat' : 'Ambil di Tempat'}
                                     </div>
 
-                                    {/* 3.3 Card Alamat */}
+                                    {/* 3.3 Alamat */}
                                     <div className="flex items-start gap-2 bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-[11px] text-gray-500">
                                         <svg className="w-3.5 h-3.5 mt-0.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                         <span className="leading-snug break-words w-full">{order.alamat || 'Alamat tidak diisi'}</span>
                                     </div>
 
-                                    {/* 3.4 Card Waktu */}
+                                    {/* 3.4 Waktu */}
                                     <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-[10px] text-gray-500">
-                                        <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                        <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                         {formatTanggal(order.tanggal_order)}
                                     </div>
-                                    
                                 </div>
 
                                 <div className="mt-auto">
                                     {/* --- 4. TOTAL HARGA (Biru Muda) --- */}
                                     <div className="flex justify-between items-center bg-sky-100 px-3 py-2.5 rounded-lg border border-sky-200 mb-4 shadow-sm">
-                                        <p className="text-[10px] text-sky-700 uppercase tracking-wider">Total Harga</p>
+                                        <p className="text-[10px] text-sky-700 uppercase font-bold tracking-wider">Total Harga</p>
                                         <p className="text-sm font-medium text-sky-900">{formatRp(order.total_harga)}</p>
                                     </div>
 
@@ -222,7 +229,6 @@ export default function Orders() {
                                             Cetak Nota
                                         </button>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>

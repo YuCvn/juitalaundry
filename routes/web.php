@@ -55,6 +55,8 @@ Route::middleware('auth')->group(function () {
         
         // Keuangan
         Route::get('/financial-reports', [FinancialReportController::class, 'index'])->name('financial-reports.index');
+        // Laporan Keuangan
+        Route::get('/laporan-keuangan', [\App\Http\Controllers\Admin\FinancialReportController::class, 'index'])->name('admin.report.index');
         Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
 
         // Kelola Layanan
@@ -69,6 +71,10 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
         Route::post('/settings/password', [SettingController::class, 'updatePassword'])->name('settings.password.update');
+        // Tambahkan ini di dalam group route Admin
+        Route::get('/pengeluaran', [\App\Http\Controllers\Admin\ExpenseController::class, 'index'])->name('admin.expense.index');
+        Route::post('/pengeluaran', [\App\Http\Controllers\Admin\ExpenseController::class, 'store'])->name('admin.expense.store');
+        Route::delete('/pengeluaran/{expense}', [\App\Http\Controllers\Admin\ExpenseController::class, 'destroy'])->name('admin.expense.destroy');
     });
 
     // AREA KASIR (CASHIER)

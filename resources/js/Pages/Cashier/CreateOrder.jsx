@@ -110,8 +110,8 @@ export default function CreateOrder() {
         ? (Math.ceil(jarak) - 3) * 2000 
         : 0;
 
-    // Logika Diskon (Contoh: Member dapat diskon 10% dari total layanan)
-    const diskon = (data.is_membership && data.membership_id) ? (subtotalLayanan * 0.10) : 0;
+    // Logika Diskon 
+    const diskon = (data.is_membership && data.membership_id) ? (subtotalLayanan * 0.5) : 0;
     const totalSemua = subtotalLayanan - diskon + biayaOngkir;
 
     // Cek Saldo Member
