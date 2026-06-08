@@ -10,10 +10,10 @@ class Membership extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama_lengkap',
-        'nomor_telepon',
-        'alamat',
-        'saldo',
+        'full_name',
+        'phone_number',
+        'address',
+        'balance',
     ];
     
     public function histories()

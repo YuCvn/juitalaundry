@@ -10,26 +10,28 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('order_id')->unique(); // Contoh: ORD-20260531-001
+            $table->string('order_id')->unique(); 
             $table->foreignId('membership_id')->nullable()->constrained('memberships')->nullOnDelete();
-            $table->string('nama');
-            $table->string('nomor_telepon');
-            $table->text('alamat')->nullable();
             
-            $table->timestamp('tanggal_order')->useCurrent();
+            // Data Pelanggan
+            $table->string('customer_name');
+            $table->string('phone_number');
+            $table->text('address')->nullable();
+            $table->timestamp('order_date')->useCurrent();
             
-            // Detail Pengiriman (diambil dari frontend)
-            $table->string('metode_pengambilan')->default('ambil'); // ambil / antar
-            $table->decimal('jarak_pengiriman', 8, 2)->default(0);
-            $table->decimal('biaya_ongkir', 15, 2)->default(0);
+            // Detail Pengiriman
+            $table->string('pickup_method')->default('pickup'); // 'pickup' atau 'delivery'
+            $table->decimal('delivery_distance', 8, 2)->default(0);
+            $table->decimal('delivery_fee', 15, 2)->default(0);
             
             // Kalkulasi Harga
             $table->decimal('subtotal', 15, 2)->default(0);
-            $table->decimal('diskon', 15, 2)->default(0);
-            $table->decimal('total_harga', 15, 2)->default(0);
+            $table->decimal('discount', 15, 2)->default(0);
+            $table->decimal('total_price', 15, 2)->default(0);
             
-            $table->string('metode_pembayaran'); // langsung / nanti
-            $table->enum('status_order', ['menunggu', 'dalam proses', 'selesai', 'sudah diambil'])->default('menunggu');
+            // Pembayaran & Status
+            $table->string('payment_method'); // 'upfront' (langsung) atau 'pay_later' (nanti)
+            $table->enum('status', ['pending', 'processing', 'completed', 'picked_up'])->default('pending');
             
             $table->timestamps();
         });

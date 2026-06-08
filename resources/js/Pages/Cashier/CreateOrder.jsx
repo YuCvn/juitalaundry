@@ -5,27 +5,25 @@ import CashierLayout from '../../Layouts/CashierLayout';
 export default function CreateOrder() {
     const { services = [], memberships = [], errors } = usePage().props; 
 
-    // --- MAIN FORM STATE ---
+    // --- MAIN FORM STATE (Diubah ke bahasa Inggris) ---
     const { data, setData, post, processing } = useForm({
         is_membership: false,
         membership_id: '',
-        nama: '',
-        telepon: '',
-        alamat: '',
-        layanan: [],
-        metode_pengambilan: 'ambil',
-        jarak_pengiriman: 0, 
-        metode_pembayaran: 'langsung',
+        customer_name: '',
+        phone_number: '',
+        address: '',
+        services: [],
+        pickup_method: 'pickup',
+        delivery_distance: 0, 
+        payment_method: 'upfront',
     });
 
-    // --- MODAL STATE ---
     const [isModalKiloan, setIsModalKiloan] = useState(false);
     const [kiloanInput, setKiloanInput] = useState({ service_id: '', qty: '' });
 
     const [isModalJasa, setIsModalJasa] = useState(false);
     const [jasaInput, setJasaInput] = useState({ service_id: '', qty: '' });
 
-    // --- FILTER SERVICES ---
     const listKiloan = services.filter(s => s.category?.toLowerCase() === 'kiloan');
     const listJasa = services.filter(s => s.category?.toLowerCase() !== 'kiloan');
 
@@ -33,7 +31,6 @@ export default function CreateOrder() {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka || 0);
     };
 
-    // --- HANDLER MEMBERSHIP ---
     const handleMembershipChange = (e) => {
         const selectedId = e.target.value;
         const member = memberships.find(m => m.id.toString() === selectedId);
@@ -42,29 +39,27 @@ export default function CreateOrder() {
             setData(prev => ({
                 ...prev,
                 membership_id: selectedId,
-                nama: member.nama_lengkap || '',
-                telepon: member.nomor_telepon || '',
-                alamat: member.alamat || ''
+                customer_name: member.full_name || '',
+                phone_number: member.phone_number || '',
+                address: member.address || ''
             }));
         } else {
             setData(prev => ({
                 ...prev,
                 membership_id: '',
-                nama: '',
-                telepon: '',
-                alamat: ''
+                customer_name: '',
+                phone_number: '',
+                address: ''
             }));
         }
     };
 
-    // --- KALKULASI MODAL ---
     const activeKiloan = listKiloan.find(s => s.id.toString() === kiloanInput.service_id.toString());
     const totalKiloanModal = activeKiloan ? (activeKiloan.price * (parseFloat(kiloanInput.qty) || 0)) : 0;
 
     const activeJasa = listJasa.find(s => s.id.toString() === jasaInput.service_id.toString());
     const totalJasaModal = activeJasa ? (activeJasa.price * (parseFloat(jasaInput.qty) || 0)) : 0;
 
-    // --- HANDLER SIMPAN LAYANAN ---
     const handleSimpanKiloan = () => {
         if (!activeKiloan || !kiloanInput.qty) return;
         const newItem = {
@@ -77,7 +72,7 @@ export default function CreateOrder() {
             subtotal: totalKiloanModal,
             type: 'kiloan'
         };
-        setData('layanan', [...data.layanan, newItem]);
+        setData('services', [...data.services, newItem]);
         setIsModalKiloan(false);
         setKiloanInput({ service_id: '', qty: '' });
     };
@@ -94,30 +89,27 @@ export default function CreateOrder() {
             subtotal: totalJasaModal,
             type: 'jasa'
         };
-        setData('layanan', [...data.layanan, newItem]);
+        setData('services', [...data.services, newItem]);
         setIsModalJasa(false);
         setJasaInput({ service_id: '', qty: '' });
     };
 
     const hapusLayanan = (id) => {
-        setData('layanan', data.layanan.filter(item => item.id !== id));
+        setData('services', data.services.filter(item => item.id !== id));
     };
 
-    // --- TOTAL KESELURUHAN & DISKON ---
-    const subtotalLayanan = data.layanan.reduce((sum, item) => sum + item.subtotal, 0);
-    const jarak = parseFloat(data.jarak_pengiriman) || 0;
-    const biayaOngkir = (data.metode_pengambilan === 'antar' && jarak > 3) 
-        ? (Math.ceil(jarak) - 3) * 2000 
+    const subtotalServices = data.services.reduce((sum, item) => sum + item.subtotal, 0);
+    const distance = parseFloat(data.delivery_distance) || 0;
+    const deliveryFee = (data.pickup_method === 'delivery' && distance > 3) 
+        ? (Math.ceil(distance) - 3) * 2000 
         : 0;
 
-    // Logika Diskon 
-    const diskon = (data.is_membership && data.membership_id) ? (subtotalLayanan * 0.5) : 0;
-    const totalSemua = subtotalLayanan - diskon + biayaOngkir;
+    const discount = (data.is_membership && data.membership_id) ? (subtotalServices * 0.10) : 0; // Diskon 10%
+    const totalSemua = subtotalServices - discount + deliveryFee;
 
-    // Cek Saldo Member
     const selectedMember = memberships.find(m => m.id.toString() === data.membership_id.toString());
-    const currentSaldo = selectedMember ? parseFloat(selectedMember.saldo) : 0;
-    const isSaldoKurang = (data.is_membership && data.membership_id) ? (currentSaldo < totalSemua) : false;
+    const currentBalance = selectedMember ? parseFloat(selectedMember.balance) : 0;
+    const isSaldoKurang = (data.is_membership && data.membership_id) ? (currentBalance < totalSemua) : false;
 
     const submit = (e) => {
         e.preventDefault();
@@ -138,7 +130,6 @@ export default function CreateOrder() {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
                     <h2 className="text-2xl font-bold text-sky-600 mb-8">Order Baru</h2>
 
-                    {/* Menampilkan Error dari Backend jika ada */}
                     {errors?.error && (
                         <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-6 border border-red-100 flex items-start gap-3">
                             <svg className="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -148,9 +139,6 @@ export default function CreateOrder() {
 
                     <form onSubmit={submit} className="space-y-6">
                         
-                        {/* ---------------------------------
-                            MEMBERSHIP SECTION 
-                        --------------------------------- */}
                         <div className="bg-sky-50 border border-sky-100 p-4 rounded-xl">
                             <div className="flex items-start gap-3">
                                 <input 
@@ -163,9 +151,9 @@ export default function CreateOrder() {
                                             ...prev, 
                                             is_membership: isChecked,
                                             membership_id: isChecked ? prev.membership_id : '',
-                                            nama: isChecked ? prev.nama : '',
-                                            telepon: isChecked ? prev.telepon : '',
-                                            alamat: isChecked ? prev.alamat : ''
+                                            customer_name: isChecked ? prev.customer_name : '',
+                                            phone_number: isChecked ? prev.phone_number : '',
+                                            address: isChecked ? prev.address : ''
                                         }));
                                     }}
                                     className="mt-1 w-5 h-5 text-sky-600 rounded border-gray-300 focus:ring-sky-500 cursor-pointer"
@@ -192,7 +180,7 @@ export default function CreateOrder() {
                                             {memberships.length > 0 ? (
                                                 memberships.map(m => (
                                                     <option key={m.id} value={m.id}>
-                                                        {m.nama_lengkap} - Saldo: {formatRp(m.saldo || 0)}
+                                                        {m.full_name} - Saldo: {formatRp(m.balance || 0)}
                                                     </option>
                                                 ))
                                             ) : (
@@ -205,16 +193,13 @@ export default function CreateOrder() {
                             )}
                         </div>
 
-                        {/* ---------------------------------
-                            DATA PELANGGAN 
-                        --------------------------------- */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-1">Nama Pelanggan</label>
                                 <input 
                                     type="text" 
-                                    value={data.nama} 
-                                    onChange={e => setData('nama', e.target.value)} 
+                                    value={data.customer_name} 
+                                    onChange={e => setData('customer_name', e.target.value)} 
                                     disabled={!!data.membership_id}
                                     placeholder="Nama pelanggan" 
                                     className={`w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-colors ${data.membership_id ? 'bg-gray-100 text-gray-500 cursor-not-allowed font-semibold' : 'bg-white'}`} 
@@ -224,8 +209,8 @@ export default function CreateOrder() {
                                 <label className="block text-sm font-semibold text-gray-700 mb-1">Telepon</label>
                                 <input 
                                     type="tel" 
-                                    value={data.telepon} 
-                                    onChange={e => setData('telepon', e.target.value)} 
+                                    value={data.phone_number} 
+                                    onChange={e => setData('phone_number', e.target.value)} 
                                     disabled={!!data.membership_id}
                                     placeholder="08xxxxxxxx" 
                                     className={`w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-colors ${data.membership_id ? 'bg-gray-100 text-gray-500 cursor-not-allowed font-semibold' : 'bg-white'}`} 
@@ -235,8 +220,8 @@ export default function CreateOrder() {
                                 <label className="block text-sm font-semibold text-gray-700 mb-1">Alamat</label>
                                 <input 
                                     type="text" 
-                                    value={data.alamat} 
-                                    onChange={e => setData('alamat', e.target.value)} 
+                                    value={data.address} 
+                                    onChange={e => setData('address', e.target.value)} 
                                     disabled={!!data.membership_id}
                                     placeholder="Alamat lengkap" 
                                     className={`w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-colors ${data.membership_id ? 'bg-gray-100 text-gray-500 cursor-not-allowed font-semibold' : 'bg-white'}`} 
@@ -244,7 +229,6 @@ export default function CreateOrder() {
                             </div>
                         </div>
 
-                        {/* Jenis Layanan */}
                         <div className="bg-[#f3e8ff] border border-[#d8b4fe] rounded-xl p-5 shadow-sm">
                             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
                                 <h3 className="text-lg font-bold text-[#6b21a8]">Jenis Layanan</h3>
@@ -262,13 +246,13 @@ export default function CreateOrder() {
                             </div>
 
                             <div className="bg-white/90 rounded-lg p-4 border border-[#e9d5ff] min-h-[120px] flex flex-col justify-center">
-                                {data.layanan.length === 0 ? (
+                                {data.services.length === 0 ? (
                                     <div className="text-center">
                                         <p className="text-sm font-medium text-[#7e22ce]">Belum ada layanan yang ditambahkan</p>
                                     </div>
                                 ) : (
                                     <ul className="space-y-3">
-                                        {data.layanan.map((item) => (
+                                        {data.services.map((item) => (
                                             <li key={item.id} className="flex justify-between items-center p-3 bg-white border border-[#e9d5ff] rounded-lg shadow-sm">
                                                 <div>
                                                     <p className="font-bold text-gray-800">{item.name}</p>
@@ -289,32 +273,31 @@ export default function CreateOrder() {
                             </div>
                         </div>
 
-                        {/* Pengambilan */}
                         <div className="pt-2">
                             <label className="block text-sm font-bold text-gray-700 mb-3">Metode Pengambilan</label>
                             
                             <div className="grid grid-cols-2 gap-4 mb-3">
-                                <label className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center transition-all ${data.metode_pengambilan === 'ambil' ? 'border-[#10b981] bg-white shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
-                                    <input type="radio" value="ambil" checked={data.metode_pengambilan === 'ambil'} onChange={() => setData(prev => ({ ...prev, metode_pengambilan: 'ambil', jarak_pengiriman: 0 }))} className="hidden" />
-                                    <div className={`w-5 h-5 mb-2.5 rounded-full border-2 flex items-center justify-center ${data.metode_pengambilan === 'ambil' ? 'border-[#10b981]' : 'border-gray-300'}`}>
-                                        {data.metode_pengambilan === 'ambil' && <div className="w-2.5 h-2.5 rounded-full bg-[#4b5563]"></div>}
+                                <label className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center transition-all ${data.pickup_method === 'pickup' ? 'border-[#10b981] bg-white shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
+                                    <input type="radio" value="pickup" checked={data.pickup_method === 'pickup'} onChange={() => setData(prev => ({ ...prev, pickup_method: 'pickup', delivery_distance: 0 }))} className="hidden" />
+                                    <div className={`w-5 h-5 mb-2.5 rounded-full border-2 flex items-center justify-center ${data.pickup_method === 'pickup' ? 'border-[#10b981]' : 'border-gray-300'}`}>
+                                        {data.pickup_method === 'pickup' && <div className="w-2.5 h-2.5 rounded-full bg-[#4b5563]"></div>}
                                     </div>
-                                    <svg className={`w-7 h-7 mb-1.5 ${data.metode_pengambilan === 'ambil' ? 'text-[#10b981]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className={`w-7 h-7 mb-1.5 ${data.pickup_method === 'pickup' ? 'text-[#10b981]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                     </svg>
-                                    <span className={`text-sm font-semibold ${data.metode_pengambilan === 'ambil' ? 'text-gray-800' : 'text-gray-500'}`}>Ambil di Tempat</span>
+                                    <span className={`text-sm font-semibold ${data.pickup_method === 'pickup' ? 'text-gray-800' : 'text-gray-500'}`}>Ambil di Tempat</span>
                                 </label>
 
-                                <label className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center transition-all ${data.metode_pengambilan === 'antar' ? 'border-[#f97316] bg-orange-50/20 shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
-                                    <input type="radio" value="antar" checked={data.metode_pengambilan === 'antar'} onChange={() => setData('metode_pengambilan', 'antar')} className="hidden" />
-                                    <div className={`w-5 h-5 mb-2.5 rounded-full border-2 flex items-center justify-center ${data.metode_pengambilan === 'antar' ? 'border-[#f97316]' : 'border-gray-300'}`}>
-                                        {data.metode_pengambilan === 'antar' && <div className="w-2.5 h-2.5 rounded-full bg-[#4b5563]"></div>}
+                                <label className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center transition-all ${data.pickup_method === 'delivery' ? 'border-[#f97316] bg-orange-50/20 shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
+                                    <input type="radio" value="delivery" checked={data.pickup_method === 'delivery'} onChange={() => setData('pickup_method', 'delivery')} className="hidden" />
+                                    <div className={`w-5 h-5 mb-2.5 rounded-full border-2 flex items-center justify-center ${data.pickup_method === 'delivery' ? 'border-[#f97316]' : 'border-gray-300'}`}>
+                                        {data.pickup_method === 'delivery' && <div className="w-2.5 h-2.5 rounded-full bg-[#4b5563]"></div>}
                                     </div>
-                                    <svg className={`w-7 h-7 mb-1.5 ${data.metode_pengambilan === 'antar' ? 'text-[#f97316]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className={`w-7 h-7 mb-1.5 ${data.pickup_method === 'delivery' ? 'text-[#f97316]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
                                     </svg>
-                                    <span className={`text-sm font-semibold ${data.metode_pengambilan === 'antar' ? 'text-gray-800' : 'text-gray-500'}`}>Antar ke Alamat</span>
+                                    <span className={`text-sm font-semibold ${data.pickup_method === 'delivery' ? 'text-gray-800' : 'text-gray-500'}`}>Antar ke Alamat</span>
                                 </label>
                             </div>
                             
@@ -322,68 +305,65 @@ export default function CreateOrder() {
                                 🚚 Gratis ongkir hingga 3 km. Lebih dari itu dikenakan biaya Rp 2.000/km
                             </p>
                             
-                            {data.metode_pengambilan === 'antar' && (
+                            {data.pickup_method === 'delivery' && (
                                 <div className="mb-4">
                                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Jarak Pengiriman (km)</label>
                                     <div className="relative">
                                         <svg className="w-5 h-5 absolute left-3 top-2.5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-                                        <input type="number" min="0" step="0.1" value={data.jarak_pengiriman} onChange={e => setData('jarak_pengiriman', e.target.value)} placeholder="0.0" className="w-full pl-10 pr-4 py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none transition-all" />
+                                        <input type="number" min="0" step="0.1" value={data.delivery_distance} onChange={e => setData('delivery_distance', e.target.value)} placeholder="0.0" className="w-full pl-10 pr-4 py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none transition-all" />
                                     </div>
                                 </div>
                             )}
                         </div>
 
-                        {/* Pembayaran */}
                         <div className="pt-2">
                             <label className="block text-sm font-bold text-gray-700 mb-3">Metode Pembayaran</label>
                             
                             <div className="grid grid-cols-2 gap-4">
-                                <label className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center transition-all ${data.metode_pembayaran === 'nanti' ? 'border-[#0ea5e9] bg-white shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
-                                    <input type="radio" value="nanti" checked={data.metode_pembayaran === 'nanti'} onChange={e => setData('metode_pembayaran', e.target.value)} className="hidden" />
-                                    <div className={`w-5 h-5 mb-2.5 rounded-full border-2 flex items-center justify-center ${data.metode_pembayaran === 'nanti' ? 'border-[#0ea5e9]' : 'border-gray-300'}`}>
-                                        {data.metode_pembayaran === 'nanti' && <div className="w-2.5 h-2.5 rounded-full bg-[#4b5563]"></div>}
+                                <label className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center transition-all ${data.payment_method === 'pay_later' ? 'border-[#0ea5e9] bg-white shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
+                                    <input type="radio" value="pay_later" checked={data.payment_method === 'pay_later'} onChange={e => setData('payment_method', e.target.value)} className="hidden" />
+                                    <div className={`w-5 h-5 mb-2.5 rounded-full border-2 flex items-center justify-center ${data.payment_method === 'pay_later' ? 'border-[#0ea5e9]' : 'border-gray-300'}`}>
+                                        {data.payment_method === 'pay_later' && <div className="w-2.5 h-2.5 rounded-full bg-[#4b5563]"></div>}
                                     </div>
-                                    <svg className={`w-7 h-7 mb-1.5 ${data.metode_pembayaran === 'nanti' ? 'text-[#0ea5e9]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className={`w-7 h-7 mb-1.5 ${data.payment_method === 'pay_later' ? 'text-[#0ea5e9]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
                                     </svg>
-                                    <span className={`text-sm font-semibold ${data.metode_pembayaran === 'nanti' ? 'text-gray-800' : 'text-gray-500'}`}>Bayar Nanti</span>
+                                    <span className={`text-sm font-semibold ${data.payment_method === 'pay_later' ? 'text-gray-800' : 'text-gray-500'}`}>Bayar Nanti</span>
                                 </label>
 
-                                <label className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center transition-all ${data.metode_pembayaran === 'langsung' ? 'border-[#0ea5e9] bg-sky-50/30 shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
-                                    <input type="radio" value="langsung" checked={data.metode_pembayaran === 'langsung'} onChange={e => setData('metode_pembayaran', e.target.value)} className="hidden" />
-                                    <div className={`w-5 h-5 mb-2.5 rounded-full border-2 flex items-center justify-center ${data.metode_pembayaran === 'langsung' ? 'border-[#0ea5e9]' : 'border-gray-300'}`}>
-                                        {data.metode_pembayaran === 'langsung' && <div className="w-2.5 h-2.5 rounded-full bg-[#4b5563]"></div>}
+                                <label className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center transition-all ${data.payment_method === 'upfront' ? 'border-[#0ea5e9] bg-sky-50/30 shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
+                                    <input type="radio" value="upfront" checked={data.payment_method === 'upfront'} onChange={e => setData('payment_method', e.target.value)} className="hidden" />
+                                    <div className={`w-5 h-5 mb-2.5 rounded-full border-2 flex items-center justify-center ${data.payment_method === 'upfront' ? 'border-[#0ea5e9]' : 'border-gray-300'}`}>
+                                        {data.payment_method === 'upfront' && <div className="w-2.5 h-2.5 rounded-full bg-[#4b5563]"></div>}
                                     </div>
-                                    <svg className={`w-7 h-7 mb-1.5 ${data.metode_pembayaran === 'langsung' ? 'text-[#0ea5e9]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className={`w-7 h-7 mb-1.5 ${data.payment_method === 'upfront' ? 'text-[#0ea5e9]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                                     </svg>
-                                    <span className={`text-sm font-semibold ${data.metode_pembayaran === 'langsung' ? 'text-gray-800' : 'text-gray-500'}`}>Bayar Langsung</span>
+                                    <span className={`text-sm font-semibold ${data.payment_method === 'upfront' ? 'text-gray-800' : 'text-gray-500'}`}>Bayar Langsung</span>
                                 </label>
                             </div>
                         </div>
 
-                        {/* Ringkasan */}
                         <div className="bg-[#0ea5e9] rounded-xl p-5 text-white mt-6 shadow-md">
                             <p className="text-sm font-medium text-sky-100 mb-3">Ringkasan Pembayaran</p>
 
                             <div className="flex justify-between py-2 border-b border-sky-400/50">
-                                <span>Total Layanan ({data.layanan.length} item)</span>
-                                <span className="font-semibold">{formatRp(subtotalLayanan)}</span>
+                                <span>Total Layanan ({data.services.length} item)</span>
+                                <span className="font-semibold">{formatRp(subtotalServices)}</span>
                             </div>
                             
-                            {/* Munculkan Diskon 10% Jika Member */}
                             {data.is_membership && data.membership_id && (
                                 <div className="flex justify-between py-2 border-b border-sky-400/50 text-emerald-200">
                                     <span>Diskon Member (10%)</span>
-                                    <span className="font-semibold">- {formatRp(diskon)}</span>
+                                    <span className="font-semibold">- {formatRp(discount)}</span>
                                 </div>
                             )}
 
-                            {data.metode_pengambilan === 'antar' && (
+                            {data.pickup_method === 'delivery' && (
                                 <div className="flex justify-between py-2 border-b border-sky-400/50">
-                                    <span>Biaya Ongkir {jarak > 3 ? `(${(Math.ceil(jarak) - 3)} KM)` : '(Gratis)'}</span>
-                                    <span className="font-semibold">{formatRp(biayaOngkir)}</span>
+                                    <span>Biaya Ongkir {distance > 3 ? `(${(Math.ceil(distance) - 3)} KM)` : '(Gratis)'}</span>
+                                    <span className="font-semibold">{formatRp(deliveryFee)}</span>
                                 </div>
                             )}
                             
@@ -392,25 +372,24 @@ export default function CreateOrder() {
                                 <span className="text-2xl font-bold">{formatRp(totalSemua)}</span>
                             </div>
 
-                            {/* Peringatan Saldo Jika Kurang */}
                             {isSaldoKurang && (
                                 <div className="mt-4 bg-rose-500/20 border border-rose-400/50 p-3 rounded-lg flex items-start gap-2">
                                     <svg className="w-5 h-5 text-rose-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                                     <p className="text-xs text-rose-100 font-medium leading-snug">
-                                        Saldo member (sisa {formatRp(currentSaldo)}) tidak mencukupi untuk tagihan ini. Kasir mungkin harus membatalkan pemakaian member atau mengisi saldo member terlebih dahulu.
+                                        Saldo member (sisa {formatRp(currentBalance)}) tidak mencukupi untuk tagihan ini. Kasir mungkin harus membatalkan pemakaian member atau mengisi saldo member terlebih dahulu.
                                     </p>
                                 </div>
                             )}
                         </div>
 
-                        <button type="submit" disabled={processing || isSaldoKurang || data.layanan.length === 0} className="w-full bg-[#0284c7] hover:bg-[#0369a1] transition-colors text-white font-bold py-3.5 px-4 rounded-xl shadow-lg mt-4 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <button type="submit" disabled={processing || isSaldoKurang || data.services.length === 0} className="w-full bg-[#0284c7] hover:bg-[#0369a1] transition-colors text-white font-bold py-3.5 px-4 rounded-xl shadow-lg mt-4 disabled:opacity-50 disabled:cursor-not-allowed">
                             {processing ? 'Memproses...' : 'Buat Order'}
                         </button>
                     </form>
                 </div>
             </div>
 
-            {/* MODAL KILOAN & JASA (KODE TETAP SAMA SEPERTI SEBELUMNYA) */}
+            {/* MODAL KILOAN & JASA (Dibiarkan persis seperti aslinya karena sudah aman) */}
             {isModalKiloan && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 animate-fade-in">
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col">

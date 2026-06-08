@@ -10,20 +10,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Buat Akun Admin
         User::create([
-            'name' => 'Pemilik Laundry',
-            'username' => 'admin',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-        ]);
-
-        // Buat Akun Kasir
-        User::create([
-            'name' => 'Kasir Satu',
-            'username' => 'kasir',
-            'password' => Hash::make('password'),
-            'role' => 'cashier',
+            'name'      => 'Administrator',
+            'username'  => 'admin',
+            'password'  => Hash::make('admin123'),
+            'role'      => 'admin',
+            'is_active' => true,
         ]);
     }
 }

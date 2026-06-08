@@ -147,7 +147,7 @@ export default function Dashboard() {
                                         {index + 1}
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-xs font-bold text-gray-800">{customer.nama}</span>
+                                        <span className="text-xs font-bold text-gray-800">{customer.customer_name}</span>
                                         <span className="text-[10px] text-gray-500 mt-0.5">{customer.total_orders} orders</span>
                                     </div>
                                 </div>

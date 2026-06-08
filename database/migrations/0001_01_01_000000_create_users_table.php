@@ -6,22 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('username')->unique(); // Tambahkan kolom username (harus unik)
+            $table->string('username')->unique();
             $table->string('password');
-            $table->string('role')->default('kasir'); // Tambahkan kolom role ('admin' atau 'kasir')
+            $table->string('role')->default('kasir');
             $table->rememberToken();
             $table->timestamps();
         });
 
-        // Biarkan tabel reset token dan session seperti bawaan aslinya
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
@@ -40,8 +36,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        // Pastikan nama drop sesuai dengan nama create
-        Schema::dropIfExists('tb_admin');
+        Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

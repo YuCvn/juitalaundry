@@ -12,8 +12,8 @@ class MembershipHistory extends Model
     protected $fillable = [
         'membership_id',
         'type',
-        'nominal',
-        'saldo_akhir',
+        'amount',
+        'final_balance',
     ];
 
     // Relasi balik ke Member

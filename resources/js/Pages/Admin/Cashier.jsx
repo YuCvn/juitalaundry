@@ -23,12 +23,12 @@ export default function Cashier({ cashiers }) {
         setIsModalOpen(true);
     };
 
-    const openEditModal = (kasir) => {
+    const openEditModal = (cashier) => {
         setIsEditMode(true);
-        setEditingId(kasir.id);
+        setEditingId(cashier.id);
         setData({
-            name: kasir.name,
-            username: kasir.username,
+            name: cashier.name,
+            username: cashier.username,
             password: '',
             password_confirmation: '',
         });
@@ -60,8 +60,8 @@ export default function Cashier({ cashiers }) {
         router.patch(`/admin/cashiers/${id}/toggle`, {}, { preserveScroll: true });
     };
 
-    const deleteKasir = (id, nama) => {
-        if (window.confirm(`Peringatan: Apakah Anda yakin ingin menghapus kasir "${nama}" secara permanen? Data yang sudah dihapus tidak bisa dikembalikan.`)) {
+    const deleteCashier = (id, name) => {
+        if (window.confirm(`Peringatan: Apakah Anda yakin ingin menghapus kasir "${name}" secara permanen? Data yang sudah dihapus tidak bisa dikembalikan.`)) {
             router.delete(`/admin/cashiers/${id}`, { preserveScroll: true });
         }
     };
@@ -92,8 +92,8 @@ export default function Cashier({ cashiers }) {
                             <tr className="bg-gray-50/50 text-gray-500 text-xs uppercase tracking-wider border-b border-gray-100">
                                 <th className="p-4 font-semibold font-sans w-32">Username</th>
                                 <th className="p-4 font-semibold font-sans">Nama Lengkap</th>
-                                <th className="p-4 font-semibold font-sans">Dibuat</th>
                                 <th className="p-4 font-semibold font-sans">Status</th>
+                                <th className="p-4 font-semibold font-sans">Dibuat</th>
                                 <th className="p-4 font-semibold font-sans text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -103,14 +103,9 @@ export default function Cashier({ cashiers }) {
                                     <td className="p-4 text-sm text-gray-600 font-medium">{item.username}</td>
                                     <td className="p-4">
                                         <div className="flex items-center">
-                                            <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg mr-3 shrink-0">
-                                                {item.name.charAt(0).toUpperCase()}
-                                            </div>
+                                            
                                             <div className="font-semibold text-gray-800 text-sm">{item.name}</div>
                                         </div>
-                                    </td>
-                                    <td className="p-4 text-sm text-gray-600">
-                                        {new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                                     </td>
                                     <td className="p-4">
                                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${
@@ -120,6 +115,11 @@ export default function Cashier({ cashiers }) {
                                             {item.is_active ? 'Aktif' : 'Nonaktif'}
                                         </span>
                                     </td>
+
+                                    <td className="p-4 text-sm text-gray-600">
+                                        {new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                    </td>
+
                                     <td className="p-4 text-center">
                                         <div className="flex justify-center gap-2">
                                             {/* TOMBOL EDIT */}
@@ -132,7 +132,7 @@ export default function Cashier({ cashiers }) {
                                             </button>
                                             
                                             {/* TOMBOL HAPUS */}
-                                            <button onClick={() => deleteKasir(item.id, item.name)} className="bg-red-50 text-red-600 hover:bg-red-100 p-2 rounded-lg transition-colors shadow-sm border border-red-100" title="Hapus Permanen">
+                                            <button onClick={() => deleteCashier(item.id, item.name)} className="bg-red-50 text-red-600 hover:bg-red-100 p-2 rounded-lg transition-colors shadow-sm border border-red-100" title="Hapus Permanen">
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                             </button>
                                         </div>

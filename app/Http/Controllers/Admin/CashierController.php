@@ -88,9 +88,9 @@ class CashierController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $namaKasir = $user->name;
+        $cashierName = $user->name; 
         $user->delete();
 
-        return back()->with('success', 'Akun Dihapus|Data kasir ' . $namaKasir . ' telah dihapus secara permanen.');
+        return back()->with('success', 'Akun Dihapus|Data kasir ' . $cashierName . ' telah dihapus secara permanen.');
     }
 }

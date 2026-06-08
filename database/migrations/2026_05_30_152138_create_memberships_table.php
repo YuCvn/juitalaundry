@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('memberships', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_lengkap');
-            $table->string('nomor_telepon')->unique();
-            $table->text('alamat')->nullable();
-            $table->decimal('saldo', 15, 2)->default(0); // Format desimal untuk uang/saldo
+            $table->string('full_name'); 
+            $table->string('phone_number')->unique(); 
+            $table->text('address')->nullable(); 
+            $table->decimal('balance', 15, 2)->default(0); 
             $table->timestamps();
         });
     }

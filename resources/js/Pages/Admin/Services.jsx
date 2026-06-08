@@ -104,9 +104,9 @@ export default function Services({ auth, services }) {
             <div className="space-y-6">
                 
                 {/* 1. BANNER ATAS */}
-                <div className="bg-[#3388FF] text-white rounded-lg p-6 mb-6 text-center">
+                <div className="bg-[#3388FF] text-white rounded-lg p-6 mb-6 text-left">
                     <div>
-                        <h1 className="text-xl font-normal mb-1">Kelola Layanan</h1>
+                        <h1 className="text-xl font-bold mb-1">Kelola Layanan</h1>
                         <p className="text-white text-[12px] font-normal">Atur harga dan jenis layanan laundry</p>
                     </div>
                 </div>
@@ -288,7 +288,7 @@ export default function Services({ auth, services }) {
                                         <input 
                                             type="text" 
                                             value={data.type} 
-                                            placeholder="Contoh: Pakaian, Selimut"
+                                            placeholder="Contoh: tebal, tipis, 120x200"
                                             onChange={(e) => setData('type', e.target.value)} 
                                             className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2.5 px-3 outline-none"
                                         />

@@ -4,22 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\FinancialReport; // Tetap gunakan model ini
 use Inertia\Inertia;
-use App\Models\Expense;
 
 class ExpenseController extends Controller
 {
     public function index()
     {
-        // Ambil semua data pengeluaran, urutkan dari tanggal terbaru
-        $expenses = Expense::latest('tanggal')->latest('id')->get();
-        
-        // Hitung total pengeluaran untuk ditampilkan di atas tabel
-        $totalPengeluaran = $expenses->sum('nominal');
+        // Mengambil semua data pengeluaran, diurutkan dari yang terbaru
+        $expenses = FinancialReport::latest('tanggal')->get();
 
         return Inertia::render('Admin/Expense', [
-            'expenses' => $expenses,
-            'totalPengeluaran' => $totalPengeluaran
+            'expenses' => $expenses
         ]);
     }
 
@@ -27,22 +23,34 @@ class ExpenseController extends Controller
     {
         $request->validate([
             'keterangan' => 'required|string|max:255',
-            'nominal'    => 'required|numeric|min:1',
+            'nominal'    => 'required|numeric|min:0',
             'tanggal'    => 'required|date',
         ]);
 
-        Expense::create([
-            'keterangan' => $request->keterangan,
-            'nominal'    => $request->nominal,
-            'tanggal'    => $request->tanggal,
-        ]);
+        FinancialReport::create($request->all());
 
-        return back()->with('success', 'Data pengeluaran berhasil dicatat!');
+        return redirect()->back()->with('success', 'Pengeluaran Berhasil Ditambahkan');
     }
 
-    public function destroy(Expense $expense)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'keterangan' => 'required|string|max:255',
+            'nominal'    => 'required|numeric|min:0',
+            'tanggal'    => 'required|date',
+        ]);
+
+        $expense = FinancialReport::findOrFail($id);
+        $expense->update($request->all());
+
+        return redirect()->back()->with('success', 'Data Pengeluaran Diperbarui');
+    }
+
+    public function destroy($id)
+    {
+        $expense = FinancialReport::findOrFail($id);
         $expense->delete();
-        return back()->with('success', 'Data pengeluaran berhasil dihapus!');
+
+        return redirect()->back()->with('success', 'Data Pengeluaran Dihapus');
     }
 }

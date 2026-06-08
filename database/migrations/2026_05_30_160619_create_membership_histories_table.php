@@ -10,11 +10,10 @@ return new class extends Migration
     {
         Schema::create('membership_histories', function (Blueprint $table) {
             $table->id();
-            // Relasi ke tabel memberships, jika member dihapus, riwayatnya ikut terhapus (cascade)
             $table->foreignId('membership_id')->constrained()->onDelete('cascade');
-            $table->string('type'); // 'Pendaftaran Membership' atau 'Top-up Saldo'
-            $table->decimal('nominal', 15, 2);
-            $table->decimal('saldo_akhir', 15, 2);
+            $table->string('type'); 
+            $table->decimal('amount', 15, 2); 
+            $table->decimal('final_balance', 15, 2); 
             $table->timestamps();
         });
     }

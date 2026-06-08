@@ -10,7 +10,6 @@ use App\Models\Membership;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
@@ -39,88 +38,85 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'membership_id'      => 'nullable|exists:memberships,id',
-            'nama'               => 'required|string|max:255',
-            'telepon'            => 'required|string|max:20',
-            'alamat'             => 'nullable|string',
-            'metode_pengambilan' => 'required|in:ambil,antar',
-            'jarak_pengiriman'   => 'nullable|numeric|min:0',
-            'metode_pembayaran'  => 'required|in:langsung,nanti',
-            'layanan'            => 'required|array|min:1',
-            'layanan.*.service_id'=> 'required|exists:services,id',
-            'layanan.*.qty'      => 'required|numeric|min:0.1',
-            'layanan.*.price'    => 'required|numeric',
-            'layanan.*.subtotal' => 'required|numeric',
+            'membership_id'     => 'nullable|exists:memberships,id',
+            'customer_name'     => 'required|string|max:255',
+            'phone_number'      => 'required|string|max:20',
+            'address'           => 'nullable|string',
+            'pickup_method'     => 'required|in:pickup,delivery',
+            'delivery_distance' => 'nullable|numeric|min:0',
+            'payment_method'    => 'required|in:upfront,pay_later',
+            'services'          => 'required|array|min:1',
+            'services.*.service_id'=> 'required|exists:services,id',
+            'services.*.qty'    => 'required|numeric|min:0.1',
+            'services.*.price'  => 'required|numeric',
+            'services.*.subtotal'=> 'required|numeric',
         ]);
 
         DB::beginTransaction();
 
         try {
             // Kalkulasi Dasar
-            $subtotalLayanan = collect($validated['layanan'])->sum('subtotal');
-            $jarak = $validated['jarak_pengiriman'] ?? 0;
+            $subtotalServices = collect($validated['services'])->sum('subtotal');
+            $distance = $validated['delivery_distance'] ?? 0;
             
-            $biayaOngkir = 0;
-            if ($validated['metode_pengambilan'] === 'antar' && $jarak > 3) {
-                $biayaOngkir = (ceil($jarak) - 3) * 2000;
+            $deliveryFee = 0;
+            if ($validated['pickup_method'] === 'delivery' && $distance > 3) {
+                $deliveryFee = (ceil($distance) - 3) * 2000;
             }
 
-            $diskon = 0;
-            $totalHarga = $subtotalLayanan + $biayaOngkir;
+            $discount = 0;
+            $totalPrice = $subtotalServices + $deliveryFee;
 
-            // --- LOGIKA MEMBERSHIP: Diskon 10% & Potong Saldo ---
+            // --- LOGIKA MEMBERSHIP ---
             if (!empty($validated['membership_id'])) {
                 $membership = Membership::findOrFail($validated['membership_id']);
                 
-                // Beri Diskon 10% dari Subtotal Layanan
-                $diskon = $subtotalLayanan * 0.10;
-                $totalHarga = $subtotalLayanan - $diskon + $biayaOngkir;
+                // Diskon 10%
+                $discount = $subtotalServices * 0.10;
+                $totalPrice = $subtotalServices - $discount + $deliveryFee;
 
-                // Cek Saldo Apakah Cukup
-                if ($membership->saldo < $totalHarga) {
+                if ($membership->balance < $totalPrice) {
                     return back()->withErrors(['error' => 'Saldo member tidak mencukupi untuk membayar tagihan.']);
                 }
 
-                // Potong Saldo Member
-                $membership->decrement('saldo', $totalHarga);
+                $membership->decrement('balance', $totalPrice);
             }
 
-            // Generate Order ID Berurutan (ORD-01, ORD-02, dst)
+            // Generate Order ID
             $latestOrder = Order::latest('id')->first();
             $nextId = $latestOrder ? $latestOrder->id + 1 : 1;
             $orderId = 'ORD-' . str_pad($nextId, 2, '0', STR_PAD_LEFT);
 
-            // Simpan ke Tabel Orders
+            // Simpan Order
             $order = Order::create([
-                'order_id'           => $orderId,
-                'membership_id'      => $validated['membership_id'] ?: null,
-                'nama'               => $validated['nama'],
-                'nomor_telepon'      => $validated['telepon'],
-                'alamat'             => $validated['alamat'],
-                'tanggal_order'      => now(),
-                'metode_pengambilan' => $validated['metode_pengambilan'],
-                'jarak_pengiriman'   => $jarak,
-                'biaya_ongkir'       => $biayaOngkir,
-                'subtotal'           => $subtotalLayanan,
-                'diskon'             => $diskon,
-                'total_harga'        => $totalHarga,
-                'metode_pembayaran'  => $validated['metode_pembayaran'],
-                'status_order'       => 'menunggu',
+                'order_id'          => $orderId,
+                'membership_id'     => $validated['membership_id'] ?: null,
+                'customer_name'     => $validated['customer_name'],
+                'phone_number'      => $validated['phone_number'],
+                'address'           => $validated['address'],
+                'order_date'        => now(),
+                'pickup_method'     => $validated['pickup_method'],
+                'delivery_distance' => $distance,
+                'delivery_fee'      => $deliveryFee,
+                'subtotal'          => $subtotalServices,
+                'discount'          => $discount,
+                'total_price'       => $totalPrice,
+                'payment_method'    => $validated['payment_method'],
+                'status'            => 'pending', // Status dalam bahasa inggris
             ]);
 
-            // Simpan Item ke Tabel Order Details
-            foreach ($validated['layanan'] as $item) {
+            // Simpan Detail Order
+            foreach ($validated['services'] as $item) {
                 OrderDetail::create([
                     'order_id'   => $order->id,
                     'service_id' => $item['service_id'],
-                    'harga'      => $item['price'],
+                    'price'      => $item['price'],
                     'qty'        => $item['qty'],
                     'subtotal'   => $item['subtotal'],
                 ]);
             }
 
             DB::commit();
-
             return redirect()->route('cashier.orders.index')->with('success', 'Pesanan berhasil dibuat!');
 
         } catch (\Exception $e) {
@@ -132,11 +128,11 @@ class OrderController extends Controller
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
-            'status_order' => 'required|in:menunggu,dalam proses,selesai,sudah diambil'
+            'status' => 'required|in:pending,processing,completed,picked_up'
         ]);
 
         $order->update([
-            'status_order' => $request->status_order
+            'status' => $request->status
         ]);
 
         return back(); 

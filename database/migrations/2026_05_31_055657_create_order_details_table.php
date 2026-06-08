@@ -13,8 +13,8 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             
-            $table->decimal('harga', 15, 2); // Harga per kg / pcs saat itu (mencegah bug jika harga layanan diubah kelak)
-            $table->float('qty'); // Berat (Kg) atau Jumlah (Pcs)
+            $table->decimal('price', 15, 2); // Diubah dari 'harga'
+            $table->float('qty'); 
             $table->decimal('subtotal', 15, 2);
             
             $table->timestamps();

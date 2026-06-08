@@ -11,10 +11,9 @@ class HistoryController extends Controller
 {
     public function index()
     {
-        // Hanya ambil order yang statusnya 'sudah diambil'
         $orders = Order::with(['membership', 'details.service'])
                         ->where('status_order', 'sudah diambil')
-                        ->latest('updated_at') // Urutkan berdasarkan waktu terakhir diambil
+                        ->latest('updated_at')
                         ->get();
 
         return Inertia::render('Cashier/History', [
