@@ -12,7 +12,7 @@ class HistoryController extends Controller
     public function index()
     {
         $orders = Order::with(['membership', 'details.service'])
-                        ->where('status_order', 'sudah diambil')
+                        ->where('status', 'picked_up') 
                         ->latest('updated_at')
                         ->get();
 

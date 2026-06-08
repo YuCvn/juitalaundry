@@ -8,13 +8,15 @@ use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\FinancialReport;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class FinancialReportController extends Controller
 {
     public function index(Request $request)
     {
-        $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->toDateString());
-        $endDate = $request->input('end_date', Carbon::now()->endOfMonth()->toDateString());
+        // DEFAULT 7 HARI (Hari ini mundur 6 hari)
+        $endDate = $request->input('end_date', Carbon::now()->toDateString());
+        $startDate = $request->input('start_date', Carbon::now()->subDays(6)->toDateString());
 
         $orders = Order::where('status', 'picked_up')
             ->whereBetween('updated_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
@@ -22,10 +24,35 @@ class FinancialReportController extends Controller
             
         $totalPendapatan = $orders->sum('total_price');
 
-        $expenses = FinancialReport::whereBetween('tanggal', [$startDate, $endDate])->get();
-        $totalPengeluaran = $expenses->sum('nominal');
+        $expenses = FinancialReport::whereBetween('date', [$startDate, $endDate])->get();
+        $totalPengeluaran = $expenses->sum('amount');
 
         $netProfit = $totalPendapatan - $totalPengeluaran;
+
+        $chartData = [
+            'labels'   => [],
+            'revenues' => [],
+            'expenses' => [],
+            'profits'  => []
+        ];
+
+        // Looping data harian murni dari database
+        $period = CarbonPeriod::create($startDate, $endDate);
+        
+        foreach ($period as $date) {
+            $dateString = $date->format('Y-m-d');
+            $chartData['labels'][] = $date->format('d M'); 
+
+            $dailyRevenue = $orders->filter(function($order) use ($dateString) {
+                return Carbon::parse($order->updated_at)->format('Y-m-d') === $dateString;
+            })->sum('total_price');
+
+            $dailyExpense = $expenses->where('date', $dateString)->sum('amount');
+
+            $chartData['revenues'][] = $dailyRevenue;
+            $chartData['expenses'][] = $dailyExpense;
+            $chartData['profits'][]  = $dailyRevenue - $dailyExpense;
+        }
 
         return Inertia::render('Admin/FinancialReport', [
             'summary' => [
@@ -35,6 +62,7 @@ class FinancialReportController extends Controller
             ],
             'orders'   => $orders,
             'expenses' => $expenses,
+            'chartData'=> $chartData,
             'filters'  => [
                 'start_date' => $startDate,
                 'end_date'   => $endDate,
@@ -44,14 +72,14 @@ class FinancialReportController extends Controller
     
     public function exportCsv(Request $request)
     {
-        $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->toDateString());
-        $endDate = $request->input('end_date', Carbon::now()->endOfMonth()->toDateString());
+        $endDate = $request->input('end_date', Carbon::now()->toDateString());
+        $startDate = $request->input('start_date', Carbon::now()->subDays(6)->toDateString());
 
         $orders = Order::where('status', 'picked_up')
             ->whereBetween('updated_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
             ->get();
 
-        $expenses = FinancialReport::whereBetween('tanggal', [$startDate, $endDate])->get();
+        $expenses = FinancialReport::whereBetween('date', [$startDate, $endDate])->get();
 
         $csvData = [];
         $csvData[] = ['Tanggal', 'Tipe', 'Keterangan / Pelanggan', 'Pemasukan (Rp)', 'Pengeluaran (Rp)'];
@@ -68,11 +96,11 @@ class FinancialReportController extends Controller
 
         foreach ($expenses as $expense) {
             $csvData[] = [
-                Carbon::parse($expense->tanggal)->format('Y-m-d'),
+                Carbon::parse($expense->date)->format('Y-m-d'),
                 'Pengeluaran',
-                $expense->keterangan,
+                $expense->description,
                 0,
-                $expense->nominal
+                $expense->amount
             ];
         }
 

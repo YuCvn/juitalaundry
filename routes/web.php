@@ -15,9 +15,11 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\ServiceController;
 
 // Cashier Controllers
+use App\Http\Controllers\Cashier\DashboardController;
 use App\Http\Controllers\Cashier\OrderController;
 use App\Http\Controllers\Cashier\HistoryController;
 use App\Http\Controllers\Cashier\MembershipController;
+
 
 // Route Default
 Route::get('/', function () {
@@ -78,20 +80,18 @@ Route::middleware('auth')->group(function () {
     // AREA KASIR (CASHIER)
     Route::prefix('cashier')->name('cashier.')->middleware('role:cashier')->group(function () {
         
-        // 1. JADIKAN ORDER SEBAGAI DASHBOARD
-        // (Kode ini otomatis melempar /dashboard ke /orders)
-        Route::redirect('/dashboard', '/cashier/orders')->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         
-        // 2. Transaksi
+        // Transaksi
         Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
         Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
         
-        // 3. Riwayat & Pelanggan
+        // Riwayat & Pelanggan
         Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
         
-        // 4. Kelola Membership
+        // Kelola Membership
         Route::get('/membership', [MembershipController::class, 'index'])->name('membership.index');
         Route::post('/membership', [MembershipController::class, 'store'])->name('membership.store');
         Route::put('/membership/{membership}', [MembershipController::class, 'update'])->name('membership.update');

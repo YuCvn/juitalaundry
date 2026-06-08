@@ -75,7 +75,7 @@ export default function CashierLayout({ children, title }) {
                 )}
             </div>
 
-            {/* SIDEBAR KASIR (TEMA BIRU ADMIN) */}
+            {/* SIDEBAR KASIR */}
             <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-[#2563eb] text-white transition-all duration-300 flex flex-col shadow-xl z-20`}>
                 <div className="p-4 border-b border-blue-500/30 flex items-center justify-between h-20">
                     {isSidebarOpen && (
@@ -101,7 +101,15 @@ export default function CashierLayout({ children, title }) {
                         {isSidebarOpen ? 'Order Management' : '...'}
                     </div>
                     <div className="space-y-2">
-                        {/* Menu Orders & History (Digabung) */}
+                        {/* LINK DASHBOARD BARU */}
+                        <Link 
+                            href="/cashier/dashboard" 
+                            className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/dashboard') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                            {isSidebarOpen && <span className="ml-3 text-sm">Dashboard</span>}
+                        </Link>
+
                         <Link 
                             href="/cashier/orders" 
                             className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${(isActive('/cashier/orders') || isActive('/cashier/history')) ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}
@@ -109,7 +117,6 @@ export default function CashierLayout({ children, title }) {
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
                             {isSidebarOpen && <span className="ml-3 text-sm">Order & History</span>}
                         </Link>
-                        {/* Link History Dihapus dari sidebar */}
                     </div>
 
                     {/* KELOMPOK 2: DATA MASTER */}
@@ -129,21 +136,21 @@ export default function CashierLayout({ children, title }) {
                     </div>
                 </nav>
 
-                {/* AREA PROFIL USER KASIR (BAWAH KIRI) */}
+                {/* AREA PROFIL USER KASIR */}
                 <div className="p-4 border-t border-blue-400/20 bg-blue-800/30">
                     <div className={`flex items-center ${!isSidebarOpen ? 'justify-center' : ''}`}>
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
-                            <span className="text-blue-700 font-black text-lg leading-none" style={{ fontFamily: 'sans-serif' }}>
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center shadow-sm">
+                            <span className="text-white-700 font-black text-lg leading-none" style={{ fontFamily: 'sans-serif' }}>
                                 {userInitial}
                             </span>
                         </div>
                         
                         {isSidebarOpen && (
                             <div className="ml-3 overflow-hidden">
-                                <p className="text-sm font-bold text-white truncate leading-tight tracking-tight">
+                                <p className="text-sm font-normal text-white truncate leading-tight tracking-tight">
                                     {user?.name || 'Kasir'}
                                 </p>
-                                <p className="text-[10px] text-blue-200 uppercase font-bold tracking-widest leading-none mt-0.5">
+                                <p className="text-[10px] text-blue-200 uppercase font-normal tracking-widest leading-none mt-0.5">
                                     {user?.role || 'Cashier'}
                                 </p>
                             </div>

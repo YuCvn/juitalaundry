@@ -21,19 +21,19 @@ export default function History() {
         return `${datePart} pukul ${timePart}`;
     };
 
-    // Logika Pencarian (Search)
+    // Logika Pencarian - Diperbarui ke field Inggris
     const filteredOrders = orders.filter(order => {
         const search = searchQuery.toLowerCase();
         return (
-            order.nama.toLowerCase().includes(search) ||
-            order.nomor_telepon.includes(search) ||
-            order.order_id.toLowerCase().includes(search)
+            order.customer_name?.toLowerCase().includes(search) ||
+            order.phone_number?.includes(search) ||
+            order.order_id?.toLowerCase().includes(search)
         );
     });
 
-    // Kalkulasi Top Cards
+    // Kalkulasi Top Cards - Diperbarui ke field Inggris
     const totalOrderanSelesai = orders.length;
-    const totalPendapatan = orders.reduce((sum, order) => sum + parseFloat(order.total_harga), 0);
+    const totalPendapatan = orders.reduce((sum, order) => sum + parseFloat(order.total_price), 0);
 
     return (
         <CashierLayout title="Order & History">
@@ -61,7 +61,7 @@ export default function History() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-[#10b981] rounded-xl p-5 text-white shadow-sm flex justify-between items-center">
                     <div>
-                        <p className="text-xs font-bold text-emerald-100 uppercase tracking-wider mb-1">Total Orderan Selesai</p>
+                        <p className="text-xs font-normal text-emerald-100 uppercase tracking-wider mb-1">Total Orderan Selesai</p>
                         <h3 className="text-3xl font-black">{totalOrderanSelesai}</h3>
                     </div>
                     <svg className="w-12 h-12 text-emerald-200/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
@@ -69,14 +69,13 @@ export default function History() {
 
                 <div className="bg-[#0ea5e9] rounded-xl p-5 text-white shadow-sm flex justify-between items-center">
                     <div>
-                        <p className="text-xs font-bold text-sky-100 uppercase tracking-wider mb-1">Total Pendapatan</p>
+                        <p className="text-xs font-normal text-sky-100 uppercase tracking-wider mb-1">Total Pendapatan</p>
                         <h3 className="text-3xl font-black">{formatRp(totalPendapatan)}</h3>
                     </div>
                     <svg className="w-12 h-12 text-sky-200/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
             </div>
 
-            {/* Kolom Pencarian */}
             <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100 mb-6">
                 <div className="relative">
                     <svg className="w-4 h-4 absolute left-3.5 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -90,7 +89,6 @@ export default function History() {
                 </div>
             </div>
 
-            {/* Konten Order Cards - Menggunakan Grid 4 Kolom */}
             {filteredOrders.length === 0 ? (
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 md:p-24 flex flex-col items-center justify-center min-h-[300px]">
                     <div className="text-gray-300 mb-5">
@@ -108,17 +106,15 @@ export default function History() {
                             </div>
 
                             <div className="p-3 flex flex-col flex-1">
-                                {/* 1. PELANGGAN */}
                                 <div className="mb-4">
                                     <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Pelanggan</p>
-                                    <p className="text-sm text-gray-800">{order.nama}</p>
+                                    <p className="text-sm text-gray-800">{order.customer_name}</p>
                                     <p className="text-[11px] text-gray-600 mt-1 flex items-center gap-1">
                                         <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                                        {order.nomor_telepon}
+                                        {order.phone_number}
                                     </p>
                                 </div>
 
-                                {/* 2. DETAIL LAYANAN (UNGU) */}
                                 <div className="bg-[#f3e8ff] border border-[#d8b4fe] rounded-lg p-3 mb-4">
                                     <div className="flex items-center gap-1.5 mb-2">
                                         <svg className="w-4 h-4 text-[#9333ea]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,71 +127,60 @@ export default function History() {
                                         {order.details && order.details.map((detail) => (
                                             <div key={detail.id} className="bg-white rounded p-2 border border-[#e9d5ff]">
                                                 <p className="text-gray-800 text-xs">{detail.service?.name || 'Layanan Dihapus'}</p>
-                                                
                                                 <div className="flex justify-between items-end mt-1">
                                                     <p className="text-[10px] text-gray-500">
-                                                        {parseFloat(detail.qty)} {detail.service?.category?.toLowerCase() === 'kiloan' ? 'kg' : 'pcs'} <span className="mx-0.5 text-gray-400">x</span> {formatRp(detail.harga)}
+                                                        {parseFloat(detail.qty)} {detail.service?.category?.toLowerCase() === 'kiloan' ? 'kg' : 'pcs'} <span className="mx-0.5 text-gray-400">x</span> {formatRp(detail.price)}
                                                     </p>
                                                     <p className="text-[#7e22ce] text-xs font-medium">{formatRp(detail.subtotal)}</p>
                                                 </div>
                                             </div>
                                         ))}
-
-                                        {/* Ongkir */}
-                                        {order.biaya_ongkir > 0 && (
+                                        {order.delivery_fee > 0 && (
                                             <div className="bg-white/60 rounded p-2 border border-[#e9d5ff] flex justify-between items-center mt-1">
                                                 <p className="text-[10px] text-gray-700">Biaya Ongkir</p>
-                                                <p className="text-[#7e22ce] text-xs font-medium">{formatRp(order.biaya_ongkir)}</p>
+                                                <p className="text-[#7e22ce] text-xs font-medium">{formatRp(order.delivery_fee)}</p>
                                             </div>
                                         )}
-
-                                        {/* Diskon */}
-                                        {order.diskon > 0 && (
-                                            <div className="bg-emerald-50/60 rounded p-2 border border-emerald-100 flex justify-between items-center mt-1">
+                                        {order.discount > 0 && (
+                                            <div className="bg-emerald-50/60 rounded p-2 border border-emerald-200 flex justify-between items-center mt-1">
                                                 <p className="text-[10px] text-emerald-700">Diskon Member</p>
-                                                <p className="text-emerald-700 text-xs font-medium">- {formatRp(order.diskon)}</p>
+                                                <p className="text-emerald-700 text-xs font-medium">- {formatRp(order.discount)}</p>
                                             </div>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* 3. KUMPULAN CARD INFO */}
                                 <div className="flex flex-col gap-2 mb-4">
-                                    <div className="flex items-center gap-2 bg-sky-50 border border-sky-100 p-2.5 rounded-lg text-xs text-sky-600">
+                                    <div className="flex items-center gap-2 bg-sky-50 border border-sky-200 p-2.5 rounded-lg text-xs text-sky-600">
                                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-                                        <span className="capitalize">{order.metode_pembayaran}</span>
+                                        <span className="capitalize">
+                                            {order.payment_method === 'upfront' ? 'Bayar Langsung' : 'Bayar Nanti'}
+                                        </span> 
                                     </div>
-
-                                    <div className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs ${order.metode_pengambilan === 'antar' ? 'bg-orange-50 border-orange-100 text-orange-600' : 'bg-green-50 border-green-100 text-green-600'}`}>
-                                        {order.metode_pengambilan === 'antar' ? (
+                                    <div className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs ${order.pickup_method === 'delivery' ? 'bg-orange-50 border-orange-200 text-orange-600' : 'bg-green-50 border-green-200 text-green-600'}`}>
+                                        {order.pickup_method === 'delivery' ? (
                                             <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" /></svg>
                                         ) : (
                                             <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                                         )}
-                                        {order.metode_pengambilan === 'antar' ? 'Diantar ke Alamat' : 'Ambil di Tempat'}
+                                        {order.pickup_method === 'delivery' ? 'Diantar ke Alamat' : 'Ambil di Tempat'}
                                     </div>
-
-                                    <div className="flex items-start gap-2 bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-[11px] text-gray-500">
+                                    <div className="flex items-start gap-2 bg-gray-50 border border-gray-200 p-2.5 rounded-lg text-[11px] text-gray-500">
                                         <svg className="w-3.5 h-3.5 mt-0.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                                        <span className="leading-snug break-words w-full">{order.alamat || 'Alamat tidak diisi'}</span>
+                                        <span className="leading-snug break-words w-full">{order.address || 'Alamat tidak diisi'}</span>
                                     </div>
-
-                                    <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-[10px] text-gray-500">
+                                    <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 p-2.5 rounded-lg text-[10px] text-gray-500">
                                         <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                        {formatTanggal(order.tanggal_order)}
+                                        {formatTanggal(order.order_date)}
                                     </div>
                                 </div>
 
-                                <div className="mt-auto">
-                                    {/* TOTAL HARGA */}
-                                    <div className="flex justify-between items-center bg-sky-100 px-3 py-2.5 rounded-lg border border-sky-200 mb-4 shadow-sm">
-                                        <p className="text-[10px] text-sky-700 uppercase font-bold tracking-wider">Total Harga</p>
-                                        <p className="text-sm font-black text-sky-900">{formatRp(order.total_harga)}</p>
+                                <div className="mt-auto ">
+                                    <div className="flex justify-between items-center bg-green-100 px-3 py-2.5 rounded-lg border border-green-300 p-6 mb-6 shadow-sm">
+                                        <p className="text-[10px] text-green-600 uppercase font-normal tracking-wider ">Total Harga</p>
+                                        <p className="text-sm font-black text-green-500">{formatRp(order.total_price)}</p>
                                     </div>
-
-                                    {/* HANYA TOMBOL CETAK NOTA */}
                                     <button className="flex items-center justify-center bg-[#3b82f6] hover:bg-[#2563eb] text-white py-2 px-3 rounded-lg transition-colors text-xs w-full shadow-sm">
-                                        <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
                                         Cetak Nota
                                     </button>
                                 </div>

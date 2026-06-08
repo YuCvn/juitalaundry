@@ -4,27 +4,31 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\FinancialReport; // Tetap gunakan model ini
+use App\Models\FinancialReport; 
 use Inertia\Inertia;
 
 class ExpenseController extends Controller
 {
     public function index()
     {
-        // Mengambil semua data pengeluaran, diurutkan dari yang terbaru
-        $expenses = FinancialReport::latest('tanggal')->get();
+        // Mengambil semua data pengeluaran
+        $expenses = FinancialReport::latest('date')->get();
+        
+        // MENGHITUNG TOTAL PENGELUARAN (Berdasarkan kolom 'amount')
+        $totalPengeluaran = FinancialReport::sum('amount');
 
         return Inertia::render('Admin/Expense', [
-            'expenses' => $expenses
+            'expenses' => $expenses,
+            'totalPengeluaran' => $totalPengeluaran // Mengirimkan total ke frontend
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'keterangan' => 'required|string|max:255',
-            'nominal'    => 'required|numeric|min:0',
-            'tanggal'    => 'required|date',
+            'description' => 'required|string|max:255',
+            'amount'      => 'required|numeric|min:0',
+            'date'        => 'required|date',
         ]);
 
         FinancialReport::create($request->all());
@@ -35,9 +39,9 @@ class ExpenseController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'keterangan' => 'required|string|max:255',
-            'nominal'    => 'required|numeric|min:0',
-            'tanggal'    => 'required|date',
+            'description' => 'required|string|max:255',
+            'amount'      => 'required|numeric|min:0',
+            'date'        => 'required|date',
         ]);
 
         $expense = FinancialReport::findOrFail($id);

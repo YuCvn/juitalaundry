@@ -10,13 +10,9 @@ return new class extends Migration
     {
         Schema::create('financial_reports', function (Blueprint $table) {
             $table->id();
-            $table->string('keterangan'); 
-            $table->decimal('nominal', 15, 2);
-            $table->date('tanggal');
-            
-            // OPSIONAL: Jika tabel ini murni menggantikan expense, abaikan baris di bawah.
-            // Namun jika ingin lebih fleksibel, Anda bisa menambahkan kolom jenis transaksi.
-            // $table->enum('jenis', ['pemasukan', 'pengeluaran'])->default('pengeluaran'); 
+            $table->string('description'); 
+            $table->decimal('amount', 15, 2); 
+            $table->date('date'); 
             
             $table->timestamps();
         });

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Order;
-use App\Models\FinancialReport; // 1. Ubah Expense menjadi FinancialReport
+use App\Models\FinancialReport;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon; 
 
@@ -14,15 +14,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // 2. Ubah status_order -> status & sudah diambil -> picked_up
         $completedOrders = Order::where('status', 'picked_up');
 
         $totalOrders = $completedOrders->count();
-        
-        // 3. Ubah total_harga -> total_price
         $totalPendapatan = $completedOrders->sum('total_price');
-
-        // 4. Ubah nama -> customer_name
         $totalPelanggan = Order::where('status', 'picked_up')
             ->distinct('customer_name')
             ->count('customer_name');
@@ -34,8 +29,8 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // 5. Ubah Expense -> FinancialReport
-        $pengeluaran = FinancialReport::sum('nominal');
+        // DIPERBAIKI: Menggunakan 'amount'
+        $pengeluaran = FinancialReport::sum('amount');
 
         $labels = [];
         $revenues = [];
@@ -46,14 +41,13 @@ class DashboardController extends Controller
             $date = Carbon::today()->subDays($i);
             $labels[] = $date->isoFormat('D MMM'); 
             
-            // Pendapatan hari itu
             $dailyRevenue = Order::where('status', 'picked_up')
                 ->whereDate('updated_at', $date)
                 ->sum('total_price');
                 
-            // Pengeluaran hari itu
-            $dailyExpense = FinancialReport::whereDate('tanggal', $date)
-                ->sum('nominal');
+            // DIPERBAIKI: Menggunakan 'date' dan 'amount'
+            $dailyExpense = FinancialReport::whereDate('date', $date)
+                ->sum('amount');
 
             $revenues[] = (float) $dailyRevenue;
             $expenses[] = (float) $dailyExpense;

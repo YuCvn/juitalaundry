@@ -17,13 +17,11 @@ export default function Dashboard() {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka || 0);
     };
 
-    // Format Y-Axis agar tidak terlalu panjang (contoh: 100000 -> 100k)
     const formatYAxis = (value) => {
         if (value >= 1000) return `${value / 1000}k`;
         return value;
     };
 
-    // Mapping data dari backend agar sesuai dengan format Recharts
     const formattedChartData = chartData?.labels.map((label, index) => ({
         name: label,
         Pendapatan: chartData.revenues[index],
@@ -85,8 +83,6 @@ export default function Dashboard() {
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
                                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 11, fill: '#9ca3af'}} dy={10} />
                                 <YAxis axisLine={false} tickLine={false} tick={{fontSize: 11, fill: '#9ca3af'}} tickFormatter={formatYAxis} />
-                                
-                                {/* Tooltip Diperbarui */}
                                 <Tooltip 
                                     cursor={{fill: '#f9fafb'}} 
                                     formatter={(value) => formatRp(value)} 
@@ -94,7 +90,6 @@ export default function Dashboard() {
                                     itemStyle={{fontSize: '11px', fontWeight: '600', paddingBottom: '4px'}}
                                     labelStyle={{fontSize: '11px', color: '#6b7280', marginBottom: '6px', fontWeight: 'bold'}}
                                 />
-                                
                                 <Legend iconType="circle" wrapperStyle={{fontSize: '11px', paddingTop: '10px'}} />
                                 <Bar dataKey="Pendapatan" fill="#3b82f6" radius={[4, 4, 0, 0]} maxBarSize={40} />
                                 <Bar dataKey="Pengeluaran" fill="#06b6d4" radius={[4, 4, 0, 0]} maxBarSize={40} />
@@ -112,15 +107,12 @@ export default function Dashboard() {
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
                                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 11, fill: '#9ca3af'}} dy={10} />
                                 <YAxis axisLine={false} tickLine={false} tick={{fontSize: 11, fill: '#9ca3af'}} tickFormatter={formatYAxis} />
-                                
-                                {/* Tooltip Diperbarui */}
                                 <Tooltip 
                                     formatter={(value) => formatRp(value)} 
                                     contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', padding: '10px'}} 
                                     itemStyle={{fontSize: '11px', fontWeight: '600'}}
                                     labelStyle={{fontSize: '11px', color: '#6b7280', marginBottom: '6px', fontWeight: 'bold'}}
                                 />
-                                
                                 <Legend iconType="circle" wrapperStyle={{fontSize: '11px', paddingTop: '10px'}} />
                                 <Line type="monotone" dataKey="Profit" stroke="#3b82f6" strokeWidth={3} dot={{r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff'}} activeDot={{r: 6}} />
                             </LineChart>

@@ -14,7 +14,6 @@ class Order extends Model
 
     public function getWhatsappNumberAttribute()
     {
-        // Ubah dari $this->nomor_telepon menjadi $this->phone_number
         $phone = $this->phone_number;
 
         if (str_starts_with($phone, '0')) {
