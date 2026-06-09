@@ -3,7 +3,8 @@ import { Link, Head, usePage } from '@inertiajs/react';
 import CashierLayout from '../../Layouts/CashierLayout';
 
 export default function History() {
-    const { orders = [] } = usePage().props;
+    const { orders } = usePage().props;
+    const ordersData = orders?.data || [];
     const [searchQuery, setSearchQuery] = useState('');
 
     const formatRp = (angka) => {
@@ -21,8 +22,7 @@ export default function History() {
         return `${datePart} pukul ${timePart}`;
     };
 
-    // Logika Pencarian - Diperbarui ke field Inggris
-    const filteredOrders = orders.filter(order => {
+    const filteredOrders = ordersData.filter(order => {
         const search = searchQuery.toLowerCase();
         return (
             order.customer_name?.toLowerCase().includes(search) ||
@@ -31,9 +31,8 @@ export default function History() {
         );
     });
 
-    // Kalkulasi Top Cards - Diperbarui ke field Inggris
-    const totalOrderanSelesai = orders.length;
-    const totalPendapatan = orders.reduce((sum, order) => sum + parseFloat(order.total_price), 0);
+    const totalOrderanSelesai = orders?.total || ordersData.length;
+    const totalPendapatan = ordersData.reduce((sum, order) => sum + parseFloat(order.total_price), 0);
 
     return (
         <CashierLayout title="Order & History">
@@ -57,7 +56,6 @@ export default function History() {
                 </Link>
             </div>
 
-            {/* Top Cards History */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-[#10b981] rounded-xl p-5 text-white shadow-sm flex justify-between items-center">
                     <div>

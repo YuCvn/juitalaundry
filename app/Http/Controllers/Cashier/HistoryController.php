@@ -11,10 +11,10 @@ class HistoryController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['membership', 'details.service'])
+        $orders = Order::with(['membership', 'details.service', 'user'])
                         ->where('status', 'picked_up') 
                         ->latest('updated_at')
-                        ->get();
+                        ->paginate(50); 
 
         return Inertia::render('Cashier/History', [
             'orders' => $orders

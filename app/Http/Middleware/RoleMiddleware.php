@@ -11,10 +11,19 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, $role): Response
     {
+
         if (!Auth::check()) {
             return redirect('/login');
         }
 
+        if (isset(Auth::user()->is_active) && !Auth::user()->is_active) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            
+            return redirect()->route('login')->with('error', 'Sesi dihentikan paksa! Akun Anda telah dinonaktifkan oleh Administrator.');
+        }
+        
         $userRole = strtolower(Auth::user()->role);
         $expectedRole = strtolower($role);
 

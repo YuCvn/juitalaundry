@@ -54,8 +54,13 @@ class ServiceController extends Controller
 
     public function destroy(Service $service)
     {
-        $service->delete();
+        $isUsed = \App\Models\OrderDetail::where('service_id', $service->id)->exists();
 
-        return redirect()->back();
+        if ($isUsed) {
+            return redirect()->back()->with('error', 'Layanan tidak bisa dihapus karena sudah tercatat dalam riwayat pesanan pelanggan. Silakan nonaktifkan (uncheck is_active) saja.');
+        }
+
+        $service->delete();
+        return redirect()->back()->with('success', 'Layanan berhasil dihapus secara permanen.');
     }
 }

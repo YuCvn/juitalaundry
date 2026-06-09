@@ -25,6 +25,11 @@ class Order extends Model
         return $phone;
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function membership()
     {
         return $this->belongsTo(Membership::class);
