@@ -31,16 +31,15 @@ class MembershipController extends Controller
         ]);
 
         $membership = Membership::create([
-            'full_name' => $request->full_name,
+            'full_name' => strip_tags($request->full_name), // Proteksi XSS
             'phone_number' => $request->phone_number,
-            'address' => $request->address,
+            'address' => $request->address ? strip_tags($request->address) : null, // Proteksi XSS
             'balance' => $request->balance ?? 0,
         ]);
 
-        // LOG OTOMATIS: Pendaftaran
         MembershipHistory::create([
             'membership_id' => $membership->id,
-            'type' => 'Pendaftaran Membership', // (Teks ini dibiarkan Indo karena ditampilkan di UI)
+            'type' => 'Pendaftaran Membership',
             'amount' => $request->balance ?? 0,
             'final_balance' => $request->balance ?? 0,
         ]);
@@ -60,13 +59,25 @@ class MembershipController extends Controller
         $oldBalance = $membership->balance;
         $newBalance = $request->balance;
 
-        $membership->update($request->all());
+        $membership->update([
+            'full_name' => strip_tags($request->full_name),
+            'phone_number' => $request->phone_number,
+            'address' => $request->address ? strip_tags($request->address) : null,
+            'balance' => $newBalance,
+        ]);
 
         if ($newBalance > $oldBalance) {
             MembershipHistory::create([
                 'membership_id' => $membership->id,
                 'type' => 'Top-up Saldo',
                 'amount' => $newBalance - $oldBalance, 
+                'final_balance' => $newBalance,
+            ]);
+        } elseif ($newBalance < $oldBalance) {
+            MembershipHistory::create([
+                'membership_id' => $membership->id,
+                'type' => 'Pengurangan Saldo (Manual)',
+                'amount' => $oldBalance - $newBalance, 
                 'final_balance' => $newBalance,
             ]);
         }

@@ -11,23 +11,19 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, $role): Response
     {
-        // Pastikan user sudah login
         if (!Auth::check()) {
             return redirect('/login');
         }
 
-        // Ambil role user
         $userRole = strtolower(Auth::user()->role);
         $expectedRole = strtolower($role);
 
-        // Samakan nama role dari database ke format route
         if ($userRole === 'administrator') {
             $userRole = 'admin';
         } elseif ($userRole === 'kasir') {
             $userRole = 'cashier';
         }
 
-        // Jika role tidak sesuai, tolak akses
         if ($userRole !== $expectedRole) {
             $redirectRoute = $userRole === 'admin' ? 'admin.dashboard' : 'cashier.dashboard';
             

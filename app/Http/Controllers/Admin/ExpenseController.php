@@ -25,27 +25,31 @@ class ExpenseController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'description' => 'required|string|max:255',
             'amount'      => 'required|numeric|min:0',
             'date'        => 'required|date',
         ]);
 
-        FinancialReport::create($request->all());
+        $validated['description'] = strip_tags($validated['description']);
+
+        FinancialReport::create($validated);
 
         return redirect()->back()->with('success', 'Pengeluaran Berhasil Ditambahkan');
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validated = $request->validate([
             'description' => 'required|string|max:255',
             'amount'      => 'required|numeric|min:0',
             'date'        => 'required|date',
         ]);
 
+        $validated['description'] = strip_tags($validated['description']);
+
         $expense = FinancialReport::findOrFail($id);
-        $expense->update($request->all());
+        $expense->update($validated);
 
         return redirect()->back()->with('success', 'Data Pengeluaran Diperbarui');
     }

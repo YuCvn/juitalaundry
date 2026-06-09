@@ -36,7 +36,7 @@ Route::get('/', function () {
 // Route Guest
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'create'])->name('login');
-    Route::post('/login', [AuthController::class, 'store']);
+    Route::post('/login', [AuthController::class, 'store'])->middleware('throttle:5,1');
 });
 
 // Route Auth
@@ -87,6 +87,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
+        // Tambahkan route ini untuk cetak nota:
+        Route::get('/orders/{id}/print', [OrderController::class, 'print'])->name('orders.print');
         
         // Riwayat & Pelanggan
         Route::get('/history', [HistoryController::class, 'index'])->name('history.index');

@@ -48,17 +48,48 @@ class OrderController extends Controller
             'services'          => 'required|array|min:1',
             'services.*.service_id'=> 'required|exists:services,id',
             'services.*.qty'    => 'required|numeric|min:0.1',
+            // Kita tetap biarkan validasi price & subtotal agar frontend tidak error, 
+            // tapi nilainya akan kita abaikan di backend demi keamanan.
             'services.*.price'  => 'required|numeric',
             'services.*.subtotal'=> 'required|numeric',
         ]);
 
+        // PROTEKSI XSS: Bersihkan input teks dari tag HTML/Script berbahaya
+        $validated['customer_name'] = strip_tags($validated['customer_name']);
+        if (!empty($validated['address'])) {
+            $validated['address'] = strip_tags($validated['address']);
+        }
+
         DB::beginTransaction();
 
         try {
-            // Kalkulasi Dasar
-            $subtotalServices = collect($validated['services'])->sum('subtotal');
+            $serviceIds = collect($validated['services'])->pluck('service_id');
+
+            $dbServices = Service::whereIn('id', $serviceIds)->get()->keyBy('id');
+
+            $subtotalServices = 0;
+            $orderItems = [];
+
+            foreach ($validated['services'] as $item) {
+
+                $service = $dbServices[$item['service_id']]; 
+                
+                $actualPrice = $service->price; 
+                $actualSubtotal = $actualPrice * $item['qty'];
+                
+                $subtotalServices += $actualSubtotal;
+
+                $orderItems[] = [
+                    'service_id' => $item['service_id'],
+                    'price'      => $actualPrice,
+                    'qty'        => $item['qty'],
+                    'subtotal'   => $actualSubtotal,
+                ];
+            }
+            // -------------------------------------------------
+
+            // Kalkulasi Jarak & Ongkir
             $distance = $validated['delivery_distance'] ?? 0;
-            
             $deliveryFee = 0;
             if ($validated['pickup_method'] === 'delivery' && $distance > 3) {
                 $deliveryFee = (ceil($distance) - 3) * 2000;
@@ -71,8 +102,7 @@ class OrderController extends Controller
             if (!empty($validated['membership_id'])) {
                 $membership = Membership::findOrFail($validated['membership_id']);
                 
-                // Diskon 10%
-                $discount = $subtotalServices * 0.10;
+                $discount = $subtotalServices * 0.04;
                 $totalPrice = $subtotalServices - $discount + $deliveryFee;
 
                 if ($membership->balance < $totalPrice) {
@@ -102,11 +132,11 @@ class OrderController extends Controller
                 'discount'          => $discount,
                 'total_price'       => $totalPrice,
                 'payment_method'    => $validated['payment_method'],
-                'status'            => 'pending', // Status dalam bahasa inggris
+                'status'            => 'pending', 
             ]);
 
-            // Simpan Detail Order
-            foreach ($validated['services'] as $item) {
+            // Simpan Detail Order menggunakan data dari $orderItems yang sudah divalidasi keamanannya
+            foreach ($orderItems as $item) {
                 OrderDetail::create([
                     'order_id'   => $order->id,
                     'service_id' => $item['service_id'],
@@ -136,5 +166,12 @@ class OrderController extends Controller
         ]);
 
         return back(); 
+    }
+
+    public function print($id)
+    {
+        $order = Order::with(['membership', 'details.service'])->findOrFail($id);
+
+        return view('print.nota', compact('order'));
     }
 }

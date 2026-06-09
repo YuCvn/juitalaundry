@@ -20,8 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // 2. TAMBAHKAN KODE INI
-        // Memaksa Laravel menggunakan HTTPS jika diakses lewat Expose atau environment bukan lokal biasa
         if (str_contains(request()->url(), 'sharedwithexpose.com') || config('app.env') !== 'local') {
             URL::forceScheme('https');
         }

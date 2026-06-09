@@ -47,7 +47,7 @@ class CashierController extends Controller
     }
     public function toggleStatus($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::where('role', '!=', 'admin')->where('role', '!=', 'administrator')->findOrFail($id);
         $user->is_active = !$user->is_active; 
         $user->save();
 

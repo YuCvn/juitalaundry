@@ -180,7 +180,10 @@ export default function History() {
                                         <p className="text-[10px] text-green-600 uppercase font-normal tracking-wider ">Total Harga</p>
                                         <p className="text-sm font-black text-green-500">{formatRp(order.total_price)}</p>
                                     </div>
-                                    <button className="flex items-center justify-center bg-[#3b82f6] hover:bg-[#2563eb] text-white py-2 px-3 rounded-lg transition-colors text-xs w-full shadow-sm">
+                                    <button 
+                                        onClick={() => window.open(`/cashier/orders/${order.id}/print`, '_blank')}
+                                        className="flex items-center justify-center bg-[#3b82f6] hover:bg-[#2563eb] text-white py-2 px-3 rounded-lg transition-colors text-xs w-full shadow-sm"
+                                    >
                                         Cetak Nota
                                     </button>
                                 </div>

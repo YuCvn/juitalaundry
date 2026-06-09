@@ -95,20 +95,19 @@ export default function CashierLayout({ children, title }) {
 
                 {/* MENU NAVIGASI KASIR */}
                 <nav className="flex-1 overflow-y-auto px-3 py-2 flex flex-col">
-                    
+                    <Link 
+                            href="/cashier/dashboard" 
+                            className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/dashboard') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}
+                        >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                            {isSidebarOpen && <span className="ml-3 text-sm">Dashboard</span>}
+                    </Link>
                     {/* KELOMPOK 1: ORDER MANAGEMENT */}
                     <div className="text-xs font-semibold text-blue-300 mt-2 mb-2 px-3 uppercase tracking-wider">
                         {isSidebarOpen ? 'Order Management' : '...'}
                     </div>
                     <div className="space-y-2">
                         {/* LINK DASHBOARD BARU */}
-                        <Link 
-                            href="/cashier/dashboard" 
-                            className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/dashboard') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                            {isSidebarOpen && <span className="ml-3 text-sm">Dashboard</span>}
-                        </Link>
 
                         <Link 
                             href="/cashier/orders" 
