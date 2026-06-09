@@ -5,10 +5,9 @@ import AdminLayout from '@/Layouts/AdminLayout';
 export default function Services({ auth, services }) {
     const [search, setSearch] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalMode, setModalMode] = useState('create'); // 'create' atau 'edit'
+    const [modalMode, setModalMode] = useState('create'); 
     const [currentId, setCurrentId] = useState(null);
 
-    // Menggunakan Inertia Form Helper
     const { data, setData, post, put, delete: destroy, errors, reset, processing } = useForm({
         category: 'kiloan',
         name: '',
@@ -18,14 +17,12 @@ export default function Services({ auth, services }) {
         is_active: true,
     });
 
-    // Handle buka modal untuk tambah data
     const openCreateModal = () => {
         reset();
         setModalMode('create');
         setIsModalOpen(true);
     };
 
-    // Handle buka modal untuk edit data
     const openEditModal = (service) => {
         setData({
             category: service.category || 'kiloan',
@@ -40,11 +37,9 @@ export default function Services({ auth, services }) {
         setIsModalOpen(true);
     };
 
-    // Submit Form (Tambah / Edit)
     const handleSubmit = (e) => {
         e.preventDefault();
         
-        // Membersihkan tipe jika kategori diubah kembali ke kiloan agar data rapi
         const submitData = { ...data };
         if (submitData.category === 'kiloan') {
             submitData.type = '';
@@ -69,14 +64,12 @@ export default function Services({ auth, services }) {
         }
     };
 
-    // Handle Hapus Data
     const handleDelete = (id) => {
         if (confirm('Apakah Anda yakin ingin menghapus layanan ini?')) {
             destroy(route('admin.services.destroy', id));
         }
     };
 
-    // Format Rupiah
     const formatRupiah = (number) => {
         return new Intl.NumberFormat('id-ID', {
             style: 'currency',
@@ -85,7 +78,6 @@ export default function Services({ auth, services }) {
         }).format(number);
     };
 
-    // Filter data berdasarkan pencarian (Aman jika services undefined)
     const safeServices = Array.isArray(services) ? services : [];
     const filteredServices = safeServices.filter(service => {
         const sName = service.name || service.nama_layanan || '';
@@ -94,7 +86,6 @@ export default function Services({ auth, services }) {
                sType.toLowerCase().includes(search.toLowerCase());
     });
 
-    // Kelompokkan data berdasarkan kategori
     const kiloanServices = filteredServices.filter(s => s.category === 'kiloan' || !s.category);
     const lainnyaServices = filteredServices.filter(s => s.category === 'lainnya');
 
@@ -103,7 +94,6 @@ export default function Services({ auth, services }) {
             <Head title="Kelola Layanan" />
             <div className="space-y-6">
                 
-                {/* 1. BANNER ATAS */}
                 <div className="bg-[#3388FF] text-white rounded-lg p-6 mb-6 text-left">
                     <div>
                         <h1 className="text-xl font-bold mb-1">Kelola Layanan</h1>
@@ -111,7 +101,6 @@ export default function Services({ auth, services }) {
                     </div>
                 </div>
 
-                {/* 2. SEARCH BAR & BUTTON TAMBAH */}
                 <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
                     <div className="relative w-full sm:w-80">
                         <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -138,7 +127,6 @@ export default function Services({ auth, services }) {
                     </button>
                 </div>
 
-                {/* 3. KATEGORI: LAUNDRY KILOAN */}
                 <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                     <div className="flex items-center gap-2 mb-4">
                         <h2 className="text-lg font-bold text-gray-800">Laundry Kiloan</h2>
@@ -187,7 +175,6 @@ export default function Services({ auth, services }) {
                     )}
                 </div>
 
-                {/* 4. KATEGORI: JASA LAINNYA */}
                 <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                     <div className="flex items-center gap-2 mb-4">
                         <h2 className="text-lg font-bold text-gray-800">Jasa Lainnya</h2>
@@ -237,7 +224,6 @@ export default function Services({ auth, services }) {
                 </div>
             </div>
 
-            {/* MODAL INPUT (TAMBAH / EDIT) - TELAH DIUPDATE SESUAI FIGMA */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
                     <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl relative overflow-hidden">
@@ -266,7 +252,6 @@ export default function Services({ auth, services }) {
                                     </select>
                                 </div>
 
-                                {/* 2. Nama Layanan */}
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Layanan</label>
                                     <input 
@@ -295,7 +280,6 @@ export default function Services({ auth, services }) {
                                     </div>
                                 )}
 
-                                {/* 3. Harga */}
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Harga</label>
                                     <div className="relative">
@@ -313,7 +297,6 @@ export default function Services({ auth, services }) {
                                     {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
                                 </div>
 
-                                {/* 4. Satuan */}
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Satuan</label>
                                     <select 
@@ -327,7 +310,6 @@ export default function Services({ auth, services }) {
                                     </select>
                                 </div>
 
-                                {/* 6. Checkbox Status Aktif */}
                                 <div className="pt-2">
                                     <label className="flex items-center cursor-pointer gap-2">
                                         <input 

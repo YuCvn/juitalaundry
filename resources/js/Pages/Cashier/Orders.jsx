@@ -138,7 +138,7 @@ export default function Orders() {
                             </div>
 
                             <div className="p-3 flex flex-col flex-1">
-                                {/* --- 1. PELANGGAN --- */}
+                                
                                 <div className="mb-4">
                                     <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Pelanggan</p>
                                     <p className="text-sm text-gray-800">{order.customer_name}</p>
@@ -148,7 +148,6 @@ export default function Orders() {
                                     </p>
                                 </div>
 
-                                {/* --- 2. DETAIL LAYANAN --- */}
                                 <div className="bg-[#f3e8ff] border border-[#d8b4fe] rounded-lg p-3 mb-4">
                                     <div className="flex items-center gap-1.5 mb-2">
                                         <svg className="w-4 h-4 text-[#9333ea]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,7 +170,6 @@ export default function Orders() {
                                             </div>
                                         ))}
 
-                                        {/* Ongkir */}
                                         {parseFloat(order.delivery_fee) > 0 && (
                                             <div className="bg-white/60 rounded p-2 border border-[#e9d5ff] flex justify-between items-center mt-1">
                                                 <p className="text-[10px] text-gray-700">Biaya Ongkir</p>
@@ -179,7 +177,6 @@ export default function Orders() {
                                             </div>
                                         )}
 
-                                        {/* Diskon Member */}
                                         {parseFloat(order.discount) > 0 && (
                                             <div className="bg-emerald-50/60 rounded p-2 border border-emerald-100 flex justify-between items-center mt-1">
                                                 <p className="text-[10px] text-emerald-700">Diskon Member</p>
@@ -189,15 +186,13 @@ export default function Orders() {
                                     </div>
                                 </div>
 
-                                {/* --- 3. KUMPULAN CARD INFO --- */}
                                 <div className="flex flex-col gap-2 mb-4">
-                                    {/* 3.1 Pembayaran */}
+                                    
                                     <div className="flex items-center gap-2 bg-sky-50 border border-sky-100 p-2.5 rounded-lg text-xs text-sky-600">
                                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                                         <span className="capitalize">{order.payment_method === 'upfront' ? 'Bayar Langsung' : 'Bayar Nanti'}</span>
                                     </div>
 
-                                    {/* 3.2 Ambil / Antar */}
                                     <div className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs ${order.pickup_method === 'delivery' ? 'bg-orange-50 border-orange-100 text-orange-600' : 'bg-green-50 border-green-100 text-green-600'}`}>
                                         {order.pickup_method === 'delivery' ? (
                                             <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" /></svg>
@@ -207,7 +202,6 @@ export default function Orders() {
                                         {order.pickup_method === 'delivery' ? 'Diantar ke Alamat' : 'Ambil di Tempat'}
                                     </div>
 
-                                    {/* 3.3 Alamat */}
                                     <div className="flex items-start gap-2 bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-[11px] text-gray-500">
                                         <svg className="w-3.5 h-3.5 mt-0.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                         <span className="leading-snug break-words w-full">{order.address || 'Alamat tidak diisi'}</span>
@@ -221,13 +215,12 @@ export default function Orders() {
                                 </div>
 
                                 <div className="mt-auto">
-                                    {/* --- 4. TOTAL HARGA --- */}
+
                                     <div className="flex justify-between items-center bg-sky-100 px-3 py-2.5 rounded-lg border border-sky-200 mb-4 shadow-sm">
                                         <p className="text-[10px] text-sky-700 uppercase font-bold tracking-wider">Total Harga</p>
                                         <p className="text-sm font-medium text-sky-900">{formatRp(order.total_price)}</p>
                                     </div>
 
-                                    {/* --- 5. STATUS DROPDOWN --- */}
                                     <div className="flex flex-col mb-4">
                                         <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">Status Pengerjaan</p>
                                         <select 
@@ -241,7 +234,7 @@ export default function Orders() {
                                             <option value="picked_up" className="bg-white text-gray-700">Sudah Diambil</option>
                                         </select>
                                     </div>
-                                    {/* --- 6. TOMBOL AKSI --- */}
+
                                     <div className="flex flex-col gap-2">
                                         <button 
                                             onClick={() => handleWhatsApp(order)}

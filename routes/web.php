@@ -88,7 +88,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
-        // Tambahkan route ini untuk cetak nota:
+        // Cetak nota
         Route::get('/orders/{id}/print', [OrderController::class, 'print'])->name('orders.print');
         
         // Riwayat & Pelanggan

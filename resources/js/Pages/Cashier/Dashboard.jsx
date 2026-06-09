@@ -28,13 +28,11 @@ export default function Dashboard() {
 
             <div className="space-y-6">
                 
-                {/* BLOK HEADER KASIR */}
                 <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-8 rounded-2xl text-white shadow-lg">
                     <h1 className="text-3xl font-bold">Dashboard Kasir</h1>
                     <p className="text-sm opacity-90 mt-1 font-medium">Selamat datang! Kelola order dan member dengan mudah</p>
                 </div>
 
-                {/* TOMBOL AKSI UTAMA */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Link 
                         href="/cashier/orders/create" 
@@ -67,7 +65,6 @@ export default function Dashboard() {
                     </Link>
                 </div>
 
-                {/* GRID STATUS */}
                 <div className="grid grid-cols-4 gap-4">
                     {statusCards.map((s, i) => (
                         <div key={i} className={`bg-white p-4 rounded-xl border-2 ${s.borderColor} flex items-center justify-between shadow-sm`}>
@@ -82,7 +79,6 @@ export default function Dashboard() {
                     ))}
                 </div>
 
-                {/* SECTION ORDER BERJALAN */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="bg-[#06b6d4] px-6 py-3 text-white flex justify-between items-center">
                         <h3 className="font-bold text-sm">Order yang Berjalan</h3>
@@ -119,7 +115,6 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                {/* MEMBERSHIP SECTION */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="bg-gradient-to-r from-violet-500 to-pink-500 px-6 py-3 text-white flex justify-between items-center">
                         <h3 className="font-bold text-sm">Membership</h3>

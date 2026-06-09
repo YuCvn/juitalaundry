@@ -74,7 +74,6 @@ export default function Dashboard() {
             {/* --- GRAFIK AREA --- */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
                 
-                {/* Grafik Bar: Pendapatan & Pengeluaran */}
                 <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 min-h-[300px] flex flex-col">
                     <h4 className="text-sm font-bold text-gray-800 mb-4">Pendapatan & Pengeluaran (7 Hari Terakhir)</h4>
                     <div className="flex-1 w-full h-[250px]">
@@ -98,7 +97,6 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                {/* Grafik Line: Net Profit */}
                 <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 min-h-[300px] flex flex-col">
                     <h4 className="text-sm font-bold text-gray-800 mb-4">Net Profit (7 Hari Terakhir)</h4>
                     <div className="flex-1 w-full h-[250px]">

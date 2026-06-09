@@ -5,7 +5,6 @@ import CashierLayout from '../../Layouts/CashierLayout';
 export default function CreateOrder() {
     const { services = [], memberships = [], errors } = usePage().props; 
 
-    // --- MAIN FORM STATE (Diubah ke bahasa Inggris) ---
     const { data, setData, post, processing } = useForm({
         is_membership: false,
         membership_id: '',
@@ -389,7 +388,6 @@ export default function CreateOrder() {
                 </div>
             </div>
 
-            {/* MODAL KILOAN & JASA (Dibiarkan persis seperti aslinya karena sudah aman) */}
             {isModalKiloan && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 animate-fade-in">
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col">

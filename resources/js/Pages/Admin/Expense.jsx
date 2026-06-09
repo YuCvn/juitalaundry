@@ -210,7 +210,6 @@ export default function Pengeluaran() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/80 backdrop-blur-sm transition-opacity">
                     <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
                         
-                        {/* HEADER MODAL: Nila jika Edit, Biru jika Tambah Baru */}
                         <div className={`px-6 py-5 text-white flex items-center ${editingExpense ? 'bg-gradient-to-r from-indigo-500 to-indigo-700' : 'bg-gradient-to-r from-[#3b82f6] to-[#2563eb]'}`}>
                             {editingExpense ? (
                                 <svg className="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>

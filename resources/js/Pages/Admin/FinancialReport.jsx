@@ -65,13 +65,11 @@ export default function LaporanKeuangan() {
         Profit: chartData.profits[index],
     })) || [];
 
-    // Menghitung Jumlah Hari Berdasarkan Filter (Untuk Judul)
     const startObj = new Date(filters.start_date);
     const endObj = new Date(filters.end_date);
     const diffDays = Math.round(Math.abs((endObj - startObj) / (1000 * 60 * 60 * 24))) + 1;
     const titleSuffix = `(${diffDays} Hari)`;
 
-    // PERSIAPAN DATA PIE CHART PENGELUARAN
     const categoryData = {};
     expenses.forEach(exp => {
         const cat = exp.description.split(': ')[0] || 'Lain-lain';
@@ -177,9 +175,8 @@ export default function LaporanKeuangan() {
                     </a>
                 </div>
 
-                {/* ROW 1: BAR CHART & LINE CHART */}
+                {/* BAR CHART & LINE CHART */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    {/* CHART 1: BAR CHART */}
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30">
                         <h3 className="text-md font-bold text-gray-800 mb-4">Pendapatan vs Pengeluaran {titleSuffix}</h3>
                         <div className="h-72">
@@ -203,7 +200,6 @@ export default function LaporanKeuangan() {
                         </div>
                     </div>
 
-                    {/* CHART 2: LINE CHART */}
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30">
                         <h3 className="text-md font-bold text-gray-800 mb-4">Profit Harian {titleSuffix}</h3>
                         <div className="h-72">
@@ -225,9 +221,7 @@ export default function LaporanKeuangan() {
                     </div>
                 </div>
 
-                {/* ROW 2: PIE CHART KATEGORI & PENGELUARAN TERBARU */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* CHART 3: PIE CHART */}
                     <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30">
                         <h3 className="text-md font-bold text-gray-800 mb-4">Pengeluaran per Kategori</h3>
                         <div className="h-64 flex justify-center items-center">
@@ -240,7 +234,7 @@ export default function LaporanKeuangan() {
                                             data={pieData}
                                             cx="50%"
                                             cy="50%"
-                                            innerRadius={60} // Membuat bolong di tengah (Donut)
+                                            innerRadius={60}
                                             outerRadius={100}
                                             paddingAngle={2}
                                             dataKey="value"
@@ -284,7 +278,6 @@ export default function LaporanKeuangan() {
                                                 <p className="text-sm font-bold text-orange-500 mt-1">{formatRp(expense.amount)}</p>
                                             </div>
                                             <div className="flex space-x-2">
-                                                {/* Tombol shortcut diarahkan ke Pengeluaran utama */}
                                                 <a href="/admin/expenses" className="text-indigo-500 hover:text-indigo-700 transition-colors p-1" title="Edit">
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                                 </a>
