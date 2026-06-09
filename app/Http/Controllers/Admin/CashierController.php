@@ -20,10 +20,9 @@ class CashierController extends Controller
         ]);
     }
 
-    // FUNGSI BARU: Untuk menyimpan data kasir
     public function store(Request $request)
     {
-        // 1. Validasi input
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',

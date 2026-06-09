@@ -29,7 +29,6 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // DIPERBAIKI: Menggunakan 'amount'
         $pengeluaran = FinancialReport::sum('amount');
 
         $labels = [];
@@ -45,7 +44,6 @@ class DashboardController extends Controller
                 ->whereDate('updated_at', $date)
                 ->sum('total_price');
                 
-            // DIPERBAIKI: Menggunakan 'date' dan 'amount'
             $dailyExpense = FinancialReport::whereDate('date', $date)
                 ->sum('amount');
 

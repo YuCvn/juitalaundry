@@ -14,7 +14,7 @@ class FinancialReportController extends Controller
 {
     public function index(Request $request)
     {
-        // DEFAULT 7 HARI (Hari ini mundur 6 hari)
+        
         $endDate = $request->input('end_date', Carbon::now()->toDateString());
         $startDate = $request->input('start_date', Carbon::now()->subDays(6)->toDateString());
 
@@ -36,7 +36,6 @@ class FinancialReportController extends Controller
             'profits'  => []
         ];
 
-        // Looping data harian murni dari database
         $period = CarbonPeriod::create($startDate, $endDate);
         
         foreach ($period as $date) {

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title inertia>Juita Laundry</title>
 
+    <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
+
     @routes 
 
     @viteReactRefresh

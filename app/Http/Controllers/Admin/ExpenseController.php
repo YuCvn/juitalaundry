@@ -11,15 +11,14 @@ class ExpenseController extends Controller
 {
     public function index()
     {
-        // Mengambil semua data pengeluaran
+
         $expenses = FinancialReport::latest('date')->get();
         
-        // MENGHITUNG TOTAL PENGELUARAN (Berdasarkan kolom 'amount')
         $totalPengeluaran = FinancialReport::sum('amount');
 
         return Inertia::render('Admin/Expense', [
             'expenses' => $expenses,
-            'totalPengeluaran' => $totalPengeluaran // Mengirimkan total ke frontend
+            'totalPengeluaran' => $totalPengeluaran
         ]);
     }
 

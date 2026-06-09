@@ -31,9 +31,9 @@ class MembershipController extends Controller
         ]);
 
         $membership = Membership::create([
-            'full_name' => strip_tags($request->full_name), // Proteksi XSS
+            'full_name' => strip_tags($request->full_name),
             'phone_number' => $request->phone_number,
-            'address' => $request->address ? strip_tags($request->address) : null, // Proteksi XSS
+            'address' => $request->address ? strip_tags($request->address) : null,
             'balance' => $request->balance ?? 0,
         ]);
 

@@ -16,7 +16,6 @@ class MembershipHistory extends Model
         'final_balance',
     ];
 
-    // Relasi balik ke Member
     public function membership()
     {
         return $this->belongsTo(Membership::class);

@@ -11,10 +11,9 @@ class ServiceController extends Controller
 {
     public function index()
 {
-    // Ambil data dari database
+    
     $services = Service::all(); 
     
-    // Lempar ke React
     return Inertia::render('Admin/Services', [
         'services' => $services
     ]);

@@ -55,7 +55,6 @@ class OrderController extends Controller
             'services.*.subtotal'=> 'required|numeric',
         ]);
 
-        // PROTEKSI XSS
         $validated['customer_name'] = strip_tags($validated['customer_name']);
         if (!empty($validated['address'])) {
             $validated['address'] = strip_tags($validated['address']);
@@ -64,7 +63,6 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-            // PROTEKSI MANIPULASI HARGA
             $serviceIds = collect($validated['services'])->pluck('service_id');
             $dbServices = Service::whereIn('id', $serviceIds)->get()->keyBy('id');
 
@@ -87,7 +85,6 @@ class OrderController extends Controller
                 ];
             }
 
-            // Kalkulasi Dasar & Ongkir
             $distance = $validated['delivery_distance'] ?? 0;
             $deliveryFee = 0;
             if ($validated['pickup_method'] === 'delivery' && $distance > 3) {
@@ -97,7 +94,6 @@ class OrderController extends Controller
             $discount = 0;
             $totalPrice = $subtotalServices + $deliveryFee;
 
-            // LOGIKA MEMBERSHIP
             if (!empty($validated['membership_id'])) {
                 $membership = Membership::findOrFail($validated['membership_id']);
                 
@@ -111,15 +107,13 @@ class OrderController extends Controller
                 $membership->decrement('balance', $totalPrice);
             }
 
-            // PROTEKSI RACE CONDITION: Generate Order ID yang aman
             $latestOrder = Order::lockForUpdate()->latest('id')->first();
             $nextId = $latestOrder ? $latestOrder->id + 1 : 1;
             $orderId = 'ORD-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
 
-            // SIMPAN ORDER + PROTEKSI AKUNTABILITAS KASIR
             $order = Order::create([
                 'order_id'          => $orderId,
-                'user_id'           => Auth::id(), // <--- MEREKAM ID KASIR YANG LOGIN
+                'user_id'           => Auth::id(),
                 'membership_id'     => $validated['membership_id'] ?: null,
                 'customer_name'     => $validated['customer_name'],
                 'phone_number'      => $validated['phone_number'],

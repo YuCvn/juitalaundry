@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Membership;
 use Inertia\Inertia;
-use Illuminate\Support\Carbon; // 1. PASTIKAN LINE INI ADA
+use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Mengatur lokal Carbon ke Bahasa Indonesia agar nama bulan menjadi "Juni" bukan "June"
+
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
 
@@ -36,8 +36,6 @@ class DashboardController extends Controller
                 'picked_up'  => 'Diambil',
             ];
 
-            // 2. MENGAMBIL TANGGAL DARI CREATED_AT (Aman untuk Eloquent maupun Query Builder)
-            // Menghasilkan format: "08 Juni 2026, 19:29"
             $tanggalRaw = $order->created_at ?? $order->order_date ?? null;
             $formatTanggal = $tanggalRaw ? Carbon::parse($tanggalRaw)->translatedFormat('d F Y, H:i') : null;
 
@@ -46,7 +44,7 @@ class DashboardController extends Controller
                 'customer' => $order->customer_name,
                 'status'   => $statusMapping[$order->status] ?? $order->status,
                 'total'    => $order->total_price,
-                'date'     => $formatTanggal, // Pastikan key 'date' ini terisi
+                'date'     => $formatTanggal, 
             ];
         });
 
