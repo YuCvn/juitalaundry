@@ -35,7 +35,7 @@ export default function Dashboard() {
 
             <div className="mb-6"></div>
 
-            {/* --- TOP CARDS STATISTIK --- */}
+            {/* TOP CARDS STATISTIK */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div className="bg-[#3b82f6] rounded-xl p-5 text-white shadow-sm flex justify-between items-center">
                     <div>
@@ -71,7 +71,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            {/* --- GRAFIK AREA --- */}
+            {/* GRAFIK AREA */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
                 
                 <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 min-h-[300px] flex flex-col">
@@ -119,8 +119,6 @@ export default function Dashboard() {
                 </div>
 
             </div>
-
-            {/* --- TOP 5 PELANGGAN --- */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="p-4 border-b border-gray-100 bg-gray-50/50">
                     <h4 className="text-sm font-bold text-gray-800">Top 5 Pelanggan</h4>

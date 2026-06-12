@@ -102,7 +102,7 @@ class OrderController extends Controller
                     return back()->withErrors(['error' => 'Saldo member tidak mencukupi untuk membayar tagihan.']);
                 }
 
-                // Hanya memotong saldo, Poin Loyalti DIBATALKAN disini dan dipindah ke updateStatus
+
                 $membership->decrement('balance', $totalPrice);
             }
 
@@ -195,13 +195,13 @@ class OrderController extends Controller
             $discount = 0;
             $totalPrice = $subtotalServices + $deliveryFee;
 
-            // Restorasi / Pengembalian saldo jika order sebelumnya menggunakan membership
+
             if ($order->membership_id) {
                 $oldMembership = Membership::find($order->membership_id);
                 if ($oldMembership) {
                     $oldMembership->increment('balance', $order->total_price);
                     
-                    // Tarik kembali poin sebelumnya HANYA JIKA statusnya sudah picked_up
+
                     if ($order->status === 'picked_up') {
                         $oldPoints = floor($order->total_price / 10000);
                         if ($oldPoints > 0) {
@@ -211,7 +211,7 @@ class OrderController extends Controller
                 }
             }
 
-            // Hitung potongan saldo baru
+
             if (!empty($validated['membership_id'])) {
                 $membership = Membership::findOrFail($validated['membership_id']);
                 
@@ -224,7 +224,7 @@ class OrderController extends Controller
 
                 $membership->decrement('balance', $totalPrice);
 
-                // Tambahkan poin yang baru HANYA JIKA statusnya sudah picked_up
+
                 if ($order->status === 'picked_up') {
                     $newPoints = floor($totalPrice / 10000);
                     if ($newPoints > 0) {
@@ -247,7 +247,7 @@ class OrderController extends Controller
                 'payment_method'    => $validated['payment_method'],
             ]);
 
-            // Replace order detail
+
             $order->details()->delete();
             foreach ($validated['services'] as $item) {
                 OrderDetail::create([
@@ -273,13 +273,13 @@ class OrderController extends Controller
         try {
             $order = Order::findOrFail($id);
 
-            // Kembalikan saldo & poin jika dihapus
+
             if ($order->membership_id) {
                 $membership = Membership::find($order->membership_id);
                 if ($membership) {
                     $membership->increment('balance', $order->total_price);
                     
-                    // Tarik poin HANYA JIKA order tersebut terlanjur sudah picked_up
+
                     if ($order->status === 'picked_up') {
                         $points = floor($order->total_price / 10000);
                         if ($points > 0) {
@@ -300,7 +300,7 @@ class OrderController extends Controller
         }
     }
 
-    // LOGIKA PENAMBAHAN POINT PINDAH KE SINI ⬇️
+
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
@@ -313,24 +313,24 @@ class OrderController extends Controller
         if ($oldStatus !== $newStatus) {
             DB::beginTransaction();
             try {
-                // Update ke status baru
+
                 $order->update([
                     'status' => $newStatus
                 ]);
 
-                // Jika pesanan ini menggunakan membership, jalankan logika poin
+
                 if ($order->membership_id) {
                     $membership = Membership::find($order->membership_id);
                     if ($membership) {
                         $points = floor($order->total_price / 10000);
                         
-                        // KONDISI 1: Jika pesanan dirubah MENJADI "Sudah Diambil", tambahkan poin
+
                         if ($newStatus === 'picked_up') {
                             if ($points > 0) {
                                 $membership->increment('loyalty_point', $points);
                             }
                         } 
-                        // KONDISI 2: Jika pesanan yg "Sudah Diambil" DIBATALKAN/DIKEMBALIKAN ke status lain, tarik lagi poinnya
+
                         else if ($oldStatus === 'picked_up') {
                             if ($points > 0) {
                                 $membership->decrement('loyalty_point', $points);

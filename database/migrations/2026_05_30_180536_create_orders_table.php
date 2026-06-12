@@ -13,24 +13,24 @@ return new class extends Migration
             $table->string('order_id')->unique(); 
             $table->foreignId('membership_id')->nullable()->constrained('memberships')->nullOnDelete();
             
-            // Data Pelanggan
+
             $table->string('customer_name');
             $table->string('phone_number');
             $table->text('address')->nullable();
             $table->timestamp('order_date')->useCurrent();
             
-            // Detail Pengiriman
-            $table->string('pickup_method')->default('pickup'); // 'pickup' atau 'delivery'
+
+            $table->string('pickup_method')->default('pickup');
             $table->decimal('delivery_distance', 8, 2)->default(0);
             $table->decimal('delivery_fee', 15, 2)->default(0);
             
-            // Kalkulasi Harga
+
             $table->decimal('subtotal', 15, 2)->default(0);
             $table->decimal('discount', 15, 2)->default(0);
             $table->decimal('total_price', 15, 2)->default(0);
             
-            // Pembayaran & Status
-            $table->string('payment_method'); // 'upfront' (langsung) atau 'pay_later' (nanti)
+
+            $table->string('payment_method');
             $table->enum('status', ['pending', 'processing', 'completed', 'picked_up'])->default('pending');
             
             $table->timestamps();

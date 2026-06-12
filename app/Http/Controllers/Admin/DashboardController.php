@@ -36,21 +36,39 @@ class DashboardController extends Controller
         $expenses = [];
         $profits = [];
 
+
+        $startDate = Carbon::today()->subDays(6);
+        $endDate = Carbon::today()->endOfDay();
+
+
+        $revenuesData = Order::selectRaw('DATE(updated_at) as date, SUM(total_price) as total')
+            ->where('status', 'picked_up')
+            ->whereBetween('updated_at', [$startDate, $endDate])
+            ->groupBy('date')
+            ->pluck('total', 'date');
+
+
+        $expensesData = FinancialReport::selectRaw('DATE(date) as date, SUM(amount) as total')
+            ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+            ->groupBy('date')
+            ->pluck('total', 'date');
+
+
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i);
+            $dateString = $date->format('Y-m-d');
+
             $labels[] = $date->isoFormat('D MMM'); 
             
-            $dailyRevenue = Order::where('status', 'picked_up')
-                ->whereDate('updated_at', $date)
-                ->sum('total_price');
-                
-            $dailyExpense = FinancialReport::whereDate('date', $date)
-                ->sum('amount');
 
-            $revenues[] = (float) $dailyRevenue;
-            $expenses[] = (float) $dailyExpense;
-            $profits[] = (float) ($dailyRevenue - $dailyExpense);
+            $dailyRev = (float) ($revenuesData[$dateString] ?? 0);
+            $dailyExp = (float) ($expensesData[$dateString] ?? 0);
+
+            $revenues[] = $dailyRev;
+            $expenses[] = $dailyExp;
+            $profits[]  = $dailyRev - $dailyExp;
         }
+
 
         $chartData = [
             'labels'   => $labels,

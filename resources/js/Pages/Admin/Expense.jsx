@@ -109,8 +109,7 @@ export default function Pengeluaran() {
 
                 {/* 3 Card Informasi */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
-                    
-                    {/* Card 1: Total Pengeluaran */}
+    
                     <div className="rounded-xl py-3 px-5 shadow-sm bg-sky-500 flex justify-between items-center cursor-default">
                         <div>
                             <p className="text-[11px] font-semibold text-white/90 mb-0.5">Total Bulan Ini</p>
@@ -137,11 +136,10 @@ export default function Pengeluaran() {
                     </div>
                 </div>
 
-                {/* Card Tabel (Border cyan-400) */}
+                {/* Card Tabel */}
                 <div className="bg-white rounded-xl shadow-sm border border-cyan-400 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm text-gray-600">
-                            {/* Header Tabel (Bg cyan-100, Text cyan-800, Border bawah cyan-400) */}
                             <thead className="text-[12px] text-cyan-800 font-normal bg-cyan-100 border-b border-cyan-400 tracking-wide">
                                 <tr>
                                     <th scope="col" className="px-5 py-3">Tanggal</th>

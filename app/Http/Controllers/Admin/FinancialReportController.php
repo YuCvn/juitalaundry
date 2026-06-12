@@ -14,20 +14,28 @@ class FinancialReportController extends Controller
 {
     public function index(Request $request)
     {
-        
         $endDate = $request->input('end_date', Carbon::now()->toDateString());
         $startDate = $request->input('start_date', Carbon::now()->subDays(6)->toDateString());
+
+        $period = CarbonPeriod::create($startDate, $endDate);
 
         $orders = Order::where('status', 'picked_up')
             ->whereBetween('updated_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
             ->get();
             
-        $totalPendapatan = $orders->sum('total_price');
-
         $expenses = FinancialReport::whereBetween('date', [$startDate, $endDate])->get();
-        $totalPengeluaran = $expenses->sum('amount');
 
-        $netProfit = $totalPendapatan - $totalPengeluaran;
+
+        $dailyRevenues = Order::selectRaw('DATE(updated_at) as date, SUM(total_price) as total')
+            ->where('status', 'picked_up')
+            ->whereBetween('updated_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
+            ->groupBy('date')
+            ->pluck('total', 'date');
+
+        $dailyExpenses = FinancialReport::selectRaw('DATE(date) as date, SUM(amount) as total')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->groupBy('date')
+            ->pluck('total', 'date');
 
         $chartData = [
             'labels'   => [],
@@ -36,22 +44,23 @@ class FinancialReportController extends Controller
             'profits'  => []
         ];
 
-        $period = CarbonPeriod::create($startDate, $endDate);
-        
         foreach ($period as $date) {
             $dateString = $date->format('Y-m-d');
             $chartData['labels'][] = $date->format('d M'); 
 
-            $dailyRevenue = $orders->filter(function($order) use ($dateString) {
-                return Carbon::parse($order->updated_at)->format('Y-m-d') === $dateString;
-            })->sum('total_price');
 
-            $dailyExpense = $expenses->where('date', $dateString)->sum('amount');
+            $dailyRev = (float) ($dailyRevenues[$dateString] ?? 0);
+            $dailyExp = (float) ($dailyExpenses[$dateString] ?? 0);
 
-            $chartData['revenues'][] = $dailyRevenue;
-            $chartData['expenses'][] = $dailyExpense;
-            $chartData['profits'][]  = $dailyRevenue - $dailyExpense;
+            $chartData['revenues'][] = $dailyRev;
+            $chartData['expenses'][] = $dailyExp;
+            $chartData['profits'][]  = $dailyRev - $dailyExp;
         }
+
+
+        $totalPendapatan = $dailyRevenues->sum();
+        $totalPengeluaran = $dailyExpenses->sum();
+        $netProfit = $totalPendapatan - $totalPengeluaran;
 
         return Inertia::render('Admin/FinancialReport', [
             'summary' => [

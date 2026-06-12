@@ -111,7 +111,7 @@ export default function Membership({ memberships = [], histories = [] }) {
             
             <div className="max-w-7xl mx-auto relative">
                 
-                {/* Header Utama didalam Card Biru */}
+
                 <div className="bg-blue-600 rounded-xl p-6 mb-6 shadow-sm w-full">
                     <h2 className="text-xl font-bold text-white">Membership</h2>
                     <p className="text-xs text-blue-100 mt-1">Manajemen data membership laundry</p>
@@ -206,13 +206,13 @@ export default function Membership({ memberships = [], histories = [] }) {
                                             </div>
                                         </div>
 
-                                        {/* Card Saldo Aktif */}
+
                                         <div className="bg-white border border-sky-200 rounded-lg p-2 mb-2">
                                             <p className="text-[10px] text-gray-500 font-normal mb-0.5">Saldo Aktif</p>
                                             <p className="font-bold text-sky-700 text-[15px]">{formatRp(member.balance)}</p>
                                         </div>
 
-                                        {/* Card Point Loyalty */}
+
                                         <div className="bg-amber-50 border border-amber-400 rounded-lg p-2 mb-3 flex justify-between items-center">
                                             <div>
                                                 <p className="text-[10px] text-amber-700 font-medium mb-0.5">Point Loyalty</p>
@@ -223,7 +223,7 @@ export default function Membership({ memberships = [], histories = [] }) {
                                             </svg>
                                         </div>
 
-                                        {/* Tombol Aksi */}
+
                                         <div className="grid grid-cols-5 gap-1.5 mt-auto">
                                             <button 
                                                 onClick={() => openTopupModal(member)}
@@ -269,7 +269,7 @@ export default function Membership({ memberships = [], histories = [] }) {
                         {/* MODAL RIWAYAT TRANSAKSI */}
                         {modalMode === 'history' ? (
                             <div>
-                                {/* Header Card Biru Full Ke Samping */}
+
                                 <div className="bg-blue-600 px-5 py-4 w-full flex justify-between items-center">
                                     <h2 className="text-base font-bold text-white tracking-wide">
                                         Riwayat Transaksi Membership
@@ -293,7 +293,7 @@ export default function Membership({ memberships = [], histories = [] }) {
                                                 return (
                                                     <div key={history.id} className="bg-green-100 border border-green-500 rounded-xl p-3 flex flex-col shadow-sm">
                                                         
-                                                        {/* Baris Atas: Nama/Jenis dan Angka Nominal */}
+
                                                         <div className="flex justify-between items-start">
                                                             <div className="flex flex-col">
                                                                 <p className="text-sm font-bold text-gray-800 leading-tight">{namaMember}</p>
@@ -302,7 +302,7 @@ export default function Membership({ memberships = [], histories = [] }) {
                                                             <p className="text-lg font-semibold text-green-600 leading-none mt-1">+ {formatRp(history.amount)}</p>
                                                         </div>
                                                         
-                                                        {/* Baris Bawah: Tanggal & Saldo setelah ditambah */}
+
                                                         <div className="flex justify-between items-center mt-2 text-[10px] text-gray-500 font-normal">
                                                             <p>{tanggal} • {jam}</p>
                                                             <p>Saldo: <span>{formatRp(history.final_balance)}</span></p>

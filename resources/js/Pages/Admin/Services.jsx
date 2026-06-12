@@ -226,10 +226,10 @@ export default function Services({ auth, services }) {
 
             {isModalOpen && (
                 <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
-                    {/* Mengubah max-w-md menjadi max-w-sm untuk memperkecil lebar modal */}
+
                     <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl relative overflow-hidden">
                         
-                        {/* Mengurangi padding header agar lebih rapat */}
+
                         <div className="px-5 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                             <h3 className="text-lg font-bold text-gray-800">
                                 {modalMode === 'create' ? 'Tambah Layanan Baru' : 'Edit Data Layanan'}
@@ -238,8 +238,7 @@ export default function Services({ auth, services }) {
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
-                        
-                        {/* Mengurangi padding wrapper form dan space antar elemen */}
+
                         <form onSubmit={handleSubmit} className="p-5">
                             <div className="space-y-3">
                                 
@@ -330,7 +329,6 @@ export default function Services({ auth, services }) {
                                 </div>
                             </div>
 
-                            {/* Mengurangi margin top dan padding tombol */}
                             <div className="flex gap-3 mt-6 w-full">
                                 <button 
                                     type="button" 

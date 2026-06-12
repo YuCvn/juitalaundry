@@ -86,7 +86,7 @@ export default function Cashier({ cashiers, totalCashiers, activeCashiers, inact
                 </button>
             </div>
 
-            {/* 3 Card Informasi (Lebih pendek secara vertikal) */}
+            {/* Card Informasi*/}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-center">
                     <span className="text-[13px] font-semibold text-gray-500 mb-0.5">Total Kasir</span>
@@ -104,7 +104,6 @@ export default function Cashier({ cashiers, totalCashiers, activeCashiers, inact
 
             {/* Tabel Data Kasir */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                {/* Perbaikan jarak teks Daftar Kasir */}
                 <div className="p-5 border-b border-gray-100">
                     <h4 className="font-semibold text-gray-800 font-sans">Daftar Kasir</h4>
                     <p className="text-sm text-gray-500 mt-0.5">Semua akun kasir yang terdaftar</p>
@@ -173,7 +172,6 @@ export default function Cashier({ cashiers, totalCashiers, activeCashiers, inact
                 </div>
             </div>
 
-            {/* Modal Tambah/Edit Kasir */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" onClick={closeModal}></div>

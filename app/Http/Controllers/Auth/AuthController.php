@@ -9,13 +9,12 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
-    // 1. Menampilkan Halaman Login
+
     public function create()
     {
         return Inertia::render('Auth/Login');
     }
 
-    // 2. Proses Data Login
     public function store(Request $request)
     {
         $credentials = $request->validate([
@@ -38,7 +37,7 @@ class AuthController extends Controller
                 return redirect()->intended(route('admin.dashboard'))
                     ->with('success', 'Selamat datang kembali, Admin!');
             } elseif (strtolower($role) === 'kasir' || strtolower($role) === 'cashier') {
-                // PERBAIKAN: Titik koma dihapus agar bisa di-chain dengan ->with()
+
                 return redirect()->intended('/cashier/dashboard')
                     ->with('success', 'Selamat bekerja, Kasir!');
             }
@@ -50,7 +49,6 @@ class AuthController extends Controller
                      ->onlyInput('username');
     }
 
-    // 3. Fungsi Logout
     public function destroy(Request $request)
     {
         Auth::logout();

@@ -5,7 +5,7 @@ import CashierLayout from '../../Layouts/CashierLayout';
 export default function EditOrder() {
     const { order, services = [], memberships = [], errors } = usePage().props; 
 
-    // Mapping service lama untuk masuk ke dalam state cart array
+
     const initialServices = order.details ? order.details.map(d => ({
         id: d.id || Date.now() + Math.random(), 
         service_id: d.service_id,
@@ -123,7 +123,7 @@ export default function EditOrder() {
 
     const selectedMember = memberships.find(m => m.id.toString() === data.membership_id.toString());
     
-    // Perbaikan logic saldo saat Edit: Saldo member seolah-olah "dikembalikan dulu" dengan total pesanan lama, baru dikurangi tagihan baru
+
     const baseBalance = selectedMember ? parseFloat(selectedMember.balance) : 0;
     const balanceWithRefund = (order.membership_id === data.membership_id) ? (baseBalance + parseFloat(order.total_price)) : baseBalance;
     const currentBalance = selectedMember ? balanceWithRefund : 0;

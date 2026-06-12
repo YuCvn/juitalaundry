@@ -41,7 +41,7 @@ export default function History() {
                 </Link>
             </div>
 
-            {/* SWITCH ORDER AKTIF / HISTORY SELESAI */}
+
             <div className="grid grid-cols-2 gap-2 bg-white p-1.5 rounded-xl w-full mb-6 border border-gray-200 shadow-sm">
                 <Link href="/cashier/orders" className="flex items-center justify-center gap-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-transparent px-6 py-2.5 rounded-lg text-sm font-semibold transition-all">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,16 +57,16 @@ export default function History() {
                 </Link>
             </div>
 
-            {/* KARTU SUMMARY (Total Order & Pendapatan) */}
+            {/* KARTU SUMMARY */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
                     <div>
-                        {/* Teks tidak kapital semua */}
+
                         <p className="text-sm font-semibold text-gray-500 mb-1">Total orderan selesai</p>
                         <h3 className="text-2xl font-bold text-gray-800">{totalOrder}</h3>
                     </div>
                     <div className="bg-[#25D366]/10 p-3 rounded-lg">
-                        {/* Logo Lemari Laci */}
+
                         <svg className="w-7 h-7 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                         </svg>
@@ -75,12 +75,12 @@ export default function History() {
 
                 <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
                     <div>
-                        {/* Teks tidak kapital semua */}
+
                         <p className="text-sm font-semibold text-gray-500 mb-1">Total pendapatan</p>
                         <h3 className="text-2xl font-bold text-gray-800">{formatRp(totalPendapatan)}</h3>
                     </div>
                     <div className="bg-[#25D366]/10 p-3 rounded-lg">
-                        {/* Logo Lemari Laci */}
+
                         <svg className="w-7 h-7 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                         </svg>
@@ -103,16 +103,15 @@ export default function History() {
                     {dataList.map((order) => (
                         <div 
                             key={order.id} 
-                            // Card utama + Warna Border Kiri WhatsApp Green
                             className="bg-white rounded-xl shadow-sm border-y border-r border-gray-200 border-l-[6px] border-l-[#25D366] overflow-hidden flex flex-col"
                         >
                             
-                            {/* HEADER CARD */}
+
                             <div className="border-b border-gray-100 p-3 bg-gray-50/50 flex justify-between items-center">
                                 <div className="flex items-center gap-2">
                                     <p className="text-[11px] font-medium text-gray-400">{order.order_id}</p>
                                     
-                                    {/* Badge Selesai */}
+
                                     <div className="bg-[#25D366]/15 text-[#25D366] px-2 py-0.5 rounded flex items-center gap-1 text-[10px] font-bold">
                                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -133,7 +132,7 @@ export default function History() {
 
                             <div className="p-3 flex flex-col flex-1">
                                 
-                                {/* Info Pelanggan */}
+
                                 <div className="mb-4">
                                     <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Pelanggan</p>
                                     <p className="text-sm text-gray-800 font-semibold">{order.customer_name}</p>
@@ -143,7 +142,7 @@ export default function History() {
                                     </p>
                                 </div>
 
-                                {/* Detail Layanan */}
+
                                 <div className="bg-[#f3e8ff] border border-[#d8b4fe] rounded-lg p-3 mb-4">
                                     <div className="flex items-center gap-1.5 mb-2">
                                         <svg className="w-4 h-4 text-[#9333ea]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,7 +181,7 @@ export default function History() {
                                     </div>
                                 </div>
 
-                                {/* Informasi Pengiriman & Waktu */}
+
                                 <div className="flex flex-col gap-2 mb-4">
                                     <div className="flex items-center gap-2 bg-sky-50 border border-sky-100 p-2.5 rounded-lg text-xs text-sky-600">
                                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
@@ -209,10 +208,10 @@ export default function History() {
                                     </div>
                                 </div>
 
-                                {/* Bagian Bawah Card */}
+
                                 <div className="mt-auto">
 
-                                    {/* Total Harga */}
+
                                     <div className="flex flex-col justify-center items-center bg-[#25D366]/5 px-3 py-3 rounded-lg border border-[#25D366]/20 mb-4 shadow-sm text-center">
                                         <p className="text-[11px] text-[#25D366] uppercase font-bold tracking-wider mb-0.5">Total Harga</p>
                                         <p className="text-xl font-bold text-gray-800">{formatRp(order.total_price)}</p>

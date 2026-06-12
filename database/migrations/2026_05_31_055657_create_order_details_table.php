@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             
-            $table->decimal('price', 15, 2); // Diubah dari 'harga'
+            $table->decimal('price', 15, 2);
             $table->float('qty'); 
             $table->decimal('subtotal', 15, 2);
             

@@ -23,7 +23,7 @@ export default function CreateOrder() {
     const [isModalJasa, setIsModalJasa] = useState(false);
     const [jasaInput, setJasaInput] = useState({ service_id: '', qty: '' });
 
-    // State untuk Modal Animasi Loading & Berhasil
+
     const [isLoadingModalOpen, setIsLoadingModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
@@ -119,15 +119,15 @@ export default function CreateOrder() {
     const submit = (e) => {
         e.preventDefault();
         
-        // Memunculkan Modal Loading
+
         setIsLoadingModalOpen(true);
         
-        // Tahap 1: Modal Loading tampil selama 1.2 detik (1200 ms)
+
         setTimeout(() => {
             setIsLoadingModalOpen(false);
             setIsSuccessModalOpen(true);
             
-            // Tahap 2: Modal Sukses tampil selama 0.8 detik (800 ms), kemudian baru redirect/proses datanya
+
             setTimeout(() => {
                 post('/cashier/orders', {
                     preserveScroll: true,

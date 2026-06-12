@@ -9,13 +9,13 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    // Ini memberi tahu Inertia di mana mencari file komponen React kita
+
     resolve: (name) => resolvePageComponent(`./Pages/${name}.jsx`, import.meta.glob('./Pages/**/*.jsx')),
     setup({ el, App, props }) {
         const root = createRoot(el);
         root.render(<App {...props} />);
     },
     progress: {
-        color: '#00a8ff', // Warna loading bar di atas layar
+        color: '#00a8ff',
     },
 });

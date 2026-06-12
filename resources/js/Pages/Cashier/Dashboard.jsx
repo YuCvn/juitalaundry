@@ -20,7 +20,7 @@ export default function Dashboard() {
         { label: 'Total Member', val: stats?.total_member || 0, icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', border: 'border-violet-300', bg: 'bg-violet-100', text: 'text-violet-800', iconColor: 'text-violet-500', href: null },
         { label: 'Tambah Member Baru', val: 'Klik disini', icon: 'M12 4v16m8-8H4', border: 'border-blue-300', bg: 'bg-blue-100', text: 'text-blue-800', iconColor: 'text-blue-500', href: '/cashier/membership' },
         
-        // IKON KARTU CREDIT DIPERBARUI DI SINI
+
         { label: 'Top-up Saldo', val: 'Klik disini', icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z', border: 'border-green-300', bg: 'bg-green-100', text: 'text-green-800', iconColor: 'text-green-500', href: '/cashier/membership' },
     ];
 
@@ -36,7 +36,6 @@ export default function Dashboard() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Card 1: Tambah Order dengan gradasi Biru -> Cyan */}
                     <Link 
                         href="/cashier/orders/create" 
                         className="bg-gradient-to-r from-blue-500 to-cyan-400 p-6 rounded-2xl text-white flex justify-between items-center shadow-md transform transition-all duration-200 hover:scale-[1.03] hover:shadow-lg"
@@ -53,7 +52,7 @@ export default function Dashboard() {
                         </div>
                     </Link>
 
-                    {/* Card 2: Tambah Member dengan gradasi Ungu -> Pink */}
+
                     <Link 
                         href="/cashier/membership" 
                         className="bg-gradient-to-r from-purple-500 to-pink-500 p-6 rounded-2xl text-white flex justify-between items-center shadow-md transform transition-all duration-200 hover:scale-[1.03] hover:shadow-lg"
@@ -88,7 +87,7 @@ export default function Dashboard() {
 
                 {/* Tabel Order Berjalan */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    {/* Header Tabel Gradasi Biru -> Cyan */}
+
                     <div className="bg-gradient-to-r from-blue-500 to-cyan-400 px-6 py-3 text-white flex justify-between items-center">
                         <h3 className="font-bold text-sm">Order yang Berjalan</h3>
                         <Link href="/cashier/orders" className="text-[10px] bg-white text-blue-500 px-3 py-1 rounded font-bold hover:bg-gray-100">Lihat Semua</Link>
@@ -107,7 +106,7 @@ export default function Dashboard() {
                                                 {order.id}
                                             </p>
                                             
-                                            {/* Logika Badge Status */}
+
                                             {order.status?.toLowerCase() === 'pending' || order.status?.toLowerCase() === 'menunggu' ? (
                                                 <span className="ml-2 flex items-center gap-1 text-[10px] bg-blue-200 border border-blue-500 text-blue-700 px-2 py-0.5 rounded font-medium">
                                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

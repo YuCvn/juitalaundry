@@ -73,7 +73,7 @@ export default function LaporanKeuangan() {
         }
     };
 
-    // PERBAIKAN: Ubah URL dari '/admin/laporan-keuangan' menjadi '/admin/financial-reports'
+
     const handleFilterChange = (field, value) => {
         router.get('/admin/financial-reports', {
             ...filters,

@@ -70,10 +70,9 @@ export default function AdminLayout({ children, title }) {
                 )}
             </div>
 
-            {/* SIDEBAR ADMIN - Mengubah lebar dari w-64 menjadi w-56, w-20 menjadi w-16 */}
+            {/* SIDEBAR ADMIN */}
             <aside className={`${isSidebarOpen ? 'w-56' : 'w-16'} bg-[#2563eb] text-white transition-all duration-300 flex flex-col shadow-xl z-20`}>
                 
-                {/* Header Logo */}
                 <div className="p-4 border-b border-blue-500/30 flex items-center justify-between h-20">
                     {isSidebarOpen && (
                         <div>
@@ -83,7 +82,6 @@ export default function AdminLayout({ children, title }) {
                     )}
                 </div>
 
-                {/* Tombol Tutup/Buka Menu */}
                 <div className="p-3">
                     <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={`w-full flex items-center p-2 rounded-lg bg-blue-500/50 hover:bg-blue-500 transition-colors ${!isSidebarOpen && 'justify-center'}`}>
                         <svg className={`w-[18px] h-[18px] ${isSidebarOpen ? 'rotate-180 mr-2.5' : ''} transition-transform`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -112,7 +110,6 @@ export default function AdminLayout({ children, title }) {
 
                     <div className="text-[10px] font-semibold text-blue-300 mt-5 mb-1.5 px-2.5 uppercase tracking-wider">{isSidebarOpen ? 'Lainnya' : '...'}</div>
                     
-                    {/* KELOLA LAYANAN dengan Ikon Wrench */}
                     <Link href="/admin/services" className={`flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/services') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
                         <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
@@ -131,7 +128,6 @@ export default function AdminLayout({ children, title }) {
                     </Link>
                 </nav>
 
-                {/* Profil User Bagian Bawah */}
                 <div className="p-3 border-t border-blue-400/20 bg-blue">
                     <div className={`flex items-center ${!isSidebarOpen ? 'justify-center' : ''}`}>
                         <div className="flex-shrink-0 w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center shadow-sm">
@@ -140,7 +136,6 @@ export default function AdminLayout({ children, title }) {
                             </span>
                         </div>
                         
-                        {/* Nama & Role */}
                         {isSidebarOpen && (
                             <div className="ml-2.5 overflow-hidden">
                                 <p className="text-xs font-normal text-white truncate leading-tight tracking-tight">

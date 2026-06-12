@@ -9,7 +9,7 @@ export default function CashierLayout({ children, title }) {
     const { flash, auth } = props; 
     
     const user = auth?.user;
-    // Ambil inisial nama, default 'K' untuk Kasir
+
     const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : 'K';
 
     const isActive = (path) => url.startsWith(path);
@@ -74,7 +74,6 @@ export default function CashierLayout({ children, title }) {
             {/* SIDEBAR KASIR */}
             <aside className={`${isSidebarOpen ? 'w-56' : 'w-16'} bg-[#2563eb] text-white transition-all duration-300 flex flex-col shadow-xl z-20`}>
                 
-                {/* Header Logo */}
                 <div className="p-4 border-b border-blue-500/30 flex items-center justify-between h-20">
                     {isSidebarOpen && (
                         <div>
@@ -84,7 +83,6 @@ export default function CashierLayout({ children, title }) {
                     )}
                 </div>
 
-                {/* Tombol Tutup/Buka Menu */}
                 <div className="p-3">
                     <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={`w-full flex items-center p-2 rounded-lg bg-blue-500/50 hover:bg-blue-500 transition-colors ${!isSidebarOpen && 'justify-center'}`}>
                         <svg className={`w-[18px] h-[18px] ${isSidebarOpen ? 'rotate-180 mr-2.5' : ''} transition-transform`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -92,10 +90,9 @@ export default function CashierLayout({ children, title }) {
                     </button>
                 </div>
 
-                {/* MENU NAVIGASI (Sesuai Struktur Asli) */}
+                {/* MENU NAVIGASI */}
                 <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1.5">
                     
-                    {/* 1. DASHBOARD */}
                     <Link href="/cashier/dashboard" className={`flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/dashboard') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
                         <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -103,12 +100,10 @@ export default function CashierLayout({ children, title }) {
                         {isSidebarOpen && <span className="ml-2.5 text-xs">Dashboard</span>}
                     </Link>
 
-                    {/* PEMISAH: ORDER MANAGEMENT */}
                     <div className="text-[10px] font-semibold text-blue-300 mt-5 mb-1.5 px-2.5 uppercase tracking-wider">
                         {isSidebarOpen ? 'Order Management' : '...'}
                     </div>
-                    
-                    {/* 2. ORDER & HISTORY (Dikembalikan ke Ikon Box/Kotak) */}
+
                     <Link href="/cashier/orders" className={`flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/orders') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
                         <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -116,12 +111,10 @@ export default function CashierLayout({ children, title }) {
                         {isSidebarOpen && <span className="ml-2.5 text-xs">Order & History</span>}
                     </Link>
 
-                    {/* PEMISAH: DATA MASTER */}
                     <div className="text-[10px] font-semibold text-blue-300 mt-5 mb-1.5 px-2.5 uppercase tracking-wider">
                         {isSidebarOpen ? 'Data Master' : '...'}
                     </div>
                     
-                    {/* 3. MEMBERSHIP (URL diperbaiki menjadi /cashier/membership, Ikon Kartu) */}
                     <Link href="/cashier/membership" className={`flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/cashier/membership') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
                         <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -129,14 +122,12 @@ export default function CashierLayout({ children, title }) {
                         {isSidebarOpen && <span className="ml-2.5 text-xs">Membership</span>}
                     </Link>
                     
-                    {/* 4. LOGOUT */}
                     <Link href="/logout" method="post" as="button" className={`w-full flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} text-blue-100 hover:bg-blue-700 font-medium mt-5`}>
                         <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
                         {isSidebarOpen && <span className="ml-2.5 text-xs">Logout</span>}
                     </Link>
                 </nav>
 
-                {/* Profil User Bagian Bawah */}
                 <div className="p-3 border-t border-blue-400/20 bg-blue">
                     <div className={`flex items-center ${!isSidebarOpen ? 'justify-center' : ''}`}>
                         <div className="flex-shrink-0 w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center shadow-sm">
@@ -145,7 +136,6 @@ export default function CashierLayout({ children, title }) {
                             </span>
                         </div>
                         
-                        {/* Nama & Role */}
                         {isSidebarOpen && (
                             <div className="ml-2.5 overflow-hidden">
                                 <p className="text-xs font-normal text-white truncate leading-tight tracking-tight">
