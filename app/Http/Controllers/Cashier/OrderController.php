@@ -71,10 +71,8 @@ class OrderController extends Controller
 
             foreach ($validated['services'] as $item) {
                 $service = $dbServices[$item['service_id']]; 
-                
                 $actualPrice = $service->price; 
                 $actualSubtotal = $actualPrice * $item['qty']; 
-                
                 $subtotalServices += $actualSubtotal;
 
                 $orderItems[] = [
@@ -104,6 +102,7 @@ class OrderController extends Controller
                     return back()->withErrors(['error' => 'Saldo member tidak mencukupi untuk membayar tagihan.']);
                 }
 
+                // Hanya memotong saldo, Poin Loyalti DIBATALKAN disini dan dipindah ke updateStatus
                 $membership->decrement('balance', $totalPrice);
             }
 
@@ -148,15 +147,204 @@ class OrderController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        $order = Order::with(['details.service'])->findOrFail($id);
+        $services = Service::all();
+        $memberships = Membership::all();
+
+        return Inertia::render('Cashier/EditOrder', [
+            'order'       => $order,
+            'services'    => $services,
+            'memberships' => $memberships
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        $validated = $request->validate([
+            'membership_id'     => 'nullable|exists:memberships,id',
+            'customer_name'     => 'required|string|max:255',
+            'phone_number'      => 'required|string|max:20',
+            'address'           => 'nullable|string',
+            'pickup_method'     => 'required|in:pickup,delivery',
+            'delivery_distance' => 'nullable|numeric|min:0',
+            'payment_method'    => 'required|in:upfront,pay_later',
+            'services'          => 'required|array|min:1',
+            'services.*.service_id'=> 'required|exists:services,id',
+            'services.*.qty'    => 'required|numeric|min:0.1',
+            'services.*.price'  => 'required|numeric',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $subtotalServices = 0;
+            foreach ($validated['services'] as $item) {
+                $subtotalServices += ($item['price'] * $item['qty']);
+            }
+
+            $distance = $validated['delivery_distance'] ?? 0;
+            $deliveryFee = 0;
+            if ($validated['pickup_method'] === 'delivery' && $distance > 3) {
+                $deliveryFee = (ceil($distance) - 3) * 2000;
+            }
+
+            $discount = 0;
+            $totalPrice = $subtotalServices + $deliveryFee;
+
+            // Restorasi / Pengembalian saldo jika order sebelumnya menggunakan membership
+            if ($order->membership_id) {
+                $oldMembership = Membership::find($order->membership_id);
+                if ($oldMembership) {
+                    $oldMembership->increment('balance', $order->total_price);
+                    
+                    // Tarik kembali poin sebelumnya HANYA JIKA statusnya sudah picked_up
+                    if ($order->status === 'picked_up') {
+                        $oldPoints = floor($order->total_price / 10000);
+                        if ($oldPoints > 0) {
+                            $oldMembership->decrement('loyalty_point', $oldPoints);
+                        }
+                    }
+                }
+            }
+
+            // Hitung potongan saldo baru
+            if (!empty($validated['membership_id'])) {
+                $membership = Membership::findOrFail($validated['membership_id']);
+                
+                $discount = $subtotalServices * 0.10;
+                $totalPrice = $subtotalServices - $discount + $deliveryFee;
+
+                if ($membership->balance < $totalPrice) {
+                    return back()->withErrors(['error' => 'Saldo member tidak mencukupi untuk tagihan yang baru.']);
+                }
+
+                $membership->decrement('balance', $totalPrice);
+
+                // Tambahkan poin yang baru HANYA JIKA statusnya sudah picked_up
+                if ($order->status === 'picked_up') {
+                    $newPoints = floor($totalPrice / 10000);
+                    if ($newPoints > 0) {
+                        $membership->increment('loyalty_point', $newPoints);
+                    }
+                }
+            }
+
+            $order->update([
+                'membership_id'     => $validated['membership_id'] ?: null,
+                'customer_name'     => strip_tags($validated['customer_name']),
+                'phone_number'      => strip_tags($validated['phone_number']),
+                'address'           => strip_tags($validated['address']),
+                'pickup_method'     => $validated['pickup_method'],
+                'delivery_distance' => $distance,
+                'delivery_fee'      => $deliveryFee,
+                'subtotal'          => $subtotalServices,
+                'discount'          => $discount,
+                'total_price'       => $totalPrice,
+                'payment_method'    => $validated['payment_method'],
+            ]);
+
+            // Replace order detail
+            $order->details()->delete();
+            foreach ($validated['services'] as $item) {
+                OrderDetail::create([
+                    'order_id'   => $order->id,
+                    'service_id' => $item['service_id'],
+                    'price'      => $item['price'],
+                    'qty'        => $item['qty'],
+                    'subtotal'   => $item['price'] * $item['qty'],
+                ]);
+            }
+
+            DB::commit();
+            return redirect()->route('cashier.orders.index')->with('success', 'Pesanan berhasil diubah!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Gagal mengubah pesanan: ' . $e->getMessage()]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+        try {
+            $order = Order::findOrFail($id);
+
+            // Kembalikan saldo & poin jika dihapus
+            if ($order->membership_id) {
+                $membership = Membership::find($order->membership_id);
+                if ($membership) {
+                    $membership->increment('balance', $order->total_price);
+                    
+                    // Tarik poin HANYA JIKA order tersebut terlanjur sudah picked_up
+                    if ($order->status === 'picked_up') {
+                        $points = floor($order->total_price / 10000);
+                        if ($points > 0) {
+                            $membership->decrement('loyalty_point', $points);
+                        }
+                    }
+                }
+            }
+
+            $order->details()->delete();
+            $order->delete();
+
+            DB::commit();
+            return redirect()->route('cashier.orders.index')->with('success', 'Pesanan berhasil dihapus!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Gagal menghapus pesanan: ' . $e->getMessage()]);
+        }
+    }
+
+    // LOGIKA PENAMBAHAN POINT PINDAH KE SINI ⬇️
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
             'status' => 'required|in:pending,processing,completed,picked_up'
         ]);
 
-        $order->update([
-            'status' => $request->status
-        ]);
+        $oldStatus = $order->status;
+        $newStatus = $request->status;
+
+        if ($oldStatus !== $newStatus) {
+            DB::beginTransaction();
+            try {
+                // Update ke status baru
+                $order->update([
+                    'status' => $newStatus
+                ]);
+
+                // Jika pesanan ini menggunakan membership, jalankan logika poin
+                if ($order->membership_id) {
+                    $membership = Membership::find($order->membership_id);
+                    if ($membership) {
+                        $points = floor($order->total_price / 10000);
+                        
+                        // KONDISI 1: Jika pesanan dirubah MENJADI "Sudah Diambil", tambahkan poin
+                        if ($newStatus === 'picked_up') {
+                            if ($points > 0) {
+                                $membership->increment('loyalty_point', $points);
+                            }
+                        } 
+                        // KONDISI 2: Jika pesanan yg "Sudah Diambil" DIBATALKAN/DIKEMBALIKAN ke status lain, tarik lagi poinnya
+                        else if ($oldStatus === 'picked_up') {
+                            if ($points > 0) {
+                                $membership->decrement('loyalty_point', $points);
+                            }
+                        }
+                    }
+                }
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return back()->withErrors(['error' => 'Gagal mengubah status: ' . $e->getMessage()]);
+            }
+        }
 
         return back(); 
     }

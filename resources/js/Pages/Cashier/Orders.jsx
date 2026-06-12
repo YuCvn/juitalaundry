@@ -3,7 +3,6 @@ import { Link, Head, usePage, router } from '@inertiajs/react';
 import CashierLayout from '../../Layouts/Cashierlayout';
 
 export default function Orders() {
-    // Menambahkan historyCount dari props (berjaga-jaga jika di controller dipisah)
     const { orders = [], historyCount = 0 } = usePage().props;
     const [activeFilter, setActiveFilter] = useState('semua');
 
@@ -31,7 +30,7 @@ export default function Orders() {
     const countProses = activeOrders.filter(o => o.status === 'processing').length;
     const countSelesai = activeOrders.filter(o => o.status === 'completed').length;
     
-    // Menghitung jumlah history (mengambil dari props historyCount ATAU memfilter data orders)
+    // Menghitung jumlah history
     const countHistory = historyCount || orders.filter(o => o.status === 'picked_up').length;
 
     const filteredOrders = activeOrders.filter(order => {
@@ -57,6 +56,14 @@ export default function Orders() {
         }, {
             preserveScroll: true,
         });
+    };
+
+    const handleDelete = (orderId) => {
+        if (window.confirm('Apakah Anda yakin ingin menghapus order ini?')) {
+            router.delete(`/cashier/orders/${orderId}`, {
+                preserveScroll: true,
+            });
+        }
     };
 
     const handleWhatsApp = (order) => {
@@ -93,7 +100,7 @@ export default function Orders() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
                 <h2 className="text-xl font-medium text-gray-800">Manajemen Orders</h2>
                 
-                <Link href="/cashier/orders/create" className="bg-[#10b981] hover:bg-emerald-600 text-white py-2 px-4 rounded-lg flex items-center transition-colors shadow-sm w-fit text-sm">
+                <Link href="/cashier/orders/create" className="bg-[#25D366] hover:bg-[#20bd5a] text-white py-2 px-4 rounded-lg flex items-center transition-colors shadow-sm w-fit text-sm font-semibold">
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                     Order Baru
                 </Link>
@@ -144,7 +151,7 @@ export default function Orders() {
                     <p className="text-gray-500 mb-8 text-sm">Belum ada order di kategori ini</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filteredOrders.map((order) => (
                         <div 
                             key={order.id} 
@@ -155,12 +162,14 @@ export default function Orders() {
                             <div className="border-b border-gray-100 p-3 bg-gray-50/50 flex justify-between items-center">
                                 <p className="text-[11px] font-medium text-gray-400">{order.order_id}</p>
                                 <div className="flex gap-2">
-                                    <a href="#" className="text-gray-400 hover:text-gray-600 transition-colors" title="Edit Order">
+                                    {/* Perubahan Disini: Menambahkan route Edit Order */}
+                                    <Link href={`/cashier/orders/${order.id}/edit`} className="text-gray-400 hover:text-gray-600 transition-colors" title="Edit Order">
                                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                                    </a>
-                                    <a href="#" className="text-gray-400 hover:text-red-500 transition-colors" title="Hapus Order">
+                                    </Link>
+                                    
+                                    <button onClick={() => handleDelete(order.id)} className="text-gray-400 hover:text-red-500 transition-colors" title="Hapus Order">
                                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
 

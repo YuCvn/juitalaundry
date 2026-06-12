@@ -2,19 +2,31 @@ import React, { useState } from 'react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import CashierLayout from '../../Layouts/CashierLayout';
 
-export default function CreateOrder() {
-    const { services = [], memberships = [], errors } = usePage().props; 
+export default function EditOrder() {
+    const { order, services = [], memberships = [], errors } = usePage().props; 
 
-    const { data, setData, post, processing } = useForm({
-        is_membership: false,
-        membership_id: '',
-        customer_name: '',
-        phone_number: '',
-        address: '',
-        services: [],
-        pickup_method: 'pickup',
-        delivery_distance: '', 
-        payment_method: 'upfront',
+    // Mapping service lama untuk masuk ke dalam state cart array
+    const initialServices = order.details ? order.details.map(d => ({
+        id: d.id || Date.now() + Math.random(), 
+        service_id: d.service_id,
+        name: d.service?.name || 'Layanan Terhapus',
+        price: parseFloat(d.price),
+        qty: parseFloat(d.qty),
+        unit: d.service?.category?.toLowerCase() === 'kiloan' ? 'Kg' : 'Pcs',
+        subtotal: parseFloat(d.subtotal),
+        type: d.service?.category?.toLowerCase() === 'kiloan' ? 'kiloan' : 'jasa'
+    })) : [];
+
+    const { data, setData, put, processing } = useForm({
+        is_membership: !!order.membership_id,
+        membership_id: order.membership_id || '',
+        customer_name: order.customer_name || '',
+        phone_number: order.phone_number || '',
+        address: order.address || '',
+        services: initialServices,
+        pickup_method: order.pickup_method || 'pickup',
+        delivery_distance: order.delivery_distance > 0 ? order.delivery_distance : '', 
+        payment_method: order.payment_method || 'upfront',
     });
 
     const [isModalKiloan, setIsModalKiloan] = useState(false);
@@ -23,7 +35,6 @@ export default function CreateOrder() {
     const [isModalJasa, setIsModalJasa] = useState(false);
     const [jasaInput, setJasaInput] = useState({ service_id: '', qty: '' });
 
-    // State untuk Modal Animasi Loading & Berhasil
     const [isLoadingModalOpen, setIsLoadingModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
@@ -111,25 +122,26 @@ export default function CreateOrder() {
     const totalSemua = subtotalServices - discount + deliveryFee;
 
     const selectedMember = memberships.find(m => m.id.toString() === data.membership_id.toString());
-    const currentBalance = selectedMember ? parseFloat(selectedMember.balance) : 0;
+    
+    // Perbaikan logic saldo saat Edit: Saldo member seolah-olah "dikembalikan dulu" dengan total pesanan lama, baru dikurangi tagihan baru
+    const baseBalance = selectedMember ? parseFloat(selectedMember.balance) : 0;
+    const balanceWithRefund = (order.membership_id === data.membership_id) ? (baseBalance + parseFloat(order.total_price)) : baseBalance;
+    const currentBalance = selectedMember ? balanceWithRefund : 0;
+    
     const isSaldoKurang = (data.is_membership && data.membership_id) ? (currentBalance < totalSemua) : false;
-
     const poinDidapat = Math.floor(totalSemua / 10000);
 
     const submit = (e) => {
         e.preventDefault();
         
-        // Memunculkan Modal Loading
         setIsLoadingModalOpen(true);
         
-        // Tahap 1: Modal Loading tampil selama 1.2 detik (1200 ms)
         setTimeout(() => {
             setIsLoadingModalOpen(false);
             setIsSuccessModalOpen(true);
             
-            // Tahap 2: Modal Sukses tampil selama 0.8 detik (800 ms), kemudian baru redirect/proses datanya
             setTimeout(() => {
-                post('/cashier/orders', {
+                put(`/cashier/orders/${order.id}`, {
                     preserveScroll: true,
                     onFinish: () => {
                         setIsSuccessModalOpen(false);
@@ -141,8 +153,8 @@ export default function CreateOrder() {
     };
 
     return (
-        <CashierLayout title="Buat Pesanan Baru">
-            <Head title="Order Baru - Juita Laundry" />
+        <CashierLayout title={`Edit Order ${order.order_id}`}>
+            <Head title={`Edit Order ${order.order_id} - Juita Laundry`} />
             
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 pb-12 px-4 md:px-0">
                 <div className="md:col-start-4 md:col-span-6 relative">
@@ -153,7 +165,7 @@ export default function CreateOrder() {
                     </Link>
 
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
-                        <h2 className="text-xl font-bold text-sky-600 mb-8">Order Baru</h2>
+                        <h2 className="text-xl font-bold text-sky-600 mb-8">Edit Order <span className="text-gray-800">#{order.order_id}</span></h2>
 
                         {errors?.error && (
                             <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-6 border border-red-100 flex items-start gap-3">
@@ -221,8 +233,9 @@ export default function CreateOrder() {
                                             <div className="mt-3 bg-[#dcf8c6] border border-[#128C7E] rounded-lg p-3 flex flex-col gap-1 shadow-sm">
                                                 <p className="text-[#075E54] font-bold text-sm">{selectedMember.full_name}</p>
                                                 <p className="text-[#075E54] text-xs">
-                                                    Saldo: <span className="font-bold">{formatRp(selectedMember.balance)}</span>
+                                                    Estimasi Saldo: <span className="font-bold">{formatRp(currentBalance)}</span>
                                                 </p>
+                                                <p className="text-[10px] text-[#128C7E] italic">*Estimasi saldo sudah termasuk proses restorasi (pengembalian) tagihan pesanan sebelumnya.</p>
                                             </div>
                                         )}
                                     </div>
@@ -448,7 +461,7 @@ export default function CreateOrder() {
                             </div>
 
                             <button type="submit" disabled={processing || isLoadingModalOpen || isSuccessModalOpen || isSaldoKurang || data.services.length === 0} className="w-full bg-[#0284c7] hover:bg-[#0369a1] transition-colors text-white font-bold py-3 px-4 rounded-xl shadow-lg mt-4 disabled:opacity-50 disabled:cursor-not-allowed text-sm">
-                                Tambah Order
+                                Simpan Perubahan
                             </button>
                         </form>
                     </div>
@@ -556,29 +569,11 @@ export default function CreateOrder() {
                         </div>
                         
                         <h3 className="text-lg font-bold text-gray-900 mb-1">
-                            {data.is_membership ? 'Memproses Pembayaran' : 'Memproses Pesanan'}
+                            Menyimpan Perubahan
                         </h3>
                         <p className="text-[11px] text-gray-500 mb-6">
-                            {data.is_membership ? 'Sedang mengurangi saldo membership...' : 'Sedang menyiapkan data pesanan...'}
+                            Sedang memperbarui data pesanan...
                         </p>
-
-                        {data.is_membership ? (
-                            <div className="w-full bg-[#f8fafc] border border-blue-100 rounded-lg p-3 text-left">
-                                <p className="text-[10px] text-gray-500 mb-0.5">Member</p>
-                                <p className="text-xs font-bold text-gray-900 mb-2">{selectedMember?.full_name}</p>
-                                <div className="border-t border-blue-100 mb-2"></div>
-                                <p className="text-[10px] text-gray-500 mb-0.5">Saldo Saat Ini</p>
-                                <p className="text-sm font-bold text-blue-600">{formatRp(currentBalance)}</p>
-                            </div>
-                        ) : (
-                            <div className="w-full bg-[#f8fafc] border border-gray-200 rounded-lg p-3 text-left">
-                                <p className="text-[10px] text-gray-500 mb-0.5">Pelanggan</p>
-                                <p className="text-xs font-bold text-gray-900 mb-2">{data.customer_name || '-'}</p>
-                                <div className="border-t border-gray-200 mb-2"></div>
-                                <p className="text-[10px] text-gray-500 mb-0.5">Total Tagihan</p>
-                                <p className="text-sm font-bold text-gray-800">{formatRp(totalSemua)}</p>
-                            </div>
-                        )}
                     </div>
                 </div>
             )}
@@ -592,49 +587,15 @@ export default function CreateOrder() {
                         </div>
                         
                         <h3 className="text-lg font-bold text-[#16a34a] mb-1">
-                            {data.is_membership ? 'Pembayaran Berhasil!' : 'Pesanan Berhasil!'}
+                            Perubahan Berhasil!
                         </h3>
                         <p className="text-[11px] text-gray-500 mb-6">
-                            {data.is_membership ? 'Saldo membership berhasil dikurangi' : 'Data pesanan siap diproses'}
+                            Data order berhasil disimpan ke sistem.
                         </p>
-
-                        {data.is_membership ? (
-                            <div className="w-full bg-[#f0fdf4] border border-[#bbf7d0] rounded-lg p-3 text-left mb-4">
-                                <p className="text-[10px] text-gray-500 mb-0.5">Member</p>
-                                <p className="text-xs font-bold text-gray-900 mb-2">{selectedMember?.full_name}</p>
-                                <div className="border-t border-[#bbf7d0] mb-2"></div>
-                                <div className="flex justify-between">
-                                    <div>
-                                        <p className="text-[10px] text-gray-500 mb-0.5">Saldo Sebelum</p>
-                                        <p className="text-xs font-bold text-gray-900">{formatRp(currentBalance)}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-[10px] text-gray-500 mb-0.5">Saldo Setelah</p>
-                                        <p className="text-xs font-bold text-[#16a34a]">{formatRp(currentBalance - totalSemua)}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="w-full bg-[#f0fdf4] border border-[#bbf7d0] rounded-lg p-3 text-left mb-4">
-                                <p className="text-[10px] text-gray-500 mb-0.5">Pelanggan</p>
-                                <p className="text-xs font-bold text-gray-900 mb-2">{data.customer_name || '-'}</p>
-                                <div className="border-t border-[#bbf7d0] mb-2"></div>
-                                <div className="flex justify-between">
-                                    <div>
-                                        <p className="text-[10px] text-gray-500 mb-0.5">Metode</p>
-                                        <p className="text-xs font-bold text-gray-900">{data.payment_method === 'pay_later' ? 'Bayar Nanti' : 'Bayar Langsung'}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-[10px] text-gray-500 mb-0.5">Total Tagihan</p>
-                                        <p className="text-xs font-bold text-[#16a34a]">{formatRp(totalSemua)}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
 
                         <div className="flex items-center gap-1.5 text-gray-400">
                             <svg className="w-3.5 h-3.5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19.95 9.05L12 21.36 4.05 9.05 7.55 3h8.9l3.5 6.05zM12 18.5l6.05-9.35H5.95L12 18.5zm-.4-10.45L8.75 4.5h6.5l-2.85 3.55H11.6z"/></svg>
-                            <span className="text-[10px] italic">Order akan segera dibuat...</span>
+                            <span className="text-[10px] italic">Mengalihkan halaman...</span>
                         </div>
                     </div>
                 </div>
