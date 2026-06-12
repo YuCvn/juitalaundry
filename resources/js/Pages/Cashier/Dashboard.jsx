@@ -17,9 +17,11 @@ export default function Dashboard() {
     ];
 
     const membershipCards = [
-        { label: 'Total Member', val: stats?.total_member || 0, icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', border: 'border-violet-300', bg: 'bg-violet-100', text: 'text-violet-800', href: null },
-        { label: 'Tambah Member Baru', val: 'Akses', icon: 'M12 4v16m8-8H4', border: 'border-blue-300', bg: 'bg-blue-100', text: 'text-blue-800', href: '/cashier/membership' },
-        { label: 'Top-up Saldo', val: 'Akses', icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3-3v8a3 3 0 003 3z', border: 'border-green-300', bg: 'bg-green-100', text: 'text-green-800', href: '/cashier/membership' },
+        { label: 'Total Member', val: stats?.total_member || 0, icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', border: 'border-violet-300', bg: 'bg-violet-100', text: 'text-violet-800', iconColor: 'text-violet-500', href: null },
+        { label: 'Tambah Member Baru', val: 'Klik disini', icon: 'M12 4v16m8-8H4', border: 'border-blue-300', bg: 'bg-blue-100', text: 'text-blue-800', iconColor: 'text-blue-500', href: '/cashier/membership' },
+        
+        // IKON KARTU CREDIT DIPERBARUI DI SINI
+        { label: 'Top-up Saldo', val: 'Klik disini', icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z', border: 'border-green-300', bg: 'bg-green-100', text: 'text-green-800', iconColor: 'text-green-500', href: '/cashier/membership' },
     ];
 
     return (
@@ -34,13 +36,15 @@ export default function Dashboard() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Card 1: Tambah Order dengan gradasi Biru -> Cyan */}
                     <Link 
                         href="/cashier/orders/create" 
-                        className="bg-[#06b6d4] p-6 rounded-2xl text-white flex justify-between items-center shadow-md transform transition-all duration-200 hover:scale-[1.03] hover:shadow-lg"
+                        className="bg-gradient-to-r from-blue-500 to-cyan-400 p-6 rounded-2xl text-white flex justify-between items-center shadow-md transform transition-all duration-200 hover:scale-[1.03] hover:shadow-lg"
                     >
                         <div>
                             <p className="text-xs font-semibold opacity-90">Buat Transaksi Baru</p>
                             <h3 className="text-xl font-bold mt-1">Tambah Order</h3>
+                            <p className="text-[11px] mt-1 opacity-80 font-medium">Klik untuk membuat order baru</p>
                         </div>
                         <div className="bg-white/20 p-3 rounded-xl">
                             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,13 +53,15 @@ export default function Dashboard() {
                         </div>
                     </Link>
 
+                    {/* Card 2: Tambah Member dengan gradasi Ungu -> Pink */}
                     <Link 
                         href="/cashier/membership" 
-                        className="bg-[#ec4899] p-6 rounded-2xl text-white flex justify-between items-center shadow-md transform transition-all duration-200 hover:scale-[1.03] hover:shadow-lg"
+                        className="bg-gradient-to-r from-purple-500 to-pink-500 p-6 rounded-2xl text-white flex justify-between items-center shadow-md transform transition-all duration-200 hover:scale-[1.03] hover:shadow-lg"
                     >
                         <div>
                             <p className="text-xs font-semibold opacity-90">Kelola Membership</p>
                             <h3 className="text-xl font-bold mt-1">Tambah Member</h3>
+                            <p className="text-[11px] mt-1 opacity-80 font-medium">Klik untuk membuat member baru</p>
                         </div>
                         <div className="bg-white/20 p-3 rounded-xl">
                             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,12 +71,13 @@ export default function Dashboard() {
                     </Link>
                 </div>
 
+                {/* Status Cards */}
                 <div className="grid grid-cols-4 gap-4">
                     {statusCards.map((s, i) => (
                         <div key={i} className={`bg-white p-4 rounded-xl border-2 ${s.borderColor} flex items-center justify-between shadow-sm`}>
                             <div>
                                 <p className="text-[10px] text-gray-400 font-bold uppercase">{s.label}</p>
-                                <h3 className="text-xl font-black text-gray-700">{s.val}</h3>
+                                <h3 className={`text-xl font-black ${s.iconColor}`}>{s.val}</h3>
                             </div>
                             <svg className={`w-8 h-8 ${s.iconColor} opacity-70`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={s.icon} />
@@ -79,10 +86,12 @@ export default function Dashboard() {
                     ))}
                 </div>
 
+                {/* Tabel Order Berjalan */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="bg-[#06b6d4] px-6 py-3 text-white flex justify-between items-center">
+                    {/* Header Tabel Gradasi Biru -> Cyan */}
+                    <div className="bg-gradient-to-r from-blue-500 to-cyan-400 px-6 py-3 text-white flex justify-between items-center">
                         <h3 className="font-bold text-sm">Order yang Berjalan</h3>
-                        <Link href="/cashier/orders" className="text-[10px] bg-white text-[#06b6d4] px-3 py-1 rounded font-bold hover:bg-gray-100">Lihat Semua</Link>
+                        <Link href="/cashier/orders" className="text-[10px] bg-white text-blue-500 px-3 py-1 rounded font-bold hover:bg-gray-100">Lihat Semua</Link>
                     </div>
                     
                     <div className="p-6 space-y-3">
@@ -110,11 +119,23 @@ export default function Dashboard() {
                                 </div>
                             ))
                         ) : (
-                            <p className="text-sm text-gray-400 text-center">Tidak ada order berjalan.</p>
+                            <div className="flex flex-col items-center justify-center py-6">
+                                <svg className="w-14 h-14 text-blue-200 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                </svg>
+                                <p className="text-sm text-gray-500 mb-5">Belum ada Order berjalan</p>
+                                <Link 
+                                    href="/cashier/orders/create" 
+                                    className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white font-semibold py-2 px-5 rounded-lg shadow-sm text-xs flex items-center transition-all"
+                                >
+                                    + Buat Order Baru
+                                </Link>
+                            </div>
                         )}
                     </div>
                 </div>
 
+                {/* Tabel Membership */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="bg-gradient-to-r from-violet-500 to-pink-500 px-6 py-3 text-white flex justify-between items-center">
                         <h3 className="font-bold text-sm">Membership</h3>
@@ -128,15 +149,15 @@ export default function Dashboard() {
                                 <ComponentTag 
                                     key={i} 
                                     href={m.href}
-                                    className={`${m.bg} ${m.border} border-2 p-6 rounded-xl flex flex-col items-center justify-center text-center transform transition-all duration-200 ${
-                                        m.href ? 'hover:scale-[1.04] hover:shadow-md cursor-pointer' : 'hover:opacity-90'
+                                    className={`${m.bg} ${m.border} border p-6 rounded-xl flex flex-col items-center justify-center text-center transform transition-all duration-200 ${
+                                        m.href ? 'hover:scale-[1.03] hover:shadow-md cursor-pointer' : ''
                                     }`}
                                 >
-                                    <svg className={`w-8 h-8 ${m.text} mb-2`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className={`w-8 h-8 ${m.iconColor} mb-2`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={m.icon} />
                                     </svg>
-                                    <p className="text-[10px] font-bold text-gray-500 uppercase mb-1">{m.label}</p>
-                                    <h3 className={`text-lg font-bold ${m.text}`}>{m.val}</h3>
+                                    <p className="text-[12px] font-normal text-gray-600 mb-1">{m.label}</p>
+                                    <h3 className={`text-xl font-bold ${m.text}`}>{m.val}</h3>
                                 </ComponentTag>
                             );
                         })}

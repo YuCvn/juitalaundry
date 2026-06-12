@@ -15,25 +15,30 @@ class CashierController extends Controller
     {
         $cashiers = User::where('role', '!=', 'admin')->get();
 
+        $totalCashiers = $cashiers->count();
+        $activeCashiers = $cashiers->where('is_active', true)->count();
+        $inactiveCashiers = $cashiers->where('is_active', false)->count();
+
         return Inertia::render('Admin/Cashier', [
-            'cashiers' => $cashiers
+            'cashiers' => $cashiers,
+            'totalCashiers' => $totalCashiers,
+            'activeCashiers' => $activeCashiers,
+            'inactiveCashiers' => $inactiveCashiers,
         ]);
     }
 
     public function store(Request $request)
     {
-        
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
         ], [
             'name.required' => 'Nama lengkap wajib diisi.',
             'username.required' => 'Username wajib diisi.',
             'username.unique' => 'Username ini sudah digunakan, pilih yang lain.',
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal 6 karakter.',
-            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
         User::create([
@@ -42,8 +47,10 @@ class CashierController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'cashier',
         ]);
+        
         return back()->with('success', 'Kasir baru berhasil ditambahkan!');
     }
+
     public function toggleStatus($id)
     {
         $user = User::where('role', '!=', 'admin')->where('role', '!=', 'administrator')->findOrFail($id);
@@ -56,6 +63,7 @@ class CashierController extends Controller
             return back()->with('error', 'Akun Kasir Dinonaktifkan|Akses login untuk kasir ' . $user->name . ' telah ditutup sementara.');
         }
     }
+
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -63,13 +71,12 @@ class CashierController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'password' => 'nullable|string|min:6|confirmed',
+            'password' => 'nullable|string|min:6',
         ], [
             'name.required' => 'Nama lengkap wajib diisi.',
             'username.required' => 'Username wajib diisi.',
             'username.unique' => 'Username ini sudah digunakan, pilih yang lain.',
             'password.min' => 'Password minimal 6 karakter.',
-            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
         $user->name = $request->name;

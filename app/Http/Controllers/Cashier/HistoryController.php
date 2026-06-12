@@ -10,14 +10,16 @@ use App\Models\Order;
 class HistoryController extends Controller
 {
     public function index()
-    {
-        $orders = Order::with(['membership', 'details.service', 'user'])
-                        ->where('status', 'picked_up') 
-                        ->latest('updated_at')
-                        ->paginate(50); 
+{
+    $history = \App\Models\Order::where('status', 'picked_up')->get();
+    
+    $activeCount = \App\Models\Order::where('status', '!=', 'picked_up')->count();
+    $historyCount = $history->count();
 
-        return Inertia::render('Cashier/History', [
-            'orders' => $orders
-        ]);
-    }
+    return Inertia::render('Cashier/History', [
+        'history' => $history,
+        'activeCount' => $activeCount,
+        'historyCount' => $historyCount
+    ]);
+}
 }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, Head, usePage, router } from '@inertiajs/react';
-import CashierLayout from '../../Layouts/CashierLayout';
+import CashierLayout from '../../Layouts/Cashierlayout';
 
 export default function Orders() {
-    const { orders = [] } = usePage().props;
+    // Menambahkan historyCount dari props (berjaga-jaga jika di controller dipisah)
+    const { orders = [], historyCount = 0 } = usePage().props;
     const [activeFilter, setActiveFilter] = useState('semua');
 
     const formatRp = (angka) => {
@@ -21,12 +22,17 @@ export default function Orders() {
         return `${datePart} pukul ${timePart}`;
     };
 
+    // Filter order yang aktif (bukan history)
     const activeOrders = orders.filter(o => o.status !== 'picked_up');
 
+    // Menghitung jumlah untuk counter
     const countSemua = activeOrders.length;
     const countMenunggu = activeOrders.filter(o => o.status === 'pending').length;
     const countProses = activeOrders.filter(o => o.status === 'processing').length;
     const countSelesai = activeOrders.filter(o => o.status === 'completed').length;
+    
+    // Menghitung jumlah history (mengambil dari props historyCount ATAU memfilter data orders)
+    const countHistory = historyCount || orders.filter(o => o.status === 'picked_up').length;
 
     const filteredOrders = activeOrders.filter(order => {
         if (activeFilter === 'semua') return true;
@@ -36,13 +42,12 @@ export default function Orders() {
         return true;
     });
 
-    const getStatusStyle = (status) => {
+    const getLeftBorderColor = (status) => {
         switch (status?.toLowerCase()) {
-            case 'pending': return 'bg-amber-50 text-amber-600 border-amber-200 focus:ring-amber-500';
-            case 'processing': return 'bg-blue-50 text-blue-600 border-blue-200 focus:ring-blue-500';
-            case 'completed': return 'bg-emerald-50 text-emerald-600 border-emerald-200 focus:ring-emerald-500';
-            case 'picked_up': return 'bg-gray-50 text-gray-600 border-gray-200 focus:ring-gray-500';
-            default: return 'bg-gray-50 text-gray-600 border-gray-200';
+            case 'pending': return 'border-l-blue-500';
+            case 'processing': return 'border-l-yellow-400';
+            case 'completed': return 'border-l-cyan-400';
+            default: return 'border-l-gray-300';
         }
     };
 
@@ -80,6 +85,7 @@ export default function Orders() {
         
         window.open(`https://wa.me/${phone}?text=${encodedText}`, '_blank');
     };
+
     return (
         <CashierLayout title="Order & History">
             <Head title="Manajemen Orders - Juita Laundry" />
@@ -93,34 +99,43 @@ export default function Orders() {
                 </Link>
             </div>
 
+            {/* SWITCH ORDER AKTIF / HISTORY SELESAI */}
             <div className="grid grid-cols-2 gap-2 bg-white p-1.5 rounded-xl w-full mb-6 border border-gray-200 shadow-sm">
-                <Link href="/cashier/orders" className="flex items-center justify-center bg-[#3b82f6] text-white shadow-md px-6 py-2.5 rounded-lg text-sm font-bold transition-all">
-                    Order Aktif
+                <Link href="/cashier/orders" className="flex items-center justify-center gap-2 bg-[#3b82f6] text-white shadow-md px-6 py-2.5 rounded-lg text-sm font-bold transition-all">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                    Order Aktif ({countSemua})
                 </Link>
-                <Link href="/cashier/history" className="flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-transparent px-6 py-2.5 rounded-lg text-sm font-semibold transition-all">
-                    History Selesai
+                <Link href="/cashier/history" className="flex items-center justify-center gap-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-transparent px-6 py-2.5 rounded-lg text-sm font-semibold transition-all">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                    History Selesai ({countHistory})
                 </Link>
             </div>
 
+            {/* FILTER STATUS */}
             <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100 mb-6 flex items-center gap-3 overflow-x-auto">
                 <span className="text-xs text-gray-500 whitespace-nowrap pl-2">Filter Status:</span>
                 
                 <div className="flex gap-2">
-                    <button onClick={() => setActiveFilter('semua')} className={`px-4 py-1.5 rounded-full text-xs transition-all whitespace-nowrap ${activeFilter === 'semua' ? 'bg-[#3b82f6] text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+                    <button onClick={() => setActiveFilter('semua')} className={`px-4 py-1.5 rounded-full text-xs transition-all whitespace-nowrap ${activeFilter === 'semua' ? 'bg-blue-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
                         Semua ({countSemua})
                     </button>
-                    <button onClick={() => setActiveFilter('menunggu')} className={`px-4 py-1.5 rounded-full text-xs transition-all whitespace-nowrap ${activeFilter === 'menunggu' ? 'bg-amber-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+                    <button onClick={() => setActiveFilter('menunggu')} className={`px-4 py-1.5 rounded-full text-xs transition-all whitespace-nowrap ${activeFilter === 'menunggu' ? 'bg-blue-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
                         Menunggu ({countMenunggu})
                     </button>
-                    <button onClick={() => setActiveFilter('proses')} className={`px-4 py-1.5 rounded-full text-xs transition-all whitespace-nowrap ${activeFilter === 'proses' ? 'bg-blue-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+                    <button onClick={() => setActiveFilter('proses')} className={`px-4 py-1.5 rounded-full text-xs transition-all whitespace-nowrap ${activeFilter === 'proses' ? 'bg-yellow-400 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
                         Dalam Proses ({countProses})
                     </button>
-                    <button onClick={() => setActiveFilter('selesai')} className={`px-4 py-1.5 rounded-full text-xs transition-all whitespace-nowrap ${activeFilter === 'selesai' ? 'bg-emerald-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+                    <button onClick={() => setActiveFilter('selesai')} className={`px-4 py-1.5 rounded-full text-xs transition-all whitespace-nowrap ${activeFilter === 'selesai' ? 'bg-cyan-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
                         Selesai ({countSelesai})
                     </button>
                 </div>
             </div>
 
+            {/* DAFTAR ORDER */}
             {filteredOrders.length === 0 ? (
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 md:p-24 flex flex-col items-center justify-center min-h-[400px]">
                     <div className="text-gray-300 mb-5">
@@ -131,23 +146,37 @@ export default function Orders() {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {filteredOrders.map((order) => (
-                        <div key={order.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+                        <div 
+                            key={order.id} 
+                            className={`bg-white rounded-xl shadow-sm border-y border-r border-gray-200 border-l-[6px] overflow-hidden flex flex-col ${getLeftBorderColor(order.status)}`}
+                        >
                             
-                            <div className="border-b border-gray-100 p-3 bg-gray-50/50">
+                            {/* HEADER CARD */}
+                            <div className="border-b border-gray-100 p-3 bg-gray-50/50 flex justify-between items-center">
                                 <p className="text-[11px] font-medium text-gray-400">{order.order_id}</p>
+                                <div className="flex gap-2">
+                                    <a href="#" className="text-gray-400 hover:text-gray-600 transition-colors" title="Edit Order">
+                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                    </a>
+                                    <a href="#" className="text-gray-400 hover:text-red-500 transition-colors" title="Hapus Order">
+                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    </a>
+                                </div>
                             </div>
 
                             <div className="p-3 flex flex-col flex-1">
                                 
+                                {/* Info Pelanggan */}
                                 <div className="mb-4">
                                     <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Pelanggan</p>
-                                    <p className="text-sm text-gray-800">{order.customer_name}</p>
+                                    <p className="text-sm text-gray-800 font-semibold">{order.customer_name}</p>
                                     <p className="text-[11px] text-gray-600 mt-1 flex items-center gap-1">
                                         <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                         {order.phone_number}
                                     </p>
                                 </div>
 
+                                {/* Detail Layanan */}
                                 <div className="bg-[#f3e8ff] border border-[#d8b4fe] rounded-lg p-3 mb-4">
                                     <div className="flex items-center gap-1.5 mb-2">
                                         <svg className="w-4 h-4 text-[#9333ea]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -186,8 +215,8 @@ export default function Orders() {
                                     </div>
                                 </div>
 
+                                {/* Informasi Pengiriman & Waktu */}
                                 <div className="flex flex-col gap-2 mb-4">
-                                    
                                     <div className="flex items-center gap-2 bg-sky-50 border border-sky-100 p-2.5 rounded-lg text-xs text-sky-600">
                                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
                                         <span className="capitalize">{order.payment_method === 'upfront' ? 'Bayar Langsung' : 'Bayar Nanti'}</span>
@@ -207,18 +236,18 @@ export default function Orders() {
                                         <span className="leading-snug break-words w-full">{order.address || 'Alamat tidak diisi'}</span>
                                     </div>
 
-                                    {/* 3.4 Waktu */}
                                     <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-[10px] text-gray-500">
                                         <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                         {formatTanggal(order.order_date)}
                                     </div>
                                 </div>
 
+                                {/* Bagian Bawah Card */}
                                 <div className="mt-auto">
 
-                                    <div className="flex justify-between items-center bg-sky-100 px-3 py-2.5 rounded-lg border border-sky-200 mb-4 shadow-sm">
-                                        <p className="text-[10px] text-sky-700 uppercase font-bold tracking-wider">Total Harga</p>
-                                        <p className="text-sm font-medium text-sky-900">{formatRp(order.total_price)}</p>
+                                    <div className="flex flex-col justify-center items-center bg-sky-50 px-3 py-3 rounded-lg border border-sky-200 mb-4 shadow-sm text-center">
+                                        <p className="text-[11px] text-sky-700 uppercase font-bold tracking-wider mb-0.5">Total Harga</p>
+                                        <p className="text-xl font-bold text-sky-900">{formatRp(order.total_price)}</p>
                                     </div>
 
                                     <div className="flex flex-col mb-4">
@@ -226,12 +255,12 @@ export default function Orders() {
                                         <select 
                                             value={order.status}
                                             onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                                            className={`w-full px-3 py-2 rounded-lg text-xs capitalize border outline-none cursor-pointer focus:ring-2 transition-all shadow-sm ${getStatusStyle(order.status)}`}
+                                            className="w-full px-3 py-2 rounded-lg text-xs capitalize border border-gray-300 text-gray-800 bg-white outline-none cursor-pointer focus:ring-2 focus:ring-blue-500 transition-all shadow-sm"
                                         >
-                                            <option value="pending" className="bg-white text-gray-700">Menunggu</option>
-                                            <option value="processing" className="bg-white text-gray-700">Dalam Proses</option>
-                                            <option value="completed" className="bg-white text-gray-700">Selesai</option>
-                                            <option value="picked_up" className="bg-white text-gray-700">Sudah Diambil</option>
+                                            <option value="pending">Menunggu</option>
+                                            <option value="processing">Dalam Proses</option>
+                                            <option value="completed">Selesai</option>
+                                            <option value="picked_up">Sudah Diambil</option>
                                         </select>
                                     </div>
 
@@ -242,7 +271,7 @@ export default function Orders() {
                                             className={`flex items-center justify-center py-2 px-3 rounded-lg transition-all text-xs w-full shadow-sm ${
                                                 order.status_order === 'menunggu' 
                                                 ? 'bg-gray-200 text-gray-400 cursor-not-allowed border border-gray-200' 
-                                                : 'bg-[#10b981] hover:bg-[#059669] text-white border border-transparent'
+                                                : 'bg-[#25D366] hover:bg-[#20bd5a] text-white border border-transparent'
                                             }`}
                                         >
                                             <svg className="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 24 24">

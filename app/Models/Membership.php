@@ -14,6 +14,7 @@ class Membership extends Model
         'phone_number',
         'address',
         'balance',
+        'loyalty_point',
     ];
     
     public function histories()

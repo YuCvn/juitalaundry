@@ -38,7 +38,8 @@ class AuthController extends Controller
                 return redirect()->intended(route('admin.dashboard'))
                     ->with('success', 'Selamat datang kembali, Admin!');
             } elseif (strtolower($role) === 'kasir' || strtolower($role) === 'cashier') {
-                return redirect()->intended(route('cashier.orders.index'))
+                // PERBAIKAN: Titik koma dihapus agar bisa di-chain dengan ->with()
+                return redirect()->intended('/cashier/dashboard')
                     ->with('success', 'Selamat bekerja, Kasir!');
             }
 

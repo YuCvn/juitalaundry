@@ -59,7 +59,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
         
         //Keuangan
+        //Keuangan
         Route::get('/financial-reports', [FinancialReportController::class, 'index'])->name('financial-reports.index');
+        Route::get('/financial-reports/export', [FinancialReportController::class, 'exportCsv'])->name('financial-reports.export'); // <-- Tambahkan baris ini
         Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
         Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
         Route::put('/expenses/{id}', [ExpenseController::class, 'update'])->name('expenses.update');

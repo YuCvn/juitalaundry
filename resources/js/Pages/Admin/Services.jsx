@@ -226,8 +226,11 @@ export default function Services({ auth, services }) {
 
             {isModalOpen && (
                 <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl relative overflow-hidden">
-                        <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                    {/* Mengubah max-w-md menjadi max-w-sm untuk memperkecil lebar modal */}
+                    <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl relative overflow-hidden">
+                        
+                        {/* Mengurangi padding header agar lebih rapat */}
+                        <div className="px-5 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                             <h3 className="text-lg font-bold text-gray-800">
                                 {modalMode === 'create' ? 'Tambah Layanan Baru' : 'Edit Data Layanan'}
                             </h3>
@@ -236,16 +239,23 @@ export default function Services({ auth, services }) {
                             </button>
                         </div>
                         
-                        <form onSubmit={handleSubmit} className="p-6">
-                            <div className="space-y-4">
+                        {/* Mengurangi padding wrapper form dan space antar elemen */}
+                        <form onSubmit={handleSubmit} className="p-5">
+                            <div className="space-y-3">
                                 
-                                {/* 1. Kategori */}
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Kategori</label>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Kategori</label>
                                     <select 
                                         value={data.category} 
-                                        onChange={(e) => setData('category', e.target.value)} 
-                                        className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2.5 px-3 bg-gray-50 outline-none"
+                                        onChange={(e) => {
+                                            const selectedCategory = e.target.value;
+                                            setData({
+                                                ...data,
+                                                category: selectedCategory,
+                                                unit: selectedCategory === 'kiloan' ? 'kg' : 'pcs'
+                                            });
+                                        }} 
+                                        className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2 px-3 bg-gray-50 outline-none"
                                     >
                                         <option value="kiloan">Laundry Kiloan</option>
                                         <option value="lainnya">Jasa Lainnya</option>
@@ -253,21 +263,21 @@ export default function Services({ auth, services }) {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Layanan</label>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Nama Layanan</label>
                                     <input 
                                         type="text" 
                                         value={data.name} 
                                         onChange={(e) => setData('name', e.target.value)} 
                                         required
                                         placeholder="Contoh: Cuci Komplit"
-                                        className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2.5 px-3 outline-none"
+                                        className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2 px-3 outline-none"
                                     />
                                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                                 </div>
 
                                 {data.category === 'lainnya' && (
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                                        <label className="block text-sm font-semibold text-gray-700 mb-1">
                                             Ukuran/Jenis <span className="text-gray-400 font-normal">(Opsional)</span>
                                         </label>
                                         <input 
@@ -275,42 +285,36 @@ export default function Services({ auth, services }) {
                                             value={data.type} 
                                             placeholder="Contoh: tebal, tipis, 120x200"
                                             onChange={(e) => setData('type', e.target.value)} 
-                                            className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2.5 px-3 outline-none"
+                                            className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2 px-3 outline-none"
                                         />
                                     </div>
                                 )}
 
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Harga</label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <span className="text-gray-500 sm:text-sm font-medium">Rp</span>
-                                        </div>
-                                        <input 
-                                            type="number" 
-                                            value={data.price} 
-                                            onChange={(e) => setData('price', e.target.value)} 
-                                            required
-                                            className="block w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm outline-none"
-                                        />
-                                    </div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Harga</label>
+                                    <input 
+                                        type="text" 
+                                        value={data.price ? data.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : ''} 
+                                        onChange={(e) => setData('price', e.target.value.replace(/\D/g, ''))} 
+                                        required
+                                        placeholder="Contoh: 10.000"
+                                        className="block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm outline-none"
+                                    />
                                     {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price}</p>}
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Satuan</label>
-                                    <select 
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Satuan</label>
+                                    <input 
+                                        type="text" 
                                         value={data.unit} 
                                         onChange={(e) => setData('unit', e.target.value)} 
-                                        className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2.5 px-3 bg-gray-50 outline-none"
-                                    >
-                                        <option value="kg">Kg</option>
-                                        <option value="pcs">Pcs</option>
-                                        <option value="meter">Meter</option>
-                                    </select>
+                                        placeholder="Contoh: kg, pcs, atau meter"
+                                        className="block w-full border border-gray-200 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm py-2 px-3 outline-none"
+                                    />
                                 </div>
 
-                                <div className="pt-2">
+                                <div className="pt-1">
                                     <label className="flex items-center cursor-pointer gap-2">
                                         <input 
                                             type="checkbox" 
@@ -326,11 +330,12 @@ export default function Services({ auth, services }) {
                                 </div>
                             </div>
 
-                            <div className="flex justify-end gap-3 mt-8">
+                            {/* Mengurangi margin top dan padding tombol */}
+                            <div className="flex gap-3 mt-6 w-full">
                                 <button 
                                     type="button" 
                                     onClick={() => { setIsModalOpen(false); reset(); }} 
-                                    className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+                                    className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors text-center"
                                 >
                                     Batal
                                 </button>
@@ -338,7 +343,7 @@ export default function Services({ auth, services }) {
                                 <button 
                                     type="submit" 
                                     disabled={processing}
-                                    className="px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center shadow-sm"
+                                    className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center shadow-sm"
                                 >
                                     {processing && (
                                         <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>

@@ -9,33 +9,73 @@ import {
 export default function LaporanKeuangan() {
     const { summary, expenses = [], filters, chartData } = usePage().props;
     const [showModal, setShowModal] = useState(false);
+    const [editingExpense, setEditingExpense] = useState(null); 
 
-    const { data: formData, setData: setFormData, post, processing, reset } = useForm({
+    const { data, setData, post, put, processing, reset, errors, transform, clearErrors } = useForm({
         kategori: 'Operasional (Listrik, Air)',
         deskripsi: '',
         amount: '',
         date: new Date().toISOString().split('T')[0],
     });
 
-    const handleSimpanPengeluaran = (e) => {
-        e.preventDefault();
+    transform((data) => ({
+        description: `${data.kategori}: ${data.deskripsi}`,
+        amount: data.amount,
+        date: data.date,
+    }));
 
-        const payload = {
-            description: `${formData.kategori}: ${formData.deskripsi}`,
-            amount: formData.amount,
-            date: formData.date,
-        };
-
-        router.post('/admin/expenses', payload, {
-            onSuccess: () => {
-                setShowModal(false);
-                reset('deskripsi', 'amount');
-            }
-        });
+    const openAddModal = () => {
+        reset();
+        clearErrors();
+        setEditingExpense(null);
+        setShowModal(true);
     };
 
+    const openEditModal = (expense) => {
+        const [kategori, ...descArr] = expense.description.split(': ');
+        const deskripsi = descArr.join(': ') || '';
+
+        clearErrors();
+        setData({
+            kategori: kategori || 'Lain-lain',
+            deskripsi: deskripsi,
+            amount: expense.amount,
+            date: expense.date,
+        });
+        setEditingExpense(expense);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setEditingExpense(null);
+        reset();
+        clearErrors();
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        if (editingExpense) {
+            put(`/admin/expenses/${editingExpense.id}`, {
+                onSuccess: () => closeModal()
+            });
+        } else {
+            post('/admin/expenses', {
+                onSuccess: () => closeModal()
+            });
+        }
+    };
+
+    const handleDelete = (id) => {
+        if (confirm('Yakin ingin menghapus data pengeluaran ini?')) {
+            router.delete(`/admin/expenses/${id}`, { preserveScroll: true });
+        }
+    };
+
+    // PERBAIKAN: Ubah URL dari '/admin/laporan-keuangan' menjadi '/admin/financial-reports'
     const handleFilterChange = (field, value) => {
-        router.get('/admin/laporan-keuangan', {
+        router.get('/admin/financial-reports', {
             ...filters,
             [field]: value
         }, {
@@ -81,7 +121,16 @@ export default function LaporanKeuangan() {
         value: categoryData[key]
     }));
 
-    const PIE_COLORS = ['#00d2ff', '#f97316', '#14b8a6', '#8b5cf6', '#eab308'];
+    const CATEGORY_COLORS = {
+        'Operasional (Listrik, Air)': '#06b6d4',
+        'Bahan Baku (Deterjen, Pewangi)': '#ec4899',
+        'Gaji Karyawan': '#a855f7',
+        'Lain-lain': '#f97316'
+    };
+
+    const isProfitNegative = summary.profit < 0;
+    const profitColorClass = isProfitNegative ? 'text-red-500' : 'text-cyan-500';
+    const profitBorderClass = isProfitNegative ? 'border-red-500' : 'border-cyan-500';
 
     return (
         <AdminLayout title="Laporan Keuangan">
@@ -90,7 +139,7 @@ export default function LaporanKeuangan() {
             <div className="max-w-7xl mx-auto space-y-6 relative">
                 
                 {/* FILTER AREA */}
-                <div className="bg-white rounded-xl shadow-sm border border-[#06b6d4]/30 p-6">
+                <div className="bg-white rounded-xl shadow-sm border border-cyan-400 p-6">
                     <h3 className="text-lg font-bold text-gray-800 mb-4">Filter Periode</h3>
                     <div className="flex flex-col md:flex-row items-end gap-4">
                         <div className="flex-1 w-full">
@@ -99,7 +148,7 @@ export default function LaporanKeuangan() {
                                 type="date" 
                                 value={filters.start_date || ''} 
                                 onChange={(e) => handleFilterChange('start_date', e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00d2ff] outline-none text-gray-600" 
+                                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-400 outline-none text-gray-600" 
                             />
                         </div>
                         <div className="flex-1 w-full">
@@ -108,13 +157,13 @@ export default function LaporanKeuangan() {
                                 type="date" 
                                 value={filters.end_date || ''} 
                                 onChange={(e) => handleFilterChange('end_date', e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00d2ff] outline-none text-gray-600" 
+                                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-400 outline-none text-gray-600" 
                             />
                         </div>
                         <div className="flex-1 w-full md:w-auto mt-4 md:mt-0">
                             <button 
-                                onClick={() => setShowModal(true)}
-                                className="w-full bg-[#00d2ff] hover:bg-[#00b8e6] text-white font-bold py-2.5 px-4 rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                onClick={openAddModal}
+                                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2.5 px-4 rounded-lg flex items-center justify-center transition-colors shadow-sm"
                             >
                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                                 Tambah Pengeluaran
@@ -125,36 +174,36 @@ export default function LaporanKeuangan() {
 
                 {/* KARTU RINGKASAN */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="bg-white rounded-xl p-5 shadow-sm border border-[#06b6d4] flex flex-col justify-between">
-                        <div className="flex items-center text-[#06b6d4] mb-2">
+                    <div className="bg-white rounded-xl p-5 shadow-sm border border-cyan-500 flex flex-col justify-between">
+                        <div className="flex items-center text-cyan-500 mb-2">
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                             <span className="text-sm font-semibold text-gray-600">Total Pendapatan</span>
                         </div>
-                        <h3 className="text-2xl font-bold text-[#06b6d4] truncate">{formatRp(summary.pendapatan)}</h3>
+                        <h3 className="text-2xl font-bold text-cyan-500 truncate">{formatRp(summary.pendapatan)}</h3>
                     </div>
 
-                    <div className="bg-white rounded-xl p-5 shadow-sm border border-[#f97316] flex flex-col justify-between">
-                        <div className="flex items-center text-[#f97316] mb-2">
+                    <div className="bg-white rounded-xl p-5 shadow-sm border border-orange-500 flex flex-col justify-between">
+                        <div className="flex items-center text-orange-500 mb-2">
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" /></svg>
                             <span className="text-sm font-semibold text-gray-600">Total Pengeluaran</span>
                         </div>
-                        <h3 className="text-2xl font-bold text-[#f97316] truncate">{formatRp(summary.pengeluaran)}</h3>
+                        <h3 className="text-2xl font-bold text-orange-500 truncate">{formatRp(summary.pengeluaran)}</h3>
                     </div>
 
-                    <div className="bg-white rounded-xl p-5 shadow-sm border border-[#14b8a6] flex flex-col justify-between">
-                        <div className="flex items-center text-[#14b8a6] mb-2">
+                    <div className={`bg-white rounded-xl p-5 shadow-sm border ${profitBorderClass} flex flex-col justify-between`}>
+                        <div className={`flex items-center ${profitColorClass} mb-2`}>
                             <span className="text-lg font-bold mr-2">$</span>
                             <span className="text-sm font-semibold text-gray-600">Net Profit</span>
                         </div>
-                        <h3 className="text-2xl font-bold text-[#14b8a6] truncate">{formatRp(summary.profit)}</h3>
+                        <h3 className={`text-2xl font-bold ${profitColorClass} truncate`}>{formatRp(summary.profit)}</h3>
                     </div>
 
-                    <div className="bg-white rounded-xl p-5 shadow-sm border border-[#06b6d4] flex flex-col justify-between">
-                        <div className="flex items-center text-[#06b6d4] mb-2">
+                    <div className="bg-white rounded-xl p-5 shadow-sm border border-cyan-500 flex flex-col justify-between">
+                        <div className="flex items-center text-cyan-500 mb-2">
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11h10M7 15h10M3 20a1 1 0 001 1h16a1 1 0 001-1V4a1 1 0 00-1-1H4a1 1 0 00-1 1v16z" /></svg>
                             <span className="text-sm font-semibold text-gray-600">Profit Margin</span>
                         </div>
-                        <h3 className="text-3xl font-bold text-[#06b6d4]">{profitMargin}%</h3>
+                        <h3 className="text-3xl font-bold text-cyan-500">{profitMargin}%</h3>
                     </div>
                 </div>
 
@@ -177,7 +226,7 @@ export default function LaporanKeuangan() {
 
                 {/* BAR CHART & LINE CHART */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30">
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                         <h3 className="text-md font-bold text-gray-800 mb-4">Pendapatan vs Pengeluaran {titleSuffix}</h3>
                         <div className="h-72">
                             <ResponsiveContainer width="100%" height="100%">
@@ -192,15 +241,14 @@ export default function LaporanKeuangan() {
                                         itemStyle={{fontSize: '12px', fontWeight: '600', paddingBottom: '4px'}}
                                     />
                                     <Legend iconType="square" wrapperStyle={{ fontSize: '11px', paddingTop: '15px' }} />
-                                    {/* Bar dibikin tipis sesuai permintaan */}
-                                    <Bar dataKey="Pendapatan" fill="#00d2ff" radius={[4, 4, 0, 0]} maxBarSize={20} />
+                                    <Bar dataKey="Pendapatan" fill="#06b6d4" radius={[4, 4, 0, 0]} maxBarSize={20} />
                                     <Bar dataKey="Pengeluaran" fill="#f97316" radius={[4, 4, 0, 0]} maxBarSize={20} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30">
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                         <h3 className="text-md font-bold text-gray-800 mb-4">Profit Harian {titleSuffix}</h3>
                         <div className="h-72">
                             <ResponsiveContainer width="100%" height="100%">
@@ -222,7 +270,9 @@ export default function LaporanKeuangan() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30">
+                    
+                    {/* PIE CHART KATEGORI */}
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                         <h3 className="text-md font-bold text-gray-800 mb-4">Pengeluaran per Kategori</h3>
                         <div className="h-64 flex justify-center items-center">
                             {pieData.length === 0 ? (
@@ -234,15 +284,13 @@ export default function LaporanKeuangan() {
                                             data={pieData}
                                             cx="50%"
                                             cy="50%"
-                                            innerRadius={60}
-                                            outerRadius={100}
-                                            paddingAngle={2}
+                                            outerRadius={100} 
                                             dataKey="value"
                                             label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                                             labelLine={false}
                                         >
                                             {pieData.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                                                <Cell key={`cell-${index}`} fill={CATEGORY_COLORS[entry.name] || '#f97316'} />
                                             ))}
                                         </Pie>
                                         <Tooltip 
@@ -256,7 +304,7 @@ export default function LaporanKeuangan() {
                     </div>
 
                     {/* Pengeluaran Terbaru */}
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-[#06b6d4]/30 flex flex-col">
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
                         <h3 className="text-md font-bold text-gray-800 mb-4">Pengeluaran Terbaru</h3>
                         {expenses.length === 0 ? (
                             <div className="flex-1 flex justify-center items-center text-gray-400 text-sm py-10">
@@ -278,12 +326,20 @@ export default function LaporanKeuangan() {
                                                 <p className="text-sm font-bold text-orange-500 mt-1">{formatRp(expense.amount)}</p>
                                             </div>
                                             <div className="flex space-x-2">
-                                                <a href="/admin/expenses" className="text-indigo-500 hover:text-indigo-700 transition-colors p-1" title="Edit">
+                                                <button 
+                                                    onClick={() => openEditModal(expense)}
+                                                    className="text-cyan-500 hover:text-cyan-700 hover:bg-cyan-50 transition-colors p-1.5 rounded-lg" 
+                                                    title="Edit"
+                                                >
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                                                </a>
-                                                <a href="/admin/expenses" className="text-red-500 hover:text-red-700 transition-colors p-1" title="Hapus">
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleDelete(expense.id)}
+                                                    className="text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors p-1.5 rounded-lg" 
+                                                    title="Hapus"
+                                                >
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     );
@@ -295,28 +351,44 @@ export default function LaporanKeuangan() {
 
             </div>
 
-            {/* MODAL POP-UP TAMBAH PENGELUARAN */}
+            {/* MODAL POP-UP TAMBAH / EDIT PENGELUARAN */}
             {showModal && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/80 backdrop-blur-sm transition-opacity">
-                    <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-                        <div className="bg-gradient-to-r from-[#00d2ff] to-[#00b8e6] px-6 py-5 text-white flex items-center">
-                            <svg className="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" /></svg>
-                            <div>
-                                <h2 className="text-xl font-bold">Tambah Pengeluaran Baru</h2>
-                                <p className="text-xs text-sky-100 mt-0.5">Catat pengeluaran bisnis Anda</p>
-                            </div>
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm transition-opacity">
+                    <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+                        
+                        <div className="px-5 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                            <h2 className="text-sm font-semibold text-gray-800">
+                                {editingExpense ? 'Edit Pengeluaran' : 'Pengeluaran Baru'}
+                            </h2>
+                            <button onClick={closeModal} className="text-gray-400 hover:bg-gray-200 hover:text-gray-600 rounded-full p-1 transition-colors">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
                         </div>
 
-                        <div className="p-6">
-                            <form className="space-y-4" onSubmit={handleSimpanPengeluaran}>
+                        <div className="p-5">
+                            <form className="space-y-3" onSubmit={handleSubmit}>
+                                
                                 <div>
-                                    <label className="flex items-center text-sm font-semibold text-gray-700 mb-1">
-                                        <span className="text-[#00d2ff] mr-1 text-base">$</span> Kategori <span className="text-red-500 ml-1">*</span>
+                                    <label className="block text-[11px] font-semibold text-gray-700 mb-1">
+                                        Tanggal <span className="text-red-500 ml-0.5">*</span>
+                                    </label>
+                                    <input 
+                                        type="date" 
+                                        value={data.date}
+                                        onChange={e => setData('date', e.target.value)}
+                                        className="w-full px-3 py-2 text-xs border border-cyan-400 rounded-lg focus:ring-2 focus:ring-cyan-200 focus:border-cyan-500 outline-none transition-all text-gray-700" 
+                                    />
+                                    {errors.date && <span className="text-[10px] text-red-500 mt-1">{errors.date}</span>}
+                                </div>
+
+                                <div>
+                                    <label className="block text-[11px] font-semibold text-gray-700 mb-1">
+                                        Kategori <span className="text-red-500 ml-0.5">*</span>
                                     </label>
                                     <select 
-                                        value={formData.kategori}
-                                        onChange={e => setFormData('kategori', e.target.value)}
-                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00d2ff] focus:border-[#00d2ff] outline-none transition-all text-gray-600 bg-white"
+                                        value={data.kategori}
+                                        onChange={e => setData('kategori', e.target.value)}
+                                        className="w-full px-3 py-2 text-xs border border-cyan-400 rounded-lg focus:ring-2 focus:ring-cyan-200 focus:border-cyan-500 outline-none transition-all text-gray-700 bg-white"
                                     >
                                         <option value="Operasional (Listrik, Air)">Operasional (Listrik, Air)</option>
                                         <option value="Bahan Baku (Deterjen, Pewangi)">Bahan Baku (Deterjen, Pewangi)</option>
@@ -326,59 +398,48 @@ export default function LaporanKeuangan() {
                                 </div>
                                 
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">
-                                        Jumlah <span className="text-red-500 ml-1">*</span>
+                                    <label className="block text-[11px] font-semibold text-gray-700 mb-1">
+                                        Jumlah <span className="text-red-500 ml-0.5">*</span>
                                     </label>
                                     <input 
                                         type="number" 
                                         min="1"
-                                        placeholder="50000" 
-                                        value={formData.amount}
-                                        onChange={e => setFormData('amount', e.target.value)}
-                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00d2ff] focus:border-[#00d2ff] outline-none transition-all" 
+                                        placeholder="Contoh: 50000" 
+                                        value={data.amount}
+                                        onChange={e => setData('amount', e.target.value)}
+                                        className="w-full px-3 py-2 text-xs border border-cyan-400 rounded-lg focus:ring-2 focus:ring-cyan-200 focus:border-cyan-500 outline-none transition-all text-gray-700" 
                                     />
+                                    {errors.amount && <span className="text-[10px] text-red-500 mt-1">{errors.amount}</span>}
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">
-                                        Deskripsi <span className="text-red-500 ml-1">*</span>
+                                    <label className="block text-[11px] font-semibold text-gray-700 mb-1">
+                                        Deskripsi <span className="text-red-500 ml-0.5">*</span>
                                     </label>
                                     <textarea 
-                                        placeholder="Deskripsi pengeluaran" 
-                                        rows="3" 
-                                        value={formData.deskripsi}
-                                        onChange={e => setFormData('deskripsi', e.target.value)}
-                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00d2ff] focus:border-[#00d2ff] outline-none transition-all resize-none" 
+                                        placeholder="Contoh: Beli token listrik" 
+                                        rows="2" 
+                                        value={data.deskripsi}
+                                        onChange={e => setData('deskripsi', e.target.value)}
+                                        className="w-full px-3 py-2 text-xs border border-cyan-400 rounded-lg focus:ring-2 focus:ring-cyan-200 focus:border-cyan-500 outline-none transition-all resize-none text-gray-700"
                                     ></textarea>
+                                    {errors.description && <span className="text-[10px] text-red-500 mt-1">{errors.description}</span>}
                                 </div>
 
-                                <div>
-                                    <label className="flex items-center text-sm font-semibold text-gray-700 mb-1">
-                                        <svg className="w-4 h-4 text-[#00d2ff] mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                        Tanggal <span className="text-red-500 ml-1">*</span>
-                                    </label>
-                                    <input 
-                                        type="date" 
-                                        value={formData.date}
-                                        onChange={e => setFormData('date', e.target.value)}
-                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00d2ff] focus:border-[#00d2ff] outline-none transition-all text-gray-600" 
-                                    />
-                                </div>
-
-                                <div className="flex gap-3 pt-4 mt-2">
+                                <div className="flex gap-2 pt-3 mt-2">
                                     <button 
                                         type="button" 
-                                        onClick={() => setShowModal(false)}
-                                        className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-xl transition-colors"
+                                        onClick={closeModal} 
+                                        className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-600 font-semibold py-2 px-3 text-xs rounded-lg transition-colors"
                                     >
                                         Batal
                                     </button>
                                     <button 
                                         type="submit" 
-                                        disabled={processing || !formData.amount || !formData.deskripsi}
-                                        className="flex-1 bg-[#00d2ff] hover:bg-[#00b8e6] text-white font-semibold py-3 px-4 rounded-xl transition-colors shadow-md disabled:opacity-50"
+                                        disabled={processing}
+                                        className="flex-1 disabled:opacity-50 bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white font-semibold py-2 px-3 text-xs rounded-lg transition-all shadow-sm flex items-center justify-center"
                                     >
-                                        {processing ? 'Menyimpan...' : 'Simpan Data'}
+                                        {processing ? 'Loading...' : (editingExpense ? 'Update Data' : 'Simpan Data')}
                                     </button>
                                 </div>
                             </form>

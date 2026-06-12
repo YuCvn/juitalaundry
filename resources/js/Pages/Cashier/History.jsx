@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, Head, usePage } from '@inertiajs/react';
-import CashierLayout from '../../Layouts/CashierLayout';
+import CashierLayout from '../../Layouts/Cashierlayout';
 
 export default function History() {
-    const { orders } = usePage().props;
-    const ordersData = orders?.data || [];
-    const [searchQuery, setSearchQuery] = useState('');
+    const { history = [], orders = [], activeCount = 0, historyCount = 0 } = usePage().props;
+    
+    const dataList = history.length > 0 ? history : orders;
+
+    const countHistory = historyCount || dataList.length;
+    const countAktif = activeCount || 0; 
+
+    const totalOrder = dataList.length;
+    const totalPendapatan = dataList.reduce((sum, item) => sum + (Number(item.total_price) || 0), 0);
 
     const formatRp = (angka) => {
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka || 0);
@@ -22,97 +28,122 @@ export default function History() {
         return `${datePart} pukul ${timePart}`;
     };
 
-    const filteredOrders = ordersData.filter(order => {
-        const search = searchQuery.toLowerCase();
-        return (
-            order.customer_name?.toLowerCase().includes(search) ||
-            order.phone_number?.includes(search) ||
-            order.order_id?.toLowerCase().includes(search)
-        );
-    });
-
-    const totalOrderanSelesai = orders?.total || ordersData.length;
-    const totalPendapatan = ordersData.reduce((sum, order) => sum + parseFloat(order.total_price), 0);
-
     return (
         <CashierLayout title="Order & History">
-            <Head title="History Order - Juita Laundry" />
+            <Head title="History Selesai - Juita Laundry" />
             
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
                 <h2 className="text-xl font-medium text-gray-800">Manajemen Orders</h2>
                 
-                <Link href="/cashier/orders/create" className="bg-[#10b981] hover:bg-emerald-600 text-white py-2 px-4 rounded-lg flex items-center transition-colors shadow-sm w-fit text-sm">
+                <Link href="/cashier/orders/create" className="bg-[#25D366] hover:bg-[#20bd5a] text-white py-2 px-4 rounded-lg flex items-center transition-colors shadow-sm w-fit text-sm font-semibold">
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                     Order Baru
                 </Link>
             </div>
 
+            {/* SWITCH ORDER AKTIF / HISTORY SELESAI */}
             <div className="grid grid-cols-2 gap-2 bg-white p-1.5 rounded-xl w-full mb-6 border border-gray-200 shadow-sm">
-                <Link href="/cashier/orders" className="flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-transparent px-6 py-2.5 rounded-lg text-sm font-semibold transition-all">
-                    Order Aktif
+                <Link href="/cashier/orders" className="flex items-center justify-center gap-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 border border-transparent px-6 py-2.5 rounded-lg text-sm font-semibold transition-all">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                    Order Aktif ({countAktif})
                 </Link>
-                <Link href="/cashier/history" className="flex items-center justify-center bg-[#10b981] text-white shadow-md px-6 py-2.5 rounded-lg text-sm font-bold transition-all">
-                    History Selesai
+                <Link href="/cashier/history" className="flex items-center justify-center gap-2 bg-[#25D366] text-white shadow-md px-6 py-2.5 rounded-lg text-sm font-bold transition-all">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                    History Selesai ({countHistory})
                 </Link>
             </div>
 
+            {/* KARTU SUMMARY (Total Order & Pendapatan) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="bg-[#10b981] rounded-xl p-5 text-white shadow-sm flex justify-between items-center">
+                <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
                     <div>
-                        <p className="text-xs font-normal text-emerald-100 uppercase tracking-wider mb-1">Total Orderan Selesai</p>
-                        <h3 className="text-3xl font-black">{totalOrderanSelesai}</h3>
+                        {/* Teks tidak kapital semua */}
+                        <p className="text-sm font-semibold text-gray-500 mb-1">Total orderan selesai</p>
+                        <h3 className="text-2xl font-bold text-gray-800">{totalOrder}</h3>
                     </div>
-                    <svg className="w-12 h-12 text-emerald-200/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                    <div className="bg-[#25D366]/10 p-3 rounded-lg">
+                        {/* Logo Lemari Laci */}
+                        <svg className="w-7 h-7 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                    </div>
                 </div>
 
-                <div className="bg-[#0ea5e9] rounded-xl p-5 text-white shadow-sm flex justify-between items-center">
+                <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
                     <div>
-                        <p className="text-xs font-normal text-sky-100 uppercase tracking-wider mb-1">Total Pendapatan</p>
-                        <h3 className="text-3xl font-black">{formatRp(totalPendapatan)}</h3>
+                        {/* Teks tidak kapital semua */}
+                        <p className="text-sm font-semibold text-gray-500 mb-1">Total pendapatan</p>
+                        <h3 className="text-2xl font-bold text-gray-800">{formatRp(totalPendapatan)}</h3>
                     </div>
-                    <svg className="w-12 h-12 text-sky-200/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <div className="bg-[#25D366]/10 p-3 rounded-lg">
+                        {/* Logo Lemari Laci */}
+                        <svg className="w-7 h-7 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                    </div>
                 </div>
             </div>
 
-            <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100 mb-6">
-                <div className="relative">
-                    <svg className="w-4 h-4 absolute left-3.5 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    <input 
-                        type="text" 
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Cari berdasarkan nama, nomor telepon, atau ID order..." 
-                        className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#10b981] focus:border-[#10b981] transition-all bg-gray-50/50"
-                    />
-                </div>
-            </div>
-
-            {filteredOrders.length === 0 ? (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 md:p-24 flex flex-col items-center justify-center min-h-[300px]">
+            {/* DAFTAR CARD HISTORY */}
+            {dataList.length === 0 ? (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 md:p-24 flex flex-col items-center justify-center min-h-[400px]">
                     <div className="text-gray-300 mb-5">
-                        <svg className="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
+                        <svg className="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
                     </div>
-                    <p className="text-gray-500 text-sm">Tidak ada riwayat orderan ditemukan</p>
+                    <p className="text-gray-500 mb-8 text-sm">Belum ada riwayat orderan selesai</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {filteredOrders.map((order) => (
-                        <div key={order.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+                    {dataList.map((order) => (
+                        <div 
+                            key={order.id} 
+                            // Card utama + Warna Border Kiri WhatsApp Green
+                            className="bg-white rounded-xl shadow-sm border-y border-r border-gray-200 border-l-[6px] border-l-[#25D366] overflow-hidden flex flex-col"
+                        >
                             
-                            <div className="border-b border-gray-100 p-3 bg-gray-50/50">
-                                <p className="text-[11px] font-medium text-gray-400">{order.order_id}</p>
+                            {/* HEADER CARD */}
+                            <div className="border-b border-gray-100 p-3 bg-gray-50/50 flex justify-between items-center">
+                                <div className="flex items-center gap-2">
+                                    <p className="text-[11px] font-medium text-gray-400">{order.order_id}</p>
+                                    
+                                    {/* Badge Selesai */}
+                                    <div className="bg-[#25D366]/15 text-[#25D366] px-2 py-0.5 rounded flex items-center gap-1 text-[10px] font-bold">
+                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Selesai
+                                    </div>
+                                </div>
+                                
+                                <div className="flex gap-2">
+                                    <a href="#" className="text-gray-400 hover:text-gray-600 transition-colors" title="Edit Order">
+                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                    </a>
+                                    <a href="#" className="text-gray-400 hover:text-red-500 transition-colors" title="Hapus Order">
+                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    </a>
+                                </div>
                             </div>
 
                             <div className="p-3 flex flex-col flex-1">
+                                
+                                {/* Info Pelanggan */}
                                 <div className="mb-4">
                                     <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Pelanggan</p>
-                                    <p className="text-sm text-gray-800">{order.customer_name}</p>
+                                    <p className="text-sm text-gray-800 font-semibold">{order.customer_name}</p>
                                     <p className="text-[11px] text-gray-600 mt-1 flex items-center gap-1">
                                         <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                         {order.phone_number}
                                     </p>
                                 </div>
 
+                                {/* Detail Layanan */}
                                 <div className="bg-[#f3e8ff] border border-[#d8b4fe] rounded-lg p-3 mb-4">
                                     <div className="flex items-center gap-1.5 mb-2">
                                         <svg className="w-4 h-4 text-[#9333ea]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,6 +156,7 @@ export default function History() {
                                         {order.details && order.details.map((detail) => (
                                             <div key={detail.id} className="bg-white rounded p-2 border border-[#e9d5ff]">
                                                 <p className="text-gray-800 text-xs">{detail.service?.name || 'Layanan Dihapus'}</p>
+                                                
                                                 <div className="flex justify-between items-end mt-1">
                                                     <p className="text-[10px] text-gray-500">
                                                         {parseFloat(detail.qty)} {detail.service?.category?.toLowerCase() === 'kiloan' ? 'kg' : 'pcs'} <span className="mx-0.5 text-gray-400">x</span> {formatRp(detail.price)}
@@ -133,14 +165,16 @@ export default function History() {
                                                 </div>
                                             </div>
                                         ))}
-                                        {order.delivery_fee > 0 && (
+
+                                        {parseFloat(order.delivery_fee) > 0 && (
                                             <div className="bg-white/60 rounded p-2 border border-[#e9d5ff] flex justify-between items-center mt-1">
                                                 <p className="text-[10px] text-gray-700">Biaya Ongkir</p>
                                                 <p className="text-[#7e22ce] text-xs font-medium">{formatRp(order.delivery_fee)}</p>
                                             </div>
                                         )}
-                                        {order.discount > 0 && (
-                                            <div className="bg-emerald-50/60 rounded p-2 border border-emerald-200 flex justify-between items-center mt-1">
+
+                                        {parseFloat(order.discount) > 0 && (
+                                            <div className="bg-emerald-50/60 rounded p-2 border border-emerald-100 flex justify-between items-center mt-1">
                                                 <p className="text-[10px] text-emerald-700">Diskon Member</p>
                                                 <p className="text-emerald-700 text-xs font-medium">- {formatRp(order.discount)}</p>
                                             </div>
@@ -148,14 +182,14 @@ export default function History() {
                                     </div>
                                 </div>
 
+                                {/* Informasi Pengiriman & Waktu */}
                                 <div className="flex flex-col gap-2 mb-4">
-                                    <div className="flex items-center gap-2 bg-sky-50 border border-sky-200 p-2.5 rounded-lg text-xs text-sky-600">
+                                    <div className="flex items-center gap-2 bg-sky-50 border border-sky-100 p-2.5 rounded-lg text-xs text-sky-600">
                                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-                                        <span className="capitalize">
-                                            {order.payment_method === 'upfront' ? 'Bayar Langsung' : 'Bayar Nanti'}
-                                        </span> 
+                                        <span className="capitalize">{order.payment_method === 'upfront' ? 'Bayar Langsung' : 'Bayar Nanti'}</span>
                                     </div>
-                                    <div className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs ${order.pickup_method === 'delivery' ? 'bg-orange-50 border-orange-200 text-orange-600' : 'bg-green-50 border-green-200 text-green-600'}`}>
+
+                                    <div className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs ${order.pickup_method === 'delivery' ? 'bg-orange-50 border-orange-100 text-orange-600' : 'bg-green-50 border-green-100 text-green-600'}`}>
                                         {order.pickup_method === 'delivery' ? (
                                             <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" /></svg>
                                         ) : (
@@ -163,27 +197,37 @@ export default function History() {
                                         )}
                                         {order.pickup_method === 'delivery' ? 'Diantar ke Alamat' : 'Ambil di Tempat'}
                                     </div>
-                                    <div className="flex items-start gap-2 bg-gray-50 border border-gray-200 p-2.5 rounded-lg text-[11px] text-gray-500">
+
+                                    <div className="flex items-start gap-2 bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-[11px] text-gray-500">
                                         <svg className="w-3.5 h-3.5 mt-0.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                         <span className="leading-snug break-words w-full">{order.address || 'Alamat tidak diisi'}</span>
                                     </div>
-                                    <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 p-2.5 rounded-lg text-[10px] text-gray-500">
+
+                                    <div className="flex items-center gap-2 bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-[10px] text-gray-500">
                                         <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                         {formatTanggal(order.order_date)}
                                     </div>
                                 </div>
 
-                                <div className="mt-auto ">
-                                    <div className="flex justify-between items-center bg-green-100 px-3 py-2.5 rounded-lg border border-green-300 p-6 mb-6 shadow-sm">
-                                        <p className="text-[10px] text-green-600 uppercase font-normal tracking-wider ">Total Harga</p>
-                                        <p className="text-sm font-black text-green-500">{formatRp(order.total_price)}</p>
+                                {/* Bagian Bawah Card */}
+                                <div className="mt-auto">
+
+                                    {/* Total Harga */}
+                                    <div className="flex flex-col justify-center items-center bg-[#25D366]/5 px-3 py-3 rounded-lg border border-[#25D366]/20 mb-4 shadow-sm text-center">
+                                        <p className="text-[11px] text-[#25D366] uppercase font-bold tracking-wider mb-0.5">Total Harga</p>
+                                        <p className="text-xl font-bold text-gray-800">{formatRp(order.total_price)}</p>
                                     </div>
-                                    <button 
-                                        onClick={() => window.open(`/cashier/orders/${order.id}/print`, '_blank')}
-                                        className="flex items-center justify-center bg-[#3b82f6] hover:bg-[#2563eb] text-white py-2 px-3 rounded-lg transition-colors text-xs w-full shadow-sm"
-                                    >
-                                        Cetak Nota
-                                    </button>
+
+                                    <div className="flex flex-col gap-2">
+                                        
+                                        <button 
+                                            onClick={() => window.open(`/cashier/orders/${order.id}/print`, '_blank')}
+                                            className="flex items-center justify-center bg-[#25D366] hover:bg-[#20bd5a] text-white py-2 px-3 rounded-lg transition-colors text-xs w-full shadow-sm"
+                                        >
+                                            <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+                                            Cetak Nota
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

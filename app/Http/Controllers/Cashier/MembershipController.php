@@ -28,6 +28,7 @@ class MembershipController extends Controller
             'phone_number' => 'required|string|max:20|unique:memberships,phone_number',
             'address' => 'nullable|string',
             'balance' => 'nullable|numeric|min:0',
+            'loyalty_point' => 'nullable|integer|min:0', // Validasi baru
         ]);
 
         $membership = Membership::create([
@@ -35,6 +36,7 @@ class MembershipController extends Controller
             'phone_number' => $request->phone_number,
             'address' => $request->address ? strip_tags($request->address) : null,
             'balance' => $request->balance ?? 0,
+            'loyalty_point' => $request->loyalty_point ?? 0, // Simpan point
         ]);
 
         MembershipHistory::create([
@@ -54,6 +56,7 @@ class MembershipController extends Controller
             'phone_number' => 'required|string|max:20|unique:memberships,phone_number,' . $membership->id,
             'address' => 'nullable|string',
             'balance' => 'required|numeric|min:0',
+            'loyalty_point' => 'nullable|integer|min:0', // Validasi baru
         ]);
 
         $oldBalance = $membership->balance;
@@ -64,6 +67,7 @@ class MembershipController extends Controller
             'phone_number' => $request->phone_number,
             'address' => $request->address ? strip_tags($request->address) : null,
             'balance' => $newBalance,
+            'loyalty_point' => $request->loyalty_point ?? $membership->loyalty_point,
         ]);
 
         if ($newBalance > $oldBalance) {

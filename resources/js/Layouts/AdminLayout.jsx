@@ -70,71 +70,83 @@ export default function AdminLayout({ children, title }) {
                 )}
             </div>
 
-            {/* SIDEBAR ADMIN */}
-            <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-[#2563eb] text-white transition-all duration-300 flex flex-col shadow-xl z-20`}>
+            {/* SIDEBAR ADMIN - Mengubah lebar dari w-64 menjadi w-56, w-20 menjadi w-16 */}
+            <aside className={`${isSidebarOpen ? 'w-56' : 'w-16'} bg-[#2563eb] text-white transition-all duration-300 flex flex-col shadow-xl z-20`}>
+                
+                {/* Header Logo */}
                 <div className="p-4 border-b border-blue-500/30 flex items-center justify-between h-20">
                     {isSidebarOpen && (
                         <div>
-                            <h1 className="font-bold text-lg">Juita Laundry</h1>
-                            <p className="text-xs text-blue-200">Panel Admin</p>
+                            <h1 className="font-bold text-base">Juita Laundry</h1>
+                            <p className="text-[11px] text-blue-200">Panel Admin</p>
                         </div>
                     )}
                 </div>
 
+                {/* Tombol Tutup/Buka Menu */}
                 <div className="p-3">
                     <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={`w-full flex items-center p-2 rounded-lg bg-blue-500/50 hover:bg-blue-500 transition-colors ${!isSidebarOpen && 'justify-center'}`}>
-                        <svg className={`w-5 h-5 ${isSidebarOpen ? 'rotate-180 mr-2' : ''} transition-transform`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                        {isSidebarOpen && <span className="text-sm font-medium">Tutup Menu</span>}
+                        <svg className={`w-[18px] h-[18px] ${isSidebarOpen ? 'rotate-180 mr-2.5' : ''} transition-transform`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                        {isSidebarOpen && <span className="text-xs font-medium">Tutup Menu</span>}
                     </button>
                 </div>
 
-                {/* MENU NAVIGASI */}
-                <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-2">
-                    <Link href="/admin/dashboard" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/dashboard') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-                        {isSidebarOpen && <span className="ml-3 text-sm">Dashboard</span>}
+                <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1.5">
+                    
+                    <Link href="/admin/dashboard" className={`flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/dashboard') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
+                        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                        {isSidebarOpen && <span className="ml-2.5 text-xs">Dashboard</span>}
                     </Link>
 
-                    <div className="text-xs font-semibold text-blue-300 mt-6 mb-2 px-3 uppercase tracking-wider">{isSidebarOpen ? 'Keuangan' : '...'}</div>
-                    <Link href="/admin/financial-reports" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/financial-reports') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                        {isSidebarOpen && <span className="ml-3 text-sm">Laporan Keuangan</span>}
+                    <div className="text-[10px] font-semibold text-blue-300 mt-5 mb-1.5 px-2.5 uppercase tracking-wider">{isSidebarOpen ? 'Keuangan' : '...'}</div>
+                    
+                    <Link href="/admin/financial-reports" className={`flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/financial-reports') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
+                        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                        {isSidebarOpen && <span className="ml-2.5 text-xs">Laporan Keuangan</span>}
                     </Link>
-                    <Link href="/admin/expenses" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/expenses') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" /></svg>
-                        {isSidebarOpen && <span className="ml-3 text-sm">Pengeluaran</span>}
+                    
+                    <Link href="/admin/expenses" className={`flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/expenses') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
+                        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" /></svg>
+                        {isSidebarOpen && <span className="ml-2.5 text-xs">Pengeluaran</span>}
                     </Link>
 
-                    <div className="text-xs font-semibold text-blue-300 mt-6 mb-2 px-3 uppercase tracking-wider">{isSidebarOpen ? 'Lainnya' : '...'}</div>
-                    <Link href="/admin/services" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/services') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z" /></svg>
-                        {isSidebarOpen && <span className="ml-3 text-sm">Kelola Layanan</span>}
+                    <div className="text-[10px] font-semibold text-blue-300 mt-5 mb-1.5 px-2.5 uppercase tracking-wider">{isSidebarOpen ? 'Lainnya' : '...'}</div>
+                    
+                    {/* KELOLA LAYANAN dengan Ikon Wrench */}
+                    <Link href="/admin/services" className={`flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/services') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
+                        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                        </svg>
+                        {isSidebarOpen && <span className="ml-2.5 text-xs">Kelola Layanan</span>}
                     </Link>
-                    <Link href="/admin/cashiers" className={`flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/cashiers') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                        {isSidebarOpen && <span className="ml-3 text-sm">Kelola Kasir</span>}
+
+                    <Link href="/admin/cashiers" className={`flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} ${isActive('/admin/cashiers') ? 'bg-white text-blue-600 shadow-sm font-semibold' : 'text-blue-100 hover:bg-blue-700 font-medium'}`}>
+                        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        {isSidebarOpen && <span className="ml-2.5 text-xs">Kelola Pengguna</span>}
                     </Link>
-                    <Link href="/logout" method="post" as="button" className={`w-full flex items-center p-3 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} text-blue-100 hover:bg-blue-700 font-medium`}>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                        {isSidebarOpen && <span className="ml-3 text-sm">Keluar</span>}
+                    
+                    <Link href="/logout" method="post" as="button" className={`w-full flex items-center p-2.5 rounded-lg transition-all ${!isSidebarOpen && 'justify-center'} text-blue-100 hover:bg-blue-700 font-medium`}>
+                        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                        {isSidebarOpen && <span className="ml-2.5 text-xs">Keluar</span>}
                     </Link>
                 </nav>
 
-                <div className="p-4 border-t border-blue-400/20 bg-blue">
+                {/* Profil User Bagian Bawah */}
+                <div className="p-3 border-t border-blue-400/20 bg-blue">
                     <div className={`flex items-center ${!isSidebarOpen ? 'justify-center' : ''}`}>
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center shadow-sm">
-                            <span className="text-white-700 font-black text-lg leading-none" style={{ fontFamily: 'sans-serif' }}>
+                        <div className="flex-shrink-0 w-7 h-7 rounded-full bg-blue-500 flex items-center justify-center shadow-sm">
+                            <span className="text-white-700 font-black text-sm leading-none" style={{ fontFamily: 'sans-serif' }}>
                                 {userInitial}
                             </span>
                         </div>
                         
                         {/* Nama & Role */}
                         {isSidebarOpen && (
-                            <div className="ml-3 overflow-hidden">
-                                <p className="text-sm font-normal text-white truncate leading-tight tracking-tight">
+                            <div className="ml-2.5 overflow-hidden">
+                                <p className="text-xs font-normal text-white truncate leading-tight tracking-tight">
                                     {user?.name || 'Administrator'}
                                 </p>
-                                <p className="text-[10px] text-blue-200 uppercase font-normal tracking-widest leading-none mt-0.5">
+                                <p className="text-[9px] text-blue-200 uppercase font-normal tracking-widest leading-none mt-0.5">
                                     {user?.role || 'Admin'}
                                 </p>
                             </div>
