@@ -2,11 +2,11 @@
 
 Juita Laundry adalah aplikasi sistem manajemen kasir dan operasional laundry berbasis web. Aplikasi ini dirancang untuk mempermudah pengelolaan pesanan, manajemen pelanggan (membership), pencatatan pengeluaran, hingga pembuatan laporan keuangan.
 
-🌐 **Live App / Demo:** [https://juitalaundry.sainzcloud.my.id/login](https://juitalaundry.sainzcloud.my.id/login)
+**Live App / Demo:** [https://juitalaundry.sainzcloud.my.id/login](https://juitalaundry.sainzcloud.my.id/login)
 
 Aplikasi ini dibangun menggunakan arsitektur *Single Page Application* (SPA) dengan teknologi **Laravel**, **Inertia.js**, dan **React** untuk memberikan pengalaman antarmuka yang cepat, modern, dan interaktif tanpa perlu *reload* halaman.
 
-## 🚀 Teknologi yang Digunakan
+## Teknologi yang Digunakan
 * **Backend:** Laravel 11.x
 * **Frontend:** React.js
 * **Routing & Bridge:** Inertia.js
@@ -14,7 +14,7 @@ Aplikasi ini dibangun menggunakan arsitektur *Single Page Application* (SPA) den
 * **Bundler:** Vite
 * **Database:** MySQL / PostgreSQL
 
-## 🎯 Fitur Utama
+## Fitur Utama
 
 Aplikasi ini membagi hak akses ke dalam dua peran utama melalui sistem Middleware (`RoleMiddleware`):
 
@@ -34,7 +34,7 @@ Berfokus pada transaksi dan operasional harian:
 * **Riwayat Transaksi:** Melihat riwayat transaksi yang sudah selesai (`HistoryController.php`).
 * **Cetak Nota:** Fitur untuk mencetak nota pelanggan (`print/nota.blade.php`).
 
-## 📂 Struktur Proyek Terkini
+## Struktur Proyek Terkini
 Proyek ini membedakan penamaan *View* secara eksplisit (`*View.jsx`) pada sisi React untuk menghindari tumpang tindih nama dengan Model PHP.
 
 * `app/Models/` : Berisi representasi tabel database (`Order`, `Service`, `Membership`, `FinancialReport`, dll).
@@ -42,7 +42,7 @@ Proyek ini membedakan penamaan *View* secara eksplisit (`*View.jsx`) pada sisi R
 * `resources/js/Pages/` : Tampilan antarmuka pengguna (UI) yang ditulis dalam React.js.
 * `resources/views/` : File template standar Laravel, termasuk file root `app.blade.php` dan desain cetak `nota.blade.php`.
 
-## 🛠️ Panduan Instalasi Lokal (Bagi Developer)
+## Panduan Instalasi Lokal (Bagi Developer)
 
 Jika Anda ingin menjalankan atau mengembangkan aplikasi ini secara lokal, pastikan Anda sudah menginstal **PHP (>= 8.2)**, **Composer**, **Node.js**, dan database **MySQL**.
 
@@ -93,5 +93,5 @@ Buka terminal baru dan jalankan server web internal Laravel:
 php artisan serve
 Aplikasi pengembangan kini dapat diakses di http://localhost:8000.
 
-🛡️ Keamanan
+Keamanan
 Aplikasi ini dilengkapi dengan middleware XssSanitization bawaan untuk mencegah injeksi Cross-Site Scripting (XSS) pada seluruh form input pengguna.
