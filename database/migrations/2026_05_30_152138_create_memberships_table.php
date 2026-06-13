@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('phone_number')->unique(); 
             $table->text('address')->nullable(); 
             $table->decimal('balance', 15, 2)->default(0); 
+            $table->integer('loyalty_point')->default(0);
             $table->timestamps();
         });
     }

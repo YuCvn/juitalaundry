@@ -13,8 +13,8 @@ return new class extends Migration
             $table->string('description'); 
             $table->decimal('amount', 15, 2); 
             $table->date('date'); 
-            
             $table->timestamps();
+            $table->index('date');
         });
     }
 
