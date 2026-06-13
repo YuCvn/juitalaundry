@@ -29,6 +29,7 @@ export default function EditOrderView() {
     });
 
     const [isModalKiloan, setIsModalKiloan] = useState(false);
+    const [isSubmitAttempted, setIsSubmitAttempted] = useState(false);
     const [kiloanInput, setKiloanInput] = useState({ service_id: '', qty: '' });
 
     const [isModalJasa, setIsModalJasa] = useState(false);
@@ -147,6 +148,7 @@ export default function EditOrderView() {
 
     const submit = (e) => {
         e.preventDefault();
+        setIsSubmitAttempted(true);
         
         if (data.is_membership && !data.membership_id) {
             alert("Harap pilih Member terlebih dahulu!");
@@ -290,9 +292,20 @@ export default function EditOrderView() {
                                         onChange={e => setData('customer_name', e.target.value)} 
                                         disabled={!!data.membership_id}
                                         placeholder="Nama pelanggan" 
-                                        className={`w-full px-4 py-2 border border-sky-500 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-colors text-xs ${data.membership_id ? 'bg-gray-100 text-gray-500 cursor-not-allowed font-semibold' : 'bg-white'}`} 
+                                        className={`w-full px-4 py-2 border ${!data.is_membership && isSubmitAttempted && !data.customer_name ? 'border-red-500 ring-1 ring-red-500' : 'border-sky-500'} rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-colors text-xs ${data.membership_id ? 'bg-gray-100 text-gray-500 cursor-not-allowed font-semibold' : 'bg-white'}`} 
                                     />
+                                    
+                                    {!data.is_membership && isSubmitAttempted && !data.customer_name && (
+                                        <div className="relative mt-1 animate-fade-in">
+                                            <div className="absolute -top-1 left-4 w-2.5 h-2.5 bg-red-600 transform rotate-45"></div>
+                                            <div className="bg-red-600 text-white text-[11px] font-bold px-2.5 py-1.5 rounded-md shadow-md flex items-center gap-1.5 w-max relative z-10">
+                                                <span className="text-sm leading-none">⚠️</span>
+                                                <span>Isi field ini!</span>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
+                                
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-700 mb-1">Telepon</label>
                                     <input 
@@ -302,9 +315,20 @@ export default function EditOrderView() {
                                         onChange={e => setData('phone_number', e.target.value)} 
                                         disabled={!!data.membership_id}
                                         placeholder="08xxxxxxxx" 
-                                        className={`w-full px-4 py-2 border border-sky-500 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-colors text-xs ${data.membership_id ? 'bg-gray-100 text-gray-500 cursor-not-allowed font-semibold' : 'bg-white'}`} 
+                                        className={`w-full px-4 py-2 border ${!data.is_membership && isSubmitAttempted && !data.phone_number ? 'border-red-500 ring-1 ring-red-500' : 'border-sky-500'} rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-colors text-xs ${data.membership_id ? 'bg-gray-100 text-gray-500 cursor-not-allowed font-semibold' : 'bg-white'}`} 
                                     />
+
+                                    {!data.is_membership && isSubmitAttempted && !data.phone_number && (
+                                        <div className="relative mt-1 animate-fade-in">
+                                            <div className="absolute -top-1 left-4 w-2.5 h-2.5 bg-red-600 transform rotate-45"></div>
+                                            <div className="bg-red-600 text-white text-[11px] font-bold px-2.5 py-1.5 rounded-md shadow-md flex items-center gap-1.5 w-max relative z-10">
+                                                <span className="text-sm leading-none">⚠️</span>
+                                                <span>Isi field ini!</span>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
+                                
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-700 mb-1">Alamat</label>
                                     <input 
@@ -314,8 +338,18 @@ export default function EditOrderView() {
                                         onChange={e => setData('address', e.target.value)} 
                                         disabled={!!data.membership_id}
                                         placeholder="Alamat lengkap" 
-                                        className={`w-full px-4 py-2 border border-sky-500 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-colors text-xs ${data.membership_id ? 'bg-gray-100 text-gray-500 cursor-not-allowed font-semibold' : 'bg-white'}`} 
+                                        className={`w-full px-4 py-2 border ${!data.is_membership && isSubmitAttempted && !data.address ? 'border-red-500 ring-1 ring-red-500' : 'border-sky-500'} rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-colors text-xs ${data.membership_id ? 'bg-gray-100 text-gray-500 cursor-not-allowed font-semibold' : 'bg-white'}`} 
                                     />
+
+                                    {!data.is_membership && isSubmitAttempted && !data.address && (
+                                        <div className="relative mt-1 animate-fade-in">
+                                            <div className="absolute -top-1 left-4 w-2.5 h-2.5 bg-red-600 transform rotate-45"></div>
+                                            <div className="bg-red-600 text-white text-[11px] font-bold px-2.5 py-1.5 rounded-md shadow-md flex items-center gap-1.5 w-max relative z-10">
+                                                <span className="text-sm leading-none">⚠️</span>
+                                                <span>Isi field ini!</span>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
