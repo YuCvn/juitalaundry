@@ -22,7 +22,7 @@ class OrderController extends Controller
                         ->latest()
                         ->get();
 
-        return Inertia::render('Cashier/Orders', [
+        return Inertia::render('Cashier/OrdersView', [
             'orders' => $orders
         ]);
     }
@@ -32,7 +32,7 @@ class OrderController extends Controller
         $services = Service::all();
         $memberships = Membership::all();
 
-        return Inertia::render('Cashier/CreateOrder', [
+        return Inertia::render('Cashier/CreateOrderView', [
             'services' => $services,
             'memberships' => $memberships
         ]);
@@ -153,7 +153,7 @@ class OrderController extends Controller
         $services = Service::all();
         $memberships = Membership::all();
 
-        return Inertia::render('Cashier/EditOrder', [
+        return Inertia::render('Cashier/EditOrderView', [
             'order'       => $order,
             'services'    => $services,
             'memberships' => $memberships

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, Head, usePage } from '@inertiajs/react';
 
-export default function Login() {
+export default function LoginView() {
     const { data, setData, post, processing, errors } = useForm({
         username: '',
         password: '',

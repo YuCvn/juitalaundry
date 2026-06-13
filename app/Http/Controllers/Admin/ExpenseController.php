@@ -16,7 +16,7 @@ class ExpenseController extends Controller
         
         $totalPengeluaran = FinancialReport::sum('amount');
 
-        return Inertia::render('Admin/Expense', [
+        return Inertia::render('Admin/ExpenseView', [
             'expenses' => $expenses,
             'totalPengeluaran' => $totalPengeluaran
         ]);

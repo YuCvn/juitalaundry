@@ -3,7 +3,7 @@ import { Head, usePage } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-export default function Dashboard() {
+export default function DashboardAdminView() {
     const { 
         totalOrders = 0, 
         totalPelanggan = 0, 

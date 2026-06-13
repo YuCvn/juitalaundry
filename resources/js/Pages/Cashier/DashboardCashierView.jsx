@@ -2,7 +2,7 @@ import React from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import CashierLayout from '../../Layouts/Cashierlayout';
 
-export default function Dashboard() {
+export default function DashboardCashierView() {
     const { stats, recentOrders } = usePage().props;
 
     const formatRp = (angka) => {

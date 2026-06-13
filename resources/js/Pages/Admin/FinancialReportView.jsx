@@ -6,7 +6,7 @@ import {
     XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
 } from 'recharts';
 
-export default function LaporanKeuangan() {
+export default function FinancialReportView() {
     const { summary, expenses = [], filters, chartData } = usePage().props;
     const [showModal, setShowModal] = useState(false);
     const [editingExpense, setEditingExpense] = useState(null); 

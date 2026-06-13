@@ -62,7 +62,7 @@ class FinancialReportController extends Controller
         $totalPengeluaran = $dailyExpenses->sum();
         $netProfit = $totalPendapatan - $totalPengeluaran;
 
-        return Inertia::render('Admin/FinancialReport', [
+        return Inertia::render('Admin/FinancialReportView', [
             'summary' => [
                 'pendapatan'  => $totalPendapatan,
                 'pengeluaran' => $totalPengeluaran,

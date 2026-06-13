@@ -16,7 +16,7 @@ class HistoryController extends Controller
     $activeCount = \App\Models\Order::where('status', '!=', 'picked_up')->count();
     $historyCount = $history->count();
 
-    return Inertia::render('Cashier/History', [
+    return Inertia::render('Cashier/HistoryView', [
         'history' => $history,
         'activeCount' => $activeCount,
         'historyCount' => $historyCount

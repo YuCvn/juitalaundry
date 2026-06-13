@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Head, usePage } from '@inertiajs/react';
 import CashierLayout from '../../Layouts/Cashierlayout';
 
-export default function History() {
+export default function HistoryView() {
     const { history = [], orders = [], activeCount = 0, historyCount = 0 } = usePage().props;
     
     const dataList = history.length > 0 ? history : orders;

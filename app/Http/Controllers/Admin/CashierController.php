@@ -19,7 +19,7 @@ class CashierController extends Controller
         $activeCashiers = $cashiers->where('is_active', true)->count();
         $inactiveCashiers = $cashiers->where('is_active', false)->count();
 
-        return Inertia::render('Admin/Cashier', [
+        return Inertia::render('Admin/CashierView', [
             'cashiers' => $cashiers,
             'totalCashiers' => $totalCashiers,
             'activeCashiers' => $activeCashiers,

@@ -77,7 +77,7 @@ class DashboardController extends Controller
             'profits'  => $profits,
         ];
 
-        return Inertia::render('Admin/Dashboard', [
+        return Inertia::render('Admin/DashboardAdminView', [
             'totalOrders'     => $totalOrders,
             'totalPelanggan'  => $totalPelanggan,
             'totalPendapatan' => $totalPendapatan,

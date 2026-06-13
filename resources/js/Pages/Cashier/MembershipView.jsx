@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import CashierLayout from '../../Layouts/Cashierlayout';
 
-export default function Membership({ memberships = [], histories = [] }) {
+export default function MembershipView({ memberships = [], histories = [] }) {
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState('add'); 
     const [selectedId, setSelectedId] = useState(null);

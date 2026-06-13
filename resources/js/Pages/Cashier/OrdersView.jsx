@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, Head, usePage, router } from '@inertiajs/react';
 import CashierLayout from '../../Layouts/Cashierlayout';
 
-export default function Orders() {
+export default function OrdersView() {
     const { orders = [], historyCount = 0 } = usePage().props;
     const [activeFilter, setActiveFilter] = useState('semua');
 

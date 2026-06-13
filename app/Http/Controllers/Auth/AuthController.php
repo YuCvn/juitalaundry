@@ -12,7 +12,7 @@ class AuthController extends Controller
 
     public function create()
     {
-        return Inertia::render('Auth/Login');
+        return Inertia::render('Auth/LoginView');
     }
 
     public function store(Request $request)

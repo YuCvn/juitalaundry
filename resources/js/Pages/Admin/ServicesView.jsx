@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm, Head } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 
-export default function Services({ auth, services }) {
+export default function ServicesView({ auth, services }) {
     const [search, setSearch] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('create'); 

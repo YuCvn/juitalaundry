@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AdminLayout from '../../Layouts/AdminLayout';
 import { Head, useForm, router } from '@inertiajs/react';
 
-export default function Cashier({ cashiers, totalCashiers, activeCashiers, inactiveCashiers }) {
+export default function CashierView({ cashiers, totalCashiers, activeCashiers, inactiveCashiers }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     
     const [isEditMode, setIsEditMode] = useState(false);

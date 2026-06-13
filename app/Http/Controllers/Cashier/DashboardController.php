@@ -48,7 +48,7 @@ class DashboardController extends Controller
             ];
         });
 
-        return Inertia::render('Cashier/Dashboard', [
+        return Inertia::render('Cashier/DashboardCashierView', [
             'stats'        => $stats,
             'recentOrders' => $recentOrders
         ]);

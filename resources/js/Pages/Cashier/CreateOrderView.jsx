@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import CashierLayout from '../../Layouts/CashierLayout';
 
-export default function CreateOrder() {
+export default function CreateOrderView() {
     const { services = [], memberships = [], errors } = usePage().props; 
 
     const { data, setData, post, processing } = useForm({

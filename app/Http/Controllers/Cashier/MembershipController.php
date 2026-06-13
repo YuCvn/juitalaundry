@@ -15,7 +15,7 @@ class MembershipController extends Controller
         $memberships = Membership::latest()->get();
         $histories = MembershipHistory::with('membership')->latest()->get();
 
-        return Inertia::render('Cashier/Membership', [
+        return Inertia::render('Cashier/MembershipView', [
             'memberships' => $memberships,
             'histories' => $histories
         ]);

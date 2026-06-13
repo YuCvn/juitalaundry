@@ -14,7 +14,7 @@ class ServiceController extends Controller
     
     $services = Service::all(); 
     
-    return Inertia::render('Admin/Services', [
+    return Inertia::render('Admin/ServicesView', [
         'services' => $services
     ]);
 }
