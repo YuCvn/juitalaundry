@@ -90,11 +90,11 @@ Untuk tahap pengembangan (development):
     ```bash
     npm run dev
 
-Jalankan Server Lokal:
+9. Jalankan Server Lokal:
 Buka terminal baru dan jalankan server web internal Laravel:
     ```bash
     php artisan serve
-    ```
+
 Aplikasi pengembangan kini dapat diakses di http://localhost:8000.
 
 Keamanan
