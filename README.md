@@ -1,59 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Juita Laundry Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Juita Laundry adalah aplikasi sistem manajemen kasir dan operasional laundry berbasis web. Aplikasi ini dirancang untuk mempermudah pengelolaan pesanan, manajemen pelanggan (membership), pencatatan pengeluaran, hingga pembuatan laporan keuangan.
 
-## About Laravel
+🌐 **Live App / Demo:** [https://juitalaundry.sainzcloud.my.id/login](https://juitalaundry.sainzcloud.my.id/login)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Aplikasi ini dibangun menggunakan arsitektur *Single Page Application* (SPA) dengan teknologi **Laravel**, **Inertia.js**, dan **React** untuk memberikan pengalaman antarmuka yang cepat, modern, dan interaktif tanpa perlu *reload* halaman.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Teknologi yang Digunakan
+* **Backend:** Laravel 11.x
+* **Frontend:** React.js
+* **Routing & Bridge:** Inertia.js
+* **Styling:** Tailwind CSS & PostCSS
+* **Bundler:** Vite
+* **Database:** MySQL / PostgreSQL
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🎯 Fitur Utama
 
-## Learning Laravel
+Aplikasi ini membagi hak akses ke dalam dua peran utama melalui sistem Middleware (`RoleMiddleware`):
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 1. Admin
+Memiliki kontrol penuh atas laporan dan manajemen sistem:
+* **Dashboard Admin:** Ringkasan statistik operasional laundry (`DashboardAdminView.jsx`).
+* **Manajemen Kasir:** Mengelola akun staf kasir (`CashierController.php`, `CashierView.jsx`).
+* **Layanan (Services):** Menambah, mengubah, atau menghapus jenis layanan laundry beserta harganya (`ServiceController.php`, `ServicesView.jsx`).
+* **Pengeluaran (Expense):** Mencatat pengeluaran operasional toko (`ExpenseController.php`, `ExpenseView.jsx`).
+* **Laporan Keuangan:** Melihat dan mencetak laporan pendapatan dan pengeluaran (`FinancialReportController.php`, `FinancialReportView.jsx`).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2. Kasir (Cashier)
+Berfokus pada transaksi dan operasional harian:
+* **Dashboard Kasir:** Tampilan antarmuka utama untuk kasir (`DashboardCashierView.jsx`).
+* **Manajemen Pesanan:** Membuat pesanan baru (`CreateOrderView.jsx`) dan mengedit status pesanan (`EditOrderView.jsx`).
+* **Membership:** Mengelola data pelanggan yang tergabung dalam keanggotaan/membership (`MembershipController.php`).
+* **Riwayat Transaksi:** Melihat riwayat transaksi yang sudah selesai (`HistoryController.php`).
+* **Cetak Nota:** Fitur untuk mencetak nota pelanggan (`print/nota.blade.php`).
 
-## Laravel Sponsors
+## 📂 Struktur Proyek Terkini
+Proyek ini membedakan penamaan *View* secara eksplisit (`*View.jsx`) pada sisi React untuk menghindari tumpang tindih nama dengan Model PHP.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+* `app/Models/` : Berisi representasi tabel database (`Order`, `Service`, `Membership`, `FinancialReport`, dll).
+* `app/Http/Controllers/` : Logika bisnis yang memproses data dan mengirimkannya ke tampilan melalui Inertia.
+* `resources/js/Pages/` : Tampilan antarmuka pengguna (UI) yang ditulis dalam React.js.
+* `resources/views/` : File template standar Laravel, termasuk file root `app.blade.php` dan desain cetak `nota.blade.php`.
 
-### Premium Partners
+## 🛠️ Panduan Instalasi Lokal (Bagi Developer)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Jika Anda ingin menjalankan atau mengembangkan aplikasi ini secara lokal, pastikan Anda sudah menginstal **PHP (>= 8.2)**, **Composer**, **Node.js**, dan database **MySQL**.
 
-## Contributing
+1. **Clone repositori ini:**
+   ```bash
+   git clone <url-repositori-anda>
+   cd juitalaundry
+Instal dependensi PHP (Backend):
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Bash
+composer install
+Instal dependensi Node.js (Frontend):
 
-## Code of Conduct
+Bash
+npm install
+Konfigurasi Environment:
+Salin file konfigurasi environment standar.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Bash
+cp .env.example .env
+Buka file .env dan sesuaikan koneksi database Anda:
 
-## Security Vulnerabilities
+Cuplikan kode
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=juita_laundry
+DB_USERNAME=root
+DB_PASSWORD=
+Generate Application Key:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Bash
+php artisan key:generate
+Migrasi dan Seeding Database:
+Perintah ini akan membuat tabel-tabel di database (users, services, orders, dll) dan mengisi data awal (akun admin default, dsb).
 
-## License
+Bash
+php artisan migrate --seed
+Kompilasi Aset Frontend (Vite):
+Untuk tahap pengembangan (development):
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Bash
+npm run dev
+Jalankan Server Lokal:
+Buka terminal baru dan jalankan server web internal Laravel:
+
+Bash
+php artisan serve
+Aplikasi pengembangan kini dapat diakses di http://localhost:8000.
+
+🛡️ Keamanan
+Aplikasi ini dilengkapi dengan middleware XssSanitization bawaan untuk mencegah injeksi Cross-Site Scripting (XSS) pada seluruh form input pengguna.
