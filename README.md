@@ -52,20 +52,20 @@ Jika Anda ingin menjalankan atau mengembangkan aplikasi ini secara lokal, pastik
    cd juitalaundry
 Instal dependensi PHP (Backend):
 
-Bash
+2. Bash
 composer install
 Instal dependensi Node.js (Frontend):
 
-Bash
+3. Bash
 npm install
 Konfigurasi Environment:
 Salin file konfigurasi environment standar.
 
-Bash
+4. Bash
 cp .env.example .env
 Buka file .env dan sesuaikan koneksi database Anda:
 
-Cuplikan kode
+5. Cuplikan kode
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -74,22 +74,22 @@ DB_USERNAME=root
 DB_PASSWORD=
 Generate Application Key:
 
-Bash
+6. Bash
 php artisan key:generate
 Migrasi dan Seeding Database:
 Perintah ini akan membuat tabel-tabel di database (users, services, orders, dll) dan mengisi data awal (akun admin default, dsb).
 
-Bash
+7. Bash
 php artisan migrate --seed
 Kompilasi Aset Frontend (Vite):
 Untuk tahap pengembangan (development):
 
-Bash
+8. Bash
 npm run dev
 Jalankan Server Lokal:
 Buka terminal baru dan jalankan server web internal Laravel:
 
-Bash
+9. Bash
 php artisan serve
 Aplikasi pengembangan kini dapat diakses di http://localhost:8000.
 
