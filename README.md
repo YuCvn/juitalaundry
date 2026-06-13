@@ -1,5 +1,7 @@
 # Capstone Project Kelompok 4 - Juita Laundry 
 
+[🇮🇩 Bahasa Indonesia](#-bahasa-indonesia) | [🇬🇧 English](#-english)
+
 **Live App / Demo:** [https://juitalaundry.sainzcloud.my.id/login](https://juitalaundry.sainzcloud.my.id/login)
 
 <br>
