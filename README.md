@@ -49,7 +49,7 @@ Jika Anda ingin menjalankan atau mengembangkan aplikasi ini secara lokal, pastik
 1. **Clone repositori ini:**
 
    ```bash
-   git clone <url-repositori-anda>
+   git clone https://github.com/YuCvn/juitalaundry
    cd juitalaundry
 
 2. Instal dependensi PHP (Backend):
