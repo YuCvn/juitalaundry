@@ -23,7 +23,6 @@ export default function CreateOrderView() {
     const [isModalJasa, setIsModalJasa] = useState(false);
     const [jasaInput, setJasaInput] = useState({ service_id: '', qty: '' });
 
-
     const [isLoadingModalOpen, setIsLoadingModalOpen] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
@@ -54,6 +53,21 @@ export default function CreateOrderView() {
                 phone_number: '',
                 address: ''
             }));
+        }
+    };
+    const handleOpenKiloan = () => {
+        if (listKiloan.length === 0) {
+            alert("Data layanan Kiloan kosong. Minta Admin/Owner untuk membuatkan Layanan.");
+        } else {
+            setIsModalKiloan(true);
+        }
+    };
+
+    const handleOpenJasa = () => {
+        if (listJasa.length === 0) {
+            alert("Data Jasa Lainnya kosong. Minta Admin/Owner untuk membuatkan Layanan.");
+        } else {
+            setIsModalJasa(true);
         }
     };
 
@@ -119,15 +133,37 @@ export default function CreateOrderView() {
     const submit = (e) => {
         e.preventDefault();
         
+        if (data.is_membership && !data.membership_id) {
+            alert("Harap pilih Member terlebih dahulu!");
+            document.getElementById('membership_id')?.focus();
+            document.getElementById('customer-info-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        if (!data.is_membership) {
+            if (!data.customer_name) {
+                document.getElementById('customer_name')?.focus();
+                document.getElementById('customer-info-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+            if (!data.phone_number) {
+                document.getElementById('phone_number')?.focus();
+                document.getElementById('customer-info-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+            if (!data.address) {
+                document.getElementById('address')?.focus();
+                document.getElementById('customer-info-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+        }
 
         setIsLoadingModalOpen(true);
         
-
         setTimeout(() => {
             setIsLoadingModalOpen(false);
             setIsSuccessModalOpen(true);
             
-
             setTimeout(() => {
                 post('/cashier/orders', {
                     preserveScroll: true,
@@ -193,13 +229,14 @@ export default function CreateOrderView() {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 gap-4">
+                            <div id="customer-info-section" className="grid grid-cols-1 gap-4">
                                 {data.is_membership && (
                                     <div className="animate-fade-in">
                                         <label className="block text-xs font-semibold text-gray-700 mb-1.5">Pilih Member (Mendapatkan Diskon 10%)</label>
                                         <div className="relative">
                                             <svg className="w-4 h-4 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                                             <select 
+                                                id="membership_id"
                                                 value={data.membership_id}
                                                 onChange={handleMembershipChange}
                                                 className="w-full pl-9 pr-4 py-2 border border-sky-500 bg-white rounded-lg focus:ring-2 focus:ring-sky-500 outline-none text-gray-700 font-medium text-xs"
@@ -231,6 +268,7 @@ export default function CreateOrderView() {
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-700 mb-1">Nama Pelanggan</label>
                                     <input 
+                                        id="customer_name"
                                         type="text" 
                                         value={data.customer_name} 
                                         onChange={e => setData('customer_name', e.target.value)} 
@@ -242,6 +280,7 @@ export default function CreateOrderView() {
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-700 mb-1">Telepon</label>
                                     <input 
+                                        id="phone_number"
                                         type="tel" 
                                         value={data.phone_number} 
                                         onChange={e => setData('phone_number', e.target.value)} 
@@ -253,6 +292,7 @@ export default function CreateOrderView() {
                                 <div>
                                     <label className="block text-xs font-semibold text-gray-700 mb-1">Alamat</label>
                                     <input 
+                                        id="address"
                                         type="text" 
                                         value={data.address} 
                                         onChange={e => setData('address', e.target.value)} 
@@ -268,11 +308,11 @@ export default function CreateOrderView() {
                                     <h3 className="text-base font-bold text-[#6b21a8]">Jenis Layanan</h3>
                                     
                                     <div className="flex gap-2">
-                                        <button onClick={() => setIsModalKiloan(true)} type="button" className="bg-[#9333ea] hover:bg-[#7e22ce] text-white text-xs font-bold py-1.5 px-3 md:px-4 rounded-lg shadow transition-colors flex items-center">
+                                        <button onClick={handleOpenKiloan} type="button" className="bg-[#9333ea] hover:bg-[#7e22ce] text-white text-xs font-bold py-1.5 px-3 md:px-4 rounded-lg shadow transition-colors flex items-center">
                                             <svg className="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
                                             Kiloan
                                         </button>
-                                        <button onClick={() => setIsModalJasa(true)} type="button" className="bg-[#25D366] hover:bg-[#128C7E] text-white text-xs font-bold py-1.5 px-3 md:px-4 rounded-lg shadow transition-colors flex items-center">
+                                        <button onClick={handleOpenJasa} type="button" className="bg-[#25D366] hover:bg-[#128C7E] text-white text-xs font-bold py-1.5 px-3 md:px-4 rounded-lg shadow transition-colors flex items-center">
                                             <svg className="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" /></svg>
                                             Jasa Lainnya
                                         </button>

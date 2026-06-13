@@ -29,6 +29,9 @@ export default function LoginView() {
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#00d2ff] to-[#3a7bd5] relative">
             <Head title="Login - Juita Laundry" />
 
+            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-500/20 rounded-full blur-3xl mix-blend-multiply pointer-events-none"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-teal-500/20 rounded-full blur-3xl mix-blend-multiply pointer-events-none"></div>
+
             <div className="fixed top-5 right-5 z-50 flex flex-col gap-3">
                 {flash?.success && showNotification && (
                     <div className="bg-white border-l-4 border-green-500 p-4 rounded-lg shadow-lg flex items-center justify-between w-80 animate-fade-in-down">

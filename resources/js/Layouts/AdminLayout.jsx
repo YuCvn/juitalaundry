@@ -5,7 +5,7 @@ export default function AdminLayout({ children, title }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isMobileOpen, setIsMobileOpen] = useState(false); 
     const [showNotification, setShowNotification] = useState(true);
-    
+
     const { url, props } = usePage();
     const { flash, auth } = props; 
     

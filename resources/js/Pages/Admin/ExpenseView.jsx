@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Head, usePage, useForm, router } from '@inertiajs/react';
 import AdminLayout from '../../Layouts/AdminLayout';
 
-export default function ExpenseView({ expenses, totalExpenses, thisMonthExpenses, todayExpenses }) {
-    const { expenses = [], totalPengeluaran = 0 } = usePage().props;
+export default function ExpenseView({ expenses = [], totalExpenses, thisMonthExpenses, todayExpenses }) {
+    const { totalPengeluaran = 0 } = usePage().props;
     const [showModal, setShowModal] = useState(false);
     
     const [editingExpense, setEditingExpense] = useState(null); 
