@@ -47,50 +47,53 @@ Proyek ini membedakan penamaan *View* secara eksplisit (`*View.jsx`) pada sisi R
 Jika Anda ingin menjalankan atau mengembangkan aplikasi ini secara lokal, pastikan Anda sudah menginstal **PHP (>= 8.2)**, **Composer**, **Node.js**, dan database **MySQL**.
 
 1. **Clone repositori ini:**
+
    ```bash
    git clone <url-repositori-anda>
    cd juitalaundry
-Instal dependensi PHP (Backend):
 
-2. Bash
-composer install
-Instal dependensi Node.js (Frontend):
+2. Instal dependensi PHP (Backend):
 
-3. Bash
-npm install
-Konfigurasi Environment:
+    ```bash
+    composer install
+
+2. Instal dependensi Node.js (Frontend):
+    ```bash
+    npm install
+
+4. Konfigurasi Environment:
 Salin file konfigurasi environment standar.
-
-4. Bash
-cp .env.example .env
+    ```bash
+    cp .env.example .env
+    
 Buka file .env dan sesuaikan koneksi database Anda:
+    ```bash
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=juita_laundry
+    DB_USERNAME=root
+    DB_PASSWORD=
 
-5. Cuplikan kode
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=juita_laundry
-DB_USERNAME=root
-DB_PASSWORD=
-Generate Application Key:
+6. Generate Application Key:
+    ```bash
+    php artisan key:generate
 
-6. Bash
-php artisan key:generate
-Migrasi dan Seeding Database:
+7. Migrasi dan Seeding Database:
 Perintah ini akan membuat tabel-tabel di database (users, services, orders, dll) dan mengisi data awal (akun admin default, dsb).
+    ```bash
+    php artisan migrate --seed
 
-7. Bash
-php artisan migrate --seed
-Kompilasi Aset Frontend (Vite):
+8. Kompilasi Aset Frontend (Vite):
 Untuk tahap pengembangan (development):
+    ```bash
+    npm run dev
 
-8. Bash
-npm run dev
 Jalankan Server Lokal:
 Buka terminal baru dan jalankan server web internal Laravel:
+    ```bash
+    php artisan serve
 
-9. Bash
-php artisan serve
 Aplikasi pengembangan kini dapat diakses di http://localhost:8000.
 
 Keamanan
