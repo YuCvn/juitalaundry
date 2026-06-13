@@ -94,7 +94,7 @@ Jalankan Server Lokal:
 Buka terminal baru dan jalankan server web internal Laravel:
     ```bash
     php artisan serve
-    ```bash
+    ```
 Aplikasi pengembangan kini dapat diakses di http://localhost:8000.
 
 Keamanan
