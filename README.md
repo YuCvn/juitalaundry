@@ -12,7 +12,7 @@ Juita Laundry adalah aplikasi sistem manajemen kasir dan operasional laundry ber
 
 Aplikasi ini dibangun menggunakan arsitektur *Single Page Application* (SPA) dengan teknologi **Laravel**, **Inertia.js**, dan **React** untuk memberikan pengalaman antarmuka yang cepat, modern, dan interaktif tanpa perlu *reload* halaman.
 
-*** Anggota Kelompok:***
+**Anggota Kelompok:**
 1. Yudi Andika Pratama - [D1A230412/Programmer]
 2. Tri Meiliyani Kurnia - [D1A230426/Database]
 3. Ananda Romy Julio - [D1A230420/UI/UX]
