@@ -35,8 +35,7 @@ export default function CashierLayout({ children, title }) {
     return (
         <div className="flex h-screen bg-gray-100 font-sans relative overflow-hidden">
             <Head title={`${title} - Juita Laundry`} />
-
-            {/* NOTIFIKASI TOAST */}
+            
             <div className="fixed top-5 right-5 z-[9999] flex flex-col gap-3">
                 {flash?.success && showNotification && (
                     <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-xl shadow-xl flex items-center justify-between w-[90vw] md:w-80 animate-fade-in-down">
