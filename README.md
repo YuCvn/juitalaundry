@@ -64,10 +64,11 @@ Jika Anda ingin menjalankan atau mengembangkan aplikasi ini secara lokal, pastik
    git clone [https://github.com/YuCvn/juitalaundry](https://github.com/YuCvn/juitalaundry)
 
 pindah ke Folder terbaru:
-    ```bash
+    ```ini
    cd juitalaundry
+   ```
 
-2. Instal dependensi PHP (Backend):
+2. **Instal dependensi PHP (Backend):**
 
     ```bash
     composer install
