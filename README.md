@@ -1,10 +1,23 @@
-# Juita Laundry Management System
+# Capstone Project Kelompok 4 - Juita Laundry 
 
 Juita Laundry adalah aplikasi sistem manajemen kasir dan operasional laundry berbasis web. Aplikasi ini dirancang untuk mempermudah pengelolaan pesanan, manajemen pelanggan (membership), pencatatan pengeluaran, hingga pembuatan laporan keuangan.
 
 **Live App / Demo:** [https://juitalaundry.sainzcloud.my.id/login](https://juitalaundry.sainzcloud.my.id/login)
 
+<br>
+<div align="center">
+  <img src="public/images/logo.png" alt="Logo Juita Laundry" width="200">
+</div>
+<br>
+
 Aplikasi ini dibangun menggunakan arsitektur *Single Page Application* (SPA) dengan teknologi **Laravel**, **Inertia.js**, dan **React** untuk memberikan pengalaman antarmuka yang cepat, modern, dan interaktif tanpa perlu *reload* halaman.
+
+** Anggota Kelompok:**
+1. Yudi Andika Pratama - [D1A230412/Programmer]
+2. Tri Meiliyani Kurnia - [D1A230426/Database]
+3. Ananda Romy Julio - [D1A230420/UI/UX]
+4. Syifa Mutaalia - [D1A231004/DataAnalys]
+5. Rohidin - [D1A230408/ProjectManager]
 
 ## Teknologi yang Digunakan
 * **Backend:** Laravel 11.x
@@ -47,9 +60,8 @@ Proyek ini membedakan penamaan *View* secara eksplisit (`*View.jsx`) pada sisi R
 Jika Anda ingin menjalankan atau mengembangkan aplikasi ini secara lokal, pastikan Anda sudah menginstal **PHP (>= 8.2)**, **Composer**, **Node.js**, dan database **MySQL**.
 
 1. **Clone repositori ini:**
-
    ```bash
-   git clone https://github.com/YuCvn/juitalaundry
+   git clone [https://github.com/YuCvn/juitalaundry](https://github.com/YuCvn/juitalaundry)
    cd juitalaundry
 
 2. Instal dependensi PHP (Backend):
