@@ -108,5 +108,5 @@ Buka terminal baru dan jalankan server web internal Laravel:
 
 Aplikasi pengembangan kini dapat diakses di http://localhost:8000.
 
-Keamanan
+***Keamanan***
 Aplikasi ini dilengkapi dengan middleware XssSanitization bawaan untuk mencegah injeksi Cross-Site Scripting (XSS) pada seluruh form input pengguna.
