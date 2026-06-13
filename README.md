@@ -1,6 +1,6 @@
 # Capstone Project Kelompok 4 - Juita Laundry 
 
-**Live App / Demo:** [https://juitalaundry.sainzcloud.my.id/login](https://juitalaundry.sainzcloud.my.id/login)
+**Live App:** [https://juitalaundry.sainzcloud.my.id/login](https://juitalaundry.sainzcloud.my.id/login)
 
 <br>
 <div align="center">
