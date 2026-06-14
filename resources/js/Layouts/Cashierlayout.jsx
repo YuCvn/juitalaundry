@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, Head, usePage } from '@inertiajs/react';
 
 export default function CashierLayout({ children, title }) {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Toggle Desktop
-    const [isMobileOpen, setIsMobileOpen] = useState(false);  // Toggle Mobile
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [showNotification, setShowNotification] = useState(true);
     
     const { url, props } = usePage();
     const { flash, auth } = props; 
     
     const user = auth?.user;
-    // Dikembalikan ke inisial 'K' sesuai versi lama
     const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : 'K';
 
     const isActive = (path) => url.startsWith(path);
@@ -27,7 +26,6 @@ export default function CashierLayout({ children, title }) {
         }
     }, [flash]);
 
-    // Tutup otomatis sidebar mobile setiap kali berpindah halaman
     useEffect(() => {
         setIsMobileOpen(false);
     }, [url]);

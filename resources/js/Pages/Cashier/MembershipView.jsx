@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
-import CashierLayout from '../../Layouts/Cashierlayout';
+import CashierLayout from '../../Layouts/CashierLayout';
 
 export default function MembershipView({ memberships = [], histories = [] }) {
     const [showModal, setShowModal] = useState(false);

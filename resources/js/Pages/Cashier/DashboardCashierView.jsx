@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
-import CashierLayout from '../../Layouts/Cashierlayout';
+import CashierLayout from '../../Layouts/CashierLayout';
 
 export default function DashboardCashierView() {
     const { stats, recentOrders } = usePage().props;
