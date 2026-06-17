@@ -254,7 +254,7 @@ export default function OrdersView() {
 
                                 <div className="mt-auto">
 
-                                    <div className="flex flex-col justify-center items-center bg-sky-50 px-3 py-3 rounded-lg border border-sky-200 mb-4 shadow-sm text-center">
+                                    <div className="flex flex-col justify-center items-left bg-sky-50 px-3 py-3 rounded-lg border border-sky-200 mb-4 shadow-sm text-left">
                                         <p className="text-[11px] text-sky-700 uppercase font-bold tracking-wider mb-0.5">Total Harga</p>
                                         <p className="text-xl font-bold text-sky-900">{formatRp(order.total_price)}</p>
                                     </div>
