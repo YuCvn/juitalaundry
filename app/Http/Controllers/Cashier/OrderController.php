@@ -355,4 +355,21 @@ class OrderController extends Controller
 
         return view('print.nota', compact('order'));
     }
+    
+    public function history()
+    {
+        $history = Order::with(['details.service', 'membership'])
+                                    ->where('status', 'picked_up')
+                                    ->latest()
+                                    ->get();
+        
+        $activeCount = Order::where('status', '!=', 'picked_up')->count();
+        $historyCount = $history->count();
+
+        return Inertia::render('Cashier/HistoryView', [
+            'history' => $history,
+            'activeCount' => $activeCount,
+            'historyCount' => $historyCount
+        ]);
+    }
 }

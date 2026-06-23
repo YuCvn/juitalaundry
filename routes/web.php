@@ -17,7 +17,6 @@ use App\Http\Controllers\Admin\ServiceController;
 // Cashier Controllers
 use App\Http\Controllers\Cashier\DashboardController;
 use App\Http\Controllers\Cashier\OrderController;
-use App\Http\Controllers\Cashier\HistoryController;
 use App\Http\Controllers\Cashier\MembershipController;
 
 
@@ -96,7 +95,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/{id}/print', [OrderController::class, 'print'])->name('orders.print');
         
         // Riwayat & Pelanggan
-        Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+        Route::get('/history', [OrderController::class, 'history'])->name('history.index');
         
         // Kelola Membership
         Route::get('/membership', [MembershipController::class, 'index'])->name('membership.index');
