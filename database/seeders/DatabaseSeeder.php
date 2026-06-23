@@ -17,5 +17,13 @@ class DatabaseSeeder extends Seeder
             'role'      => 'admin',
             'is_active' => true,
         ]);
+
+        User::create([
+            'name'      => 'Kasir 1',
+            'username'  => 'kasir',
+            'password'  => Hash::make('kasir123'),
+            'role'      => 'kasir',
+            'is_active' => true,
+        ]);
     }
 }
