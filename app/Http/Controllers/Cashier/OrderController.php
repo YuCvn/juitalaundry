@@ -17,13 +17,15 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::with(['membership', 'details.service', 'user'])
-                        ->whereDate('created_at', today())
-                        ->orWhereIn('status', ['pending', 'processing'])
+                        ->where('status', '!=', 'picked_up')
                         ->latest()
                         ->get();
+                        
+        $historyCount = Order::where('status', 'picked_up')->count();
 
         return Inertia::render('Cashier/OrdersView', [
-            'orders' => $orders
+            'orders' => $orders,
+            'historyCount' => $historyCount
         ]);
     }
 

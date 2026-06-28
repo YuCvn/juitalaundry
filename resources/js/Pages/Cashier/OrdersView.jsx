@@ -67,9 +67,9 @@ export default function OrdersView() {
     };
 
     const handleWhatsApp = (order) => {
-        if (order.status_order === 'menunggu') return; 
+        if (order.status === 'pending') return; 
 
-        const phone = order.whatsapp_number; 
+        const phone = order.phone_number; 
         
         if (!phone) {
             alert('Nomor telepon pelanggan tidak tersedia.');
@@ -78,14 +78,14 @@ export default function OrdersView() {
 
         let text = '';
 
-        if (order.status_order === 'dalam proses') {
-            text = `Halo Kak *${order.nama}*, salam hangat dari Juita Laundry! 😊\n\nIngin mengabarkan bahwa pesanan laundry Kakak dengan nomor resi *${order.order_id}* saat ini *sedang dalam proses* pengerjaan oleh tim kami.\n\nKami pastikan cucian Kakak ditangani dengan baik agar bersih dan wangi maksimal. Kami akan segera menghubungi Kakak kembali setelah semuanya selesai ya. Mohon ditunggu, Kak! 🙏✨`;
+        if (order.status === 'processing') {
+            text = `Halo Kak *${order.customer_name}*, salam hangat dari Juita Laundry! 😊\n\nIngin mengabarkan bahwa pesanan laundry Kakak dengan nomor resi *${order.order_id}* saat ini *sedang dalam proses* pengerjaan oleh tim kami.\n\nKami pastikan cucian Kakak ditangani dengan baik agar bersih dan wangi maksimal. Kami akan segera menghubungi Kakak kembali setelah semuanya selesai ya. Mohon ditunggu, Kak! 🙏✨`;
         
-        } else if (order.status_order === 'selesai') {
-            text = `Halo Kak *${order.nama}*, kabar gembira dari Juita Laundry! 🎉\n\nPesanan laundry Kakak dengan nomor resi *${order.order_id}* *sudah selesai* dikerjakan, sudah wangi, dan rapi lho!\n\nTotal tagihannya adalah *${formatRp(order.total_harga)}*.\n\nApakah pesanan ini mau Kakak ambil sendiri ke outlet kami, atau ingin kami bantu antarkan ke alamat Kakak? Jangan ragu untuk beri tahu kami ya Kak. Terima kasih banyak! 🥰👗`;
+        } else if (order.status === 'completed') {
+            text = `Halo Kak *${order.customer_name}*, kabar gembira dari Juita Laundry! 🎉\n\nPesanan laundry Kakak dengan nomor resi *${order.order_id}* *sudah selesai* dikerjakan, sudah wangi, dan rapi lho!\n\nTotal tagihannya adalah *${formatRp(order.total_price)}*.\n\nApakah pesanan ini mau Kakak ambil sendiri ke outlet kami, atau ingin kami bantu antarkan ke alamat Kakak? Jangan ragu untuk beri tahu kami ya Kak. Terima kasih banyak! 🥰👗`;
         
-        } else if (order.status_order === 'sudah diambil') {
-            text = `Halo Kak *${order.nama}*, terima kasih banyak telah mempercayakan cuciannya di Juita Laundry! 😊\n\nPesanan dengan nomor resi *${order.order_id}* sudah tercatat selesai dan diambil. Semoga Kakak puas dengan hasilnya ya. Ditunggu kedatangannya kembali! 🙏✨`;
+        } else if (order.status === 'picked_up') {
+            text = `Halo Kak *${order.customer_name}*, terima kasih banyak telah mempercayakan cuciannya di Juita Laundry! 😊\n\nPesanan dengan nomor resi *${order.order_id}* sudah tercatat selesai dan diambil. Semoga Kakak puas dengan hasilnya ya. Ditunggu kedatangannya kembali! 🙏✨`;
         }
 
         const encodedText = encodeURIComponent(text);
@@ -276,9 +276,9 @@ export default function OrdersView() {
                                     <div className="flex flex-col gap-2">
                                         <button 
                                             onClick={() => handleWhatsApp(order)}
-                                            disabled={order.status_order === 'menunggu'}
+                                            disabled={order.status === 'pending'}
                                             className={`flex items-center justify-center py-2 px-3 rounded-lg transition-all text-xs w-full shadow-sm ${
-                                                order.status_order === 'menunggu' 
+                                                order.status === 'pending' 
                                                 ? 'bg-gray-200 text-gray-400 cursor-not-allowed border border-gray-200' 
                                                 : 'bg-[#25D366] hover:bg-[#20bd5a] text-white border border-transparent'
                                             }`}
