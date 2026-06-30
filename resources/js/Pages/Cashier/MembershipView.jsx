@@ -36,6 +36,7 @@ export default function MembershipView({ memberships = [], histories = [] }) {
 
     const openAddModal = () => {
         setModalMode('add');
+        setSelectedId(null);
         reset();
         setShowModal(true);
     };
@@ -106,11 +107,11 @@ export default function MembershipView({ memberships = [], histories = [] }) {
     };
 
     const isNameDuplicate = data.full_name && memberships.some(
-        (m) => m?.full_name?.toLowerCase() === data?.full_name?.toLowerCase() && (modalMode !== 'edit' || m.id !== selectedId)
+        (m) => m?.full_name?.toLowerCase() === data?.full_name?.toLowerCase() && m.id !== selectedId
     );
 
     const isPhoneDuplicate = data.phone_number && memberships.some(
-        (m) => m?.phone_number === data?.phone_number && (modalMode !== 'edit' || m.id !== selectedId)
+        (m) => m?.phone_number === data?.phone_number && m.id !== selectedId
     );
 
     return (

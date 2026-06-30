@@ -69,11 +69,17 @@ export default function OrdersView() {
     const handleWhatsApp = (order) => {
         if (order.status === 'pending') return; 
 
-        const phone = order.phone_number; 
+        let phone = order.whatsapp_number || order.phone_number; 
         
         if (!phone) {
             alert('Nomor telepon pelanggan tidak tersedia.');
             return;
+        }
+
+        if (phone.startsWith('0')) {
+            phone = '62' + phone.substring(1);
+        } else if (phone.startsWith('+')) {
+            phone = phone.substring(1);
         }
 
         let text = '';
